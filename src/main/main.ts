@@ -19,7 +19,13 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    win = new BrowserWindow({ width: 800, height: 600 });
+    win = new BrowserWindow({
+        width: 1000,
+        height: 800,
+        webPreferences: {
+            preload: `${__dirname}/preload.js`
+        }
+    });
 
     if (process.env.NODE_ENV !== 'production') {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // eslint-disable-line require-atomic-updates
