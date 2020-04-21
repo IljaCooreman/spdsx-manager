@@ -1,7 +1,7 @@
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 
 class IO {
-    path: string;
+    path: string; // path where files temporary get written to
 
     constructor(path = 'data/resampled') {
         this.path = path;

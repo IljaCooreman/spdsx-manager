@@ -1,20 +1,11 @@
-import { applyMiddleware, createStore, Store } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStoreon } from 'storeon';
+import { storeonLogger } from 'storeon/devtools';
 
-import { rootReducer, RootState } from '../reducers';
+// eslint-disable-next-line import/no-cycle
+import { waveManager } from './waveManager';
+import { State, Events } from './types';
 
-const configureStore = (initialState?: RootState): Store<RootState | undefined> => {
-    const middlewares: any[] = [];
-    const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
-    return createStore(rootReducer, initialState, enhancer);
-};
-
-const store = configureStore();
-
-if (typeof module.hot !== 'undefined') {
-    module.hot.accept('../reducers', () =>
-        store.replaceReducer(require('../reducers').rootReducer)
-    );
-}
-
-export default store;
+export const store = createStoreon<State, Events>([
+    waveManager,
+    process.env.NODE_ENV !== 'production' && storeonLogger
+]);
