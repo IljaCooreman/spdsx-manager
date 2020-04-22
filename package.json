@@ -14,6 +14,7 @@
     "start": "electron .",
     "lint": "eslint --ext=jsx,js,tsx,ts src",
     "test": "jest '(\\/test\\/(?!e2e/)).*'",
+    "test:watch": "jest '(\\/test.*' --watch",
     "pretest:e2e": "npm run build",
     "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "pack": "npm run build && electron-builder --dir",
@@ -100,6 +101,7 @@
     "@types/react-test-renderer": "^16.8.1",
     "@types/webdriverio": "^4.8.7",
     "@types/webpack-env": "^1.13.3",
+    "@types/xml-js": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
     "babel-loader": "^8.0.6",
@@ -143,6 +145,7 @@
     "react-dom": "^16.13.1",
     "storeon": "^2.0.2",
     "uuid": "^7.0.3",
-    "wavefile": "^11.0.0"
+    "wavefile": "^11.0.0",
+    "xml-js": "^1.6.11"
   }
 }

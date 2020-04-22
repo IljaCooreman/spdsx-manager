@@ -14,6 +14,8 @@ export class Wave {
 
     file: WaveFile;
 
+    tags: string[] = [];
+
     constructor(path: string) {
         try {
             this.id = uuidv4();

@@ -1,4 +1,4 @@
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
 
 class IO {
     path: string; // path where files temporary get written to
@@ -12,6 +12,11 @@ class IO {
 
     localWriteFile(buffer: any, fileName: string) {
         writeFileSync(`${this.path}/${fileName}.wav`, buffer);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    localReadFile(path: string): string {
+        return readFileSync(path, 'utf8');
     }
 }
 
