@@ -2,7 +2,6 @@
 import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 import { join } from 'path';
-import electronDevtoolsInstaller from 'electron-devtools-installer';
 import { State, Events, WaveManagerEvents } from './types/types';
 import LocalWave from '../../classes/LocalWave';
 import io from '../../classes/IO';

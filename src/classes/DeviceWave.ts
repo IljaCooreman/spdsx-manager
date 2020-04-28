@@ -2,7 +2,6 @@ import { join } from 'path';
 import { Name } from './Name';
 import { paramLookup, wvNrToPath } from '../renderer/utils/waveUtils';
 import { decimalToString } from './xmlUtils';
-import Wave from './Wave';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 
@@ -46,7 +45,7 @@ export default class DeviceWave {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    static new(wave: Wave) {
+    static new(deviceWave: DeviceWave) {
         // create path
         // copy new wave file to path
         // create WvPrm file
