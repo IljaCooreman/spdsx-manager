@@ -1,30 +1,63 @@
 /* eslint-disable no-new */
 import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
-import { State, Events, WaveManagerEvents } from './types';
-import { Wave } from '../../classes/Wave';
+import { join } from 'path';
+import electronDevtoolsInstaller from 'electron-devtools-installer';
+import { State, Events, WaveManagerEvents } from './types/types';
+import LocalWave from '../../classes/LocalWave';
+import io from '../../classes/IO';
+import DeviceWave from '../../classes/DeviceWave';
+import { pathToWvNr } from '../utils/waveUtils';
 
-const initialState = { waves: [] };
+const initialState = { localWaves: [], deviceWaves: [] };
 
 export const waveManager: StoreonModule<State, Events> = store => {
     store.on('@init', () => initialState);
 
+    store.on('@changed', (_, { deviceIsConnected }) => {
+        if (deviceIsConnected) {
+            store.dispatch(WaveManagerEvents.importFromDevice);
+        }
+    });
+
     store.on(WaveManagerEvents.import, (state: State, paths) => {
         // prevent duplicate entries
         paths.forEach(path => {
-            if (store.get().waves.find(wave => wave.path === path)) {
+            if (store.get().localWaves.find(wave => wave.path === path)) {
                 // we could dispatch a message action here
                 console.log('this is already imported');
                 return;
             }
-            store.dispatch('waveManager/createNewWave', path);
+            store.dispatch(WaveManagerEvents.createWave, path);
         });
     });
 
-    store.on('waveManager/createNewWave', ({ waves }, path) => {
-        const wave = new Wave(path);
+    store.on(WaveManagerEvents.createWave, ({ localWaves }, path) => {
+        const wave = new LocalWave(path);
         return {
-            waves: [...waves, wave]
+            localWaves: [...localWaves, wave]
+        };
+    });
+
+    store.on(WaveManagerEvents.importFromDevice, ({ device }, _) => {
+        const path = join(device.path, 'Roland/SPD-SX/WAVE/PRM');
+        const acc: string[] = [];
+        const files = io.listFileNames(path);
+        const fileNames = files.reduce((result, folder) => {
+            return [
+                ...result,
+                ...io.listFileNames(join(path, folder)).map(file => {
+                    return `${folder}/${file}`;
+                })
+            ];
+        }, acc);
+
+        const deviceWaveArray = fileNames.map(file => {
+            console.log(device, file);
+            return new DeviceWave(device, pathToWvNr(file));
+        });
+        return {
+            deviceWaves: deviceWaveArray
         };
     });
 };

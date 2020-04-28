@@ -1,17 +1,28 @@
 import { remote } from 'electron';
-import { WaveManagerEvents } from '../store/types';
+import { WaveManagerEvents, Events, DeviceConnectorEvents } from '../store/types/types';
 import { store } from '../store';
 
-export const openImportDialog = (): void => {
+export interface DialogOptions {
+    title?: string;
+    buttonLabel?: string;
+    properties?: 'openFile' | 'openDirectory' | 'multiSelections'[];
+    filters?: any[];
+}
+
+export const openImportDialog = (
+    event: WaveManagerEvents.import | DeviceConnectorEvents.connect,
+    options: any
+): void => {
+    const { title, buttonLabel, properties, filters } = options;
     remote.dialog.showOpenDialog(
         {
-            title: 'Import wave samples',
-            buttonLabel: 'Import',
-            properties: ['openFile', 'multiSelections'],
-            filters: [{ name: 'Wave files', extensions: ['wav', 'wave'] }]
+            title: title || 'Import wave samples',
+            buttonLabel: buttonLabel || 'Import',
+            properties: properties || ['openFile', 'multiSelections'],
+            filters: filters || [{ name: 'Wave files', extensions: ['wav', 'wave'] }]
         },
         (paths: string[]) => {
-            store.dispatch(WaveManagerEvents.import, paths);
+            store.dispatch(event, paths);
         }
     );
 };

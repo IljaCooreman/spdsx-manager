@@ -37,6 +37,13 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
     "global-require": 0,
     "import/prefer-default-export": 0,
     "import/no-useless-path-segments": 1,

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import { openImportDialog } from '../utils/openDialog';
-import { State, WaveManagerEvents } from '../store/types';
+import { State, WaveManagerEvents } from '../store/types/types';
 
 const WaveManager: React.FunctionComponent = () => {
-    const { waves } = useStoreon<State, WaveManagerEvents>('waves');
+    const { localWaves } = useStoreon<State, WaveManagerEvents>('localWaves');
     return (
         <div>
-            <button onClick={openImportDialog}>import</button>
+            <button onClick={() => openImportDialog(WaveManagerEvents.import, {})}>import</button>
             <ul>
-                {waves.map((wave: any) => (
+                {localWaves.map((wave: any) => (
                     <li key={wave.path}>{wave.fileName}</li>
                 ))}
             </ul>
