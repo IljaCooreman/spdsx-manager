@@ -6,24 +6,8 @@ import { decimalToString } from './xmlUtils';
 import Device from './Device';
 import DeviceWave from './DeviceWave';
 import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
+import { PadNames } from '../renderer/store/types/types';
 
-enum PadNames {
-    pad1,
-    pad2,
-    pad3,
-    pad4,
-    pad5,
-    pad6,
-    pad7,
-    pad8,
-    pad9,
-    trigger1,
-    trigger2,
-    trigger3,
-    trigger4,
-    footSwitch1,
-    footSwitch2
-}
 export class Kit {
     id: string = uuidv4();
     device: Device;

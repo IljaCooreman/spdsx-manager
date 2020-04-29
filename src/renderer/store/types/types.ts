@@ -40,6 +40,24 @@ export interface Events {
     [KitNavigatorEvents.addKit]: Kit;
 }
 
+export enum PadNames {
+    pad1,
+    pad2,
+    pad3,
+    pad4,
+    pad5,
+    pad6,
+    pad7,
+    pad8,
+    pad9,
+    trigger1,
+    trigger2,
+    trigger3,
+    trigger4,
+    footSwitch1,
+    footSwitch2
+}
+
 export type SpdTags = KitPrmSpdTags | WvPrmSpdTags | MainSpdTags;
 
 export type KitPrmSpdTags =

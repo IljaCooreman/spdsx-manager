@@ -46,6 +46,7 @@
     ],
     "no-console": 0,
     "global-require": 0,
+    "import/no-cycle": 0,
     "import/prefer-default-export": 0,
     "import/no-useless-path-segments": 1,
     "import/no-unresolved": 0,
