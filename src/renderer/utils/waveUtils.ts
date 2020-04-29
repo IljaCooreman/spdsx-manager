@@ -1,4 +1,5 @@
 import { join, parse } from 'path';
+// eslint-disable-next-line import/no-cycle
 import io from '../../classes/IO';
 import { xmlToObject } from '../../classes/xmlUtils';
 import Device from '../../classes/Device';
@@ -11,21 +12,6 @@ export function lookupWaveFromParam(waveNr: number, device: Device) {
 
 //   // return allFileNames;
 // }
-
-/**
- * list all the WvPrm files from the different folders
- * @param pathToDevice
- */
-export function getAllParams(pathToDevice: string) {
-    const foldersList = io.listFileNames(join(pathToDevice, 'Roland/SPD-SX/WAVE/PRM')); // e.g. [ '00', '01', '02' ]
-    const acc: string[] = [];
-    return foldersList.reduce((fullList, folder) => {
-        return [
-            ...fullList,
-            ...io.listFileNames(join(pathToDevice, `Roland/SPD-SX/WAVE/PRM/${folder}`))
-        ];
-    }, acc);
-}
 
 // export function lookupWaveFromParam(pathToParam: string, pathToDevice: string) {
 //   const wvPrm = xmlToObject(io.localReadFile(pathToParam))
@@ -70,8 +56,12 @@ export function paramLookup(waveNr: number | string, device: Device) {
     const spdFile = io.localReadFile(
         join(device.path, `Roland/SPD-SX/WAVE/PRM/${wvNrToPath(waveNr)}.spd`)
     );
+    if (!spdFile) {
+        return undefined;
+    }
     return xmlToObject(spdFile);
 }
+
 export function waveLookup(waveNr: number | string, pathToDevice: string) {
     return io.localReadFile(
         join(pathToDevice, `Roland/SPD-SX/WAVE/DATA/${wvNrToPath(waveNr)}.wav`)

@@ -1,8 +1,9 @@
-import { getAllParams, wvNrToPath, pathToWvNr } from '../src/renderer/utils/waveUtils';
+import { wvNrToPath, pathToWvNr } from '../src/renderer/utils/waveUtils';
+import { getAllParamFileNames } from '../src/renderer/utils/assignPath';
 
 describe('wave utils', () => {
     it('can get a list of params files', () => {
-        expect(getAllParams(`${__dirname}/mock/full_archive`).length).toEqual(271);
+        expect(getAllParamFileNames(`${__dirname}/mock/full_archive`).length).toEqual(270);
     });
 
     it('can get a short path from a number', () => {

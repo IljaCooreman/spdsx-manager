@@ -1,4 +1,5 @@
 import { js2xml, xml2js } from 'xml-js';
+import { parse } from 'path';
 // import { SpdTags } from '../renderer/store/types';
 
 export const objectToXml = (object: {}): string => {
@@ -61,6 +62,10 @@ export const stringToDecimal = (string: string): number[] => {
         result.push(char);
     }
     return result;
+};
+
+export const stripExtension = (string: string): string => {
+    return parse(string).name;
 };
 
 // voorlopig is dit niet gebruikt

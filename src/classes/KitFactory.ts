@@ -10,7 +10,7 @@ export function createKitFromPath(path: string, device: Device, deviceWaveList: 
     try {
         if (hasWeirdFileName(basename(path))) {
             console.log(`Abnormal filename. skipping ${basename(path)}`);
-        }
+        } // TODO: fix this issue
         const object = xmlToObject(io.localReadFile(path));
 
         return new Kit(object.KitPrm, path, device, deviceWaveList);

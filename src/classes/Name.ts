@@ -1,4 +1,5 @@
 import { stringToDecimal } from './xmlUtils';
+import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
 
 /* eslint-disable class-methods-use-this */
 type Type = 'Nm' | 'SubNm';
@@ -21,12 +22,12 @@ export class Name {
         this.type = type;
     }
 
-    length(): number {
+    get length(): number {
         return nameTypes[this.type]?.length;
     }
 
-    toEncodedArray(): number[] {
-        const emptyArray = [...new Array(this.length())].map(x => 0);
+    get encodedArray(): number[] {
+        const emptyArray = [...new Array(this.length)].map(x => 0);
         const decimalArray = stringToDecimal(this.name);
         decimalArray.forEach((decimal, i) => {
             emptyArray[i] = decimal;
@@ -34,10 +35,22 @@ export class Name {
         return emptyArray;
     }
 
-    toEncodedObject() {
-        return this.toEncodedArray().reduce((acc: any, char: number, i: number) => {
+    get encodedObject(): NameType | SubNameType {
+        return this.encodedArray.reduce((acc: any, char: number, i: number) => {
             acc[`${this.type}${i}`] = char;
             return acc;
         }, {});
+    }
+
+    get tags() {
+        const array = new Array(this.length).map((_, i) => this.encodedArray[i]);
+        const result: any = {};
+        array.forEach(number => {
+            result[`${this.type}${number}`] = number;
+        });
+        if (this.type === 'Nm') {
+            return result as NameType;
+        }
+        return result as SubNameType;
     }
 }

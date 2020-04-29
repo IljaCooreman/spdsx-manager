@@ -15,7 +15,8 @@ export interface State {
 export enum WaveManagerEvents {
     import = 'waveManager/import',
     createWave = 'waveManager/createWave',
-    importFromDevice = 'waveManager/importFromDevice'
+    importFromDevice = 'waveManager/importFromDevice',
+    addWaveToDevice = 'waveManager/addWaveToDevice'
 }
 
 export enum DeviceConnectorEvents {
@@ -32,6 +33,7 @@ export interface Events {
     [WaveManagerEvents.import]: string[];
     [WaveManagerEvents.createWave]: string;
     [WaveManagerEvents.importFromDevice]: undefined;
+    [WaveManagerEvents.addWaveToDevice]: LocalWave;
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
     [KitNavigatorEvents.selectKit]: string;

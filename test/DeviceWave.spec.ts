@@ -1,8 +1,9 @@
-import { join } from 'path';
 import DeviceWave from '../src/classes/DeviceWave';
-import Device from '../src/classes/Device';
+import device, { createDevice, deleteDevice } from './mock/Device';
 
-const device = new Device(join(__dirname, './mock/full_archive'));
+beforeAll(async () => {
+    await createDevice();
+});
 
 describe('deviceWave class', () => {
     it('inits a new wave on device', () => {
@@ -10,7 +11,11 @@ describe('deviceWave class', () => {
         expect(wave.wavePath).toBe('00/Clap_.wav');
         expect(wave.name.name).toBe('Clap_110');
         expect(wave.fullWavePath).toBe(
-            '/Users/coorem43/Documents/projects/prive/spdsx2/test/mock/full_archive/Roland/SPD_SX/WAVE/DATA/00/Clap_.wav'
+            '/Users/coorem43/Documents/projects/prive/spdsx2/test/mock/temp/Roland/SPD_SX/WAVE/DATA/00/Clap_.wav'
         );
     });
+});
+
+afterAll(() => {
+    deleteDevice();
 });

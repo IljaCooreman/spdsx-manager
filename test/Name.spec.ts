@@ -7,8 +7,8 @@ describe('Name class', () => {
     });
 
     it('converts to an encoded array', () => {
-        expect(new Name('clap', 'Nm').toEncodedArray()).toEqual([99, 108, 97, 112, 0, 0, 0, 0]);
-        expect(new Name('`^long%we1rd', 'Nm').toEncodedArray()).toEqual([
+        expect(new Name('clap', 'Nm').encodedArray).toEqual([99, 108, 97, 112, 0, 0, 0, 0]);
+        expect(new Name('`^long%we1rd', 'Nm').encodedArray).toEqual([
             96,
             94,
             108,
@@ -21,7 +21,7 @@ describe('Name class', () => {
     });
 
     it('exports a convertable object', () => {
-        expect(new Name('clap', 'Nm').toEncodedObject()).toStrictEqual({
+        expect(new Name('clap', 'Nm').encodedObject).toStrictEqual({
             Nm0: 99,
             Nm1: 108,
             Nm2: 97,

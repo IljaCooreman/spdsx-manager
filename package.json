@@ -141,8 +141,11 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@types/ncp": "^2.0.3",
+    "ncp": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "rimraf": "^3.0.2",
     "storeon": "^2.0.2",
     "uuid": "^7.0.3",
     "wavefile": "^11.0.0",

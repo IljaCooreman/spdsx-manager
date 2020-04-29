@@ -6,7 +6,6 @@ import {
     stringToDecimal,
     decimalToString
 } from '../src/classes/xmlUtils';
-import io from '../src/classes/IO';
 
 const testObject = {
     parent: {

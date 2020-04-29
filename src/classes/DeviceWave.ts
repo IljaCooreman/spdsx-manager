@@ -4,6 +4,7 @@ import { paramLookup, wvNrToPath } from '../renderer/utils/waveUtils';
 import { decimalToString } from './xmlUtils';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
+import { NameType } from '../renderer/store/types/NameTypes';
 
 export default class DeviceWave {
     name: Name;
@@ -12,7 +13,7 @@ export default class DeviceWave {
     tag: number;
     wavePath: string;
 
-    constructor(device: Device, wvNr: number) {
+    constructor(device: Device, wvNr: number, wavePath?: string) {
         this.device = device;
         this.wvNr = Number(wvNr);
         const path = wvNrToPath(wvNr);
@@ -20,11 +21,20 @@ export default class DeviceWave {
             throw new Error('Cannot reference wave on device. Maybe it doesnt exist? (-1)');
         }
 
-        const wvPrmObject: WvPrmType = paramLookup(wvNr, device).WvPrm;
-        const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;
-        this.tag = Tag;
-        this.name = new Name(decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7]), 'Nm');
-        this.wavePath = Path;
+        const wvPrmObject: WvPrmType | undefined = paramLookup(wvNr, device)?.WvPrm;
+        if (!wvPrmObject) {
+            if (!wavePath) {
+                throw new Error('cannot create new device without wave path');
+            }
+            this.tag = 0;
+            this.name = new Name('new Kit', 'Nm');
+            this.wavePath = wavePath;
+        } else {
+            const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;
+            this.tag = Tag;
+            this.name = new Name(decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7]), 'Nm');
+            this.wavePath = Path;
+        }
     }
 
     get filePathOnDevice() {
@@ -42,6 +52,15 @@ export default class DeviceWave {
 
     get fullWavePath() {
         return join(this.basePath, `DATA/${this.wavePath}`);
+    }
+
+    get WvPrmObject(): WvPrmType {
+        const encodedNameObject = this.name.encodedObject;
+        return {
+            ...(encodedNameObject as NameType),
+            Tag: this.tag,
+            Path: this.wavePath
+        };
     }
 
     // eslint-disable-next-line class-methods-use-this

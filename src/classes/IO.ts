@@ -1,28 +1,79 @@
 /* eslint-disable class-methods-use-this */
-import { writeFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'fs';
+import {
+    writeFileSync,
+    existsSync,
+    mkdirSync,
+    readFileSync,
+    readdirSync,
+    unlinkSync,
+    PathLike
+} from 'fs';
+import { join, dirname } from 'path';
+// eslint-disable-next-line import/no-cycle
+import { wvNrToPath } from '../renderer/utils/waveUtils';
+import { objectToXml, stripExtension } from './xmlUtils';
+import Device from './Device';
+import { WvPrmType } from '../renderer/store/types/WvPrm';
+import { KitPrmType } from '../renderer/store/types/KitPrm';
 
-class IO {
-    path: string; // path where files temporary get written to
-
-    constructor(path = 'data/resampled') {
-        this.path = path;
-        if (!existsSync(path)) {
-            mkdirSync(path);
+const io = {
+    localReadFile(path: string): string | undefined {
+        try {
+            return readFileSync(path, 'utf8');
+        } catch (e) {
+            console.log(e);
+            return undefined;
         }
-    }
-
-    localWriteFile(buffer: any, fileName: string) {
-        writeFileSync(`${this.path}/${fileName}.wav`, buffer);
-    }
-
-    localReadFile(path: string): string {
-        return readFileSync(path, 'utf8');
-    }
+    },
 
     listFileNames(pathToFolder: string) {
         return readdirSync(pathToFolder);
-    }
-}
+    },
 
-const io = new IO();
+    writeFile(fullPath: string, content: string) {
+        try {
+            writeFileSync(fullPath, content);
+        } catch (e) {
+            throw new Error('unable to write file');
+        }
+    },
+
+    createIfNotExists(path: string) {
+        if (!existsSync(dirname(path))) {
+            console.log(`path creator:`, dirname(path));
+            mkdirSync(dirname(path));
+            console.log(existsSync(dirname(path)));
+        }
+    },
+
+    writeWvPrm(contentObject: WvPrmType, file: string | number, device: Device) {
+        const path = typeof file === 'number' || Number(file) ? wvNrToPath(file) : file;
+        this.writeFile(
+            join(device.path, `Roland/SPD-SX/WAVE/PRM/${path}.spd`),
+            objectToXml({ WvPrm: contentObject })
+        );
+    },
+
+    writeKitPrm(contentObject: KitPrmType, fileName: string, device: Device) {
+        this.writeFile(
+            join(device.path, `Roland/SPD-SX/KIT/${stripExtension(fileName)}.spd`),
+            objectToXml(contentObject)
+        );
+    },
+
+    writeWaveFile(buffer: any, fileName: string, device: Device) {
+        const path =
+            typeof fileName === 'number' || Number(fileName) ? wvNrToPath(fileName) : fileName;
+        writeFileSync(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}`), buffer);
+    },
+
+    removeFile(fullPath: PathLike) {
+        try {
+            unlinkSync(fullPath);
+        } catch (e) {
+            throw new Error('Failed to delete file');
+        }
+    }
+};
+
 export default io;

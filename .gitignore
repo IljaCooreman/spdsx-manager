@@ -2,4 +2,3 @@ node_modules/
 dist/
 release/
 data
-test/mock/full_archive

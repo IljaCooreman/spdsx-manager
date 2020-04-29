@@ -7,6 +7,7 @@ import LocalWave from '../../classes/LocalWave';
 import io from '../../classes/IO';
 import DeviceWave from '../../classes/DeviceWave';
 import { pathToWvNr } from '../utils/waveUtils';
+import { addWaveToDevice } from '../../classes/waveManager';
 
 const initialState = { localWaves: [], deviceWaves: [] };
 
@@ -58,5 +59,9 @@ export const waveManager: StoreonModule<State, Events> = store => {
         return {
             deviceWaves: deviceWaveArray
         };
+    });
+
+    store.on(WaveManagerEvents.addWaveToDevice, ({ device }, wave) => {
+        addWaveToDevice(wave, device);
     });
 };
