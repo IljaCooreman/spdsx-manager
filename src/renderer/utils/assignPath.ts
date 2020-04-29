@@ -5,8 +5,8 @@ import { pathToWvNr, wvNrToPath } from './waveUtils';
 
 export function assignPath(device: Device) {
     const numbers = listWavePaths(device).map(path => pathToWvNr(path));
-    const missingNr = listMissingNumbers(numbers)[0];
-    if (missingNr) {
+    const missingNr = findMissingNumber(numbers);
+    if (missingNr !== undefined) {
         return {
             WvNr: missingNr,
             path: wvNrToPath(missingNr)
@@ -22,20 +22,13 @@ export function assignPath(device: Device) {
     };
 }
 
-function listMissingNumbers(numbers: number[]) {
-    const accum: number[] = [];
-    const mia = numbers.reduce((acc, cur, ind, arr) => {
-        const diff = cur - arr[ind - 1];
-        if (diff > 1) {
-            let i = 1;
-            while (i < diff) {
-                acc.push(arr[ind - 1] + i);
-                i += 1;
-            }
-        }
-        return acc;
-    }, accum);
-    return mia;
+function findMissingNumber(numbers: number[]) {
+    return numbers
+        .sort((prev, next) => prev - next)
+        .findIndex((next, i) => {
+            if (i > next) throw new Error('Something wrong with the wave file numbering!!');
+            return i < next;
+        });
 }
 
 // not used for now ...

@@ -5,11 +5,14 @@ import Device from '../../src/classes/Device';
 
 const rimraf = require('rimraf');
 
-export function createDevice() {
-    ncp(join(__dirname, './full_archive'), join(__dirname, './temp'), err => {
-        if (err) {
-            throw err;
-        }
+export async function createDevice() {
+    return new Promise((resolve, reject) => {
+        ncp(join(__dirname, './full_archive'), join(__dirname, './temp'), err => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        });
     });
 }
 

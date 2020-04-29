@@ -13,7 +13,7 @@ export default class LocalWave {
 
     constructor(path: string) {
         this.id = uuidv4();
-        this.path = path;
+        this.path = path; // full path
         this.fileName = basename(path);
         this.wave = new WaveFile(readFileSync(path));
         this.resampleForSpdsx();
@@ -40,8 +40,9 @@ export default class LocalWave {
             throw new Error(`No wave in memory`);
         }
         try {
+            const wvFmt = this.wave.fmt as any;
             const changeBitDepth = this.wave.bitDepth !== String(requestedBitDepth);
-            const changeSampleRate = this.wave.fmt.sampleRate === requestedSampleRate;
+            const changeSampleRate = wvFmt === requestedSampleRate;
 
             if (changeSampleRate && changeBitDepth) {
                 this.changeBitDepth(requestedBitDepth);

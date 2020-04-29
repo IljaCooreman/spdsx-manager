@@ -3,7 +3,7 @@ import { getAllParamFileNames } from '../src/renderer/utils/assignPath';
 
 describe('wave utils', () => {
     it('can get a list of params files', () => {
-        expect(getAllParamFileNames(`${__dirname}/mock/full_archive`).length).toEqual(270);
+        expect(getAllParamFileNames(`${__dirname}/mock/full_archive`).length).toEqual(6);
     });
 
     it('can get a short path from a number', () => {

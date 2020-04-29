@@ -1,19 +1,21 @@
-import { join } from 'path';
+import { join, basename } from 'path';
 import { Name } from './Name';
 import { paramLookup, wvNrToPath } from '../renderer/utils/waveUtils';
 import { decimalToString } from './xmlUtils';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { NameType } from '../renderer/store/types/NameTypes';
+import LocalWave from './LocalWave';
 
 export default class DeviceWave {
     name: Name;
     device: Device;
     wvNr: number; // 120
     tag: number;
-    wavePath: string;
+    wavePath: string; // '00/clap__.wav'
+    localWave: LocalWave | undefined = undefined;
 
-    constructor(device: Device, wvNr: number, wavePath?: string) {
+    constructor(device: Device, wvNr: number, localWave?: LocalWave) {
         this.device = device;
         this.wvNr = Number(wvNr);
         const path = wvNrToPath(wvNr);
@@ -23,12 +25,15 @@ export default class DeviceWave {
 
         const wvPrmObject: WvPrmType | undefined = paramLookup(wvNr, device)?.WvPrm;
         if (!wvPrmObject) {
-            if (!wavePath) {
-                throw new Error('cannot create new device without wave path');
+            if (!localWave) {
+                throw new Error(
+                    'cannot create new deviceWave instance with an invalid wave number'
+                );
             }
             this.tag = 0;
-            this.name = new Name('new Kit', 'Nm');
-            this.wavePath = wavePath;
+            this.name = new Name(localWave.fileName, 'Nm');
+            this.wavePath = `${path?.split('/')[0]}/${basename(localWave.path)}`;
+            this.localWave = localWave;
         } else {
             const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;
             this.tag = Tag;

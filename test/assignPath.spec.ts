@@ -7,10 +7,10 @@ beforeAll(async () => {
 
 describe('assign path', () => {
     it('can choose a path', () => {
-        expect(assignPath(device)).toStrictEqual({ WvNr: 200, path: '02/00' });
+        expect(assignPath(device)).toStrictEqual({ WvNr: 0, path: '00/00' });
     });
 });
 
-afterAll(() => {
-    deleteDevice();
+afterAll(async () => {
+    await deleteDevice();
 });

@@ -5,7 +5,7 @@ import Device from './Device';
 import io from './IO';
 import DeviceWave from './DeviceWave';
 
-export const addWaveToDevice = (wave: LocalWave, device: Device) => {
+export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => {
     const { path, WvNr } = assignPath(device);
     if (!path) {
         throw new Error('Cannot add wave to device. Incorrect path.');
@@ -15,9 +15,10 @@ export const addWaveToDevice = (wave: LocalWave, device: Device) => {
     const wavePath = `${folder}/${wave.fileName}`;
 
     io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/PRM/${path}`));
-    io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/DATA/${wavePath}`));
-    io.writeWaveFile(wave.wave.getSamples(), wavePath, device);
-    console.log(path, WvNr, wavePath, folder);
+    io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}`));
+    io.writeWaveFile(wave.wave.toBuffer(), wavePath, device);
     // write wvPrm
-    io.writeWvPrm(new DeviceWave(device, WvNr, wavePath).WvPrmObject, WvNr, device);
+    const deviceWave = new DeviceWave(device, WvNr, wave);
+    io.writeWvPrm(deviceWave.WvPrmObject, WvNr, device);
+    return deviceWave;
 };
