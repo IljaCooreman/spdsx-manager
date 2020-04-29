@@ -67,12 +67,4 @@ export default class DeviceWave {
             Path: this.wavePath
         };
     }
-
-    // eslint-disable-next-line class-methods-use-this
-    static new(deviceWave: DeviceWave) {
-        // create path
-        // copy new wave file to path
-        // create WvPrm file
-        // return new DeviceWave()
-    }
 }

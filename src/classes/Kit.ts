@@ -5,31 +5,48 @@ import { Name } from './Name';
 import { decimalToString } from './xmlUtils';
 import Device from './Device';
 import DeviceWave from './DeviceWave';
+import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
 
+enum PadNames {
+    pad1,
+    pad2,
+    pad3,
+    pad4,
+    pad5,
+    pad6,
+    pad7,
+    pad8,
+    pad9,
+    trigger1,
+    trigger2,
+    trigger3,
+    trigger4,
+    footSwitch1,
+    footSwitch2
+}
 export class Kit {
     id: string = uuidv4();
     device: Device;
-    object = {};
     path = '';
     kitName = new Name('New Kit', 'Nm');
     kitSubName = new Name('new kit Subname', 'SubNm');
     Level = 100;
     Tempo = 120;
-    pad1 = new Pad(this.device);
-    pad2 = new Pad(this.device);
-    pad3 = new Pad(this.device);
-    pad4 = new Pad(this.device);
-    pad5 = new Pad(this.device);
-    pad6 = new Pad(this.device);
-    pad7 = new Pad(this.device);
-    pad8 = new Pad(this.device);
-    pad9 = new Pad(this.device);
-    trigger1 = new Pad(this.device);
-    trigger2 = new Pad(this.device);
-    trigger3 = new Pad(this.device);
-    trigger4 = new Pad(this.device);
-    footSwitch1 = new Pad(this.device);
-    footSwitch2 = new Pad(this.device);
+    [PadNames.pad1] = new Pad(this.device);
+    [PadNames.pad2] = new Pad(this.device);
+    [PadNames.pad3] = new Pad(this.device);
+    [PadNames.pad4] = new Pad(this.device);
+    [PadNames.pad5] = new Pad(this.device);
+    [PadNames.pad6] = new Pad(this.device);
+    [PadNames.pad7] = new Pad(this.device);
+    [PadNames.pad8] = new Pad(this.device);
+    [PadNames.pad9] = new Pad(this.device);
+    [PadNames.trigger1] = new Pad(this.device);
+    [PadNames.trigger2] = new Pad(this.device);
+    [PadNames.trigger3] = new Pad(this.device);
+    [PadNames.trigger4] = new Pad(this.device);
+    [PadNames.footSwitch1] = new Pad(this.device);
+    [PadNames.footSwitch2] = new Pad(this.device);
 
     constructor(kitPrm: KitPrmType, path: string, device: Device, deviceWaveList: DeviceWave[]) {
         this.path = path;
@@ -38,10 +55,13 @@ export class Kit {
             this.assignPads(kitPrm, deviceWaveList);
             this.assignNames(kitPrm);
             this.assignParams(kitPrm);
-            this.object = kitPrm;
         } catch (e) {
             throw new Error(`Failed to initiate Kit class. ${e.message}`);
         }
+    }
+
+    reassignPad(pad: Pad, targetPad: PadNames) {
+        this[targetPad] = pad;
     }
 
     assignPads(kitPrm: KitPrmType, deviceWaveList: DeviceWave[]) {
@@ -50,37 +70,77 @@ export class Kit {
             return waveList.find(deviceWave => deviceWave.wvNr === WvNr);
         };
         const { PadPrm } = kitPrm;
-        this.pad1 = new Pad(this.device, PadPrm['0'], findWave(PadPrm['0'].Wv, deviceWaveList));
-        this.pad2 = new Pad(this.device, PadPrm['1'], findWave(PadPrm['1'].Wv, deviceWaveList));
-        this.pad3 = new Pad(this.device, PadPrm['2'], findWave(PadPrm['2'].Wv, deviceWaveList));
-        this.pad4 = new Pad(this.device, PadPrm['3'], findWave(PadPrm['3'].Wv, deviceWaveList));
-        this.pad5 = new Pad(this.device, PadPrm['4'], findWave(PadPrm['4'].Wv, deviceWaveList));
-        this.pad6 = new Pad(this.device, PadPrm['5'], findWave(PadPrm['5'].Wv, deviceWaveList));
-        this.pad7 = new Pad(this.device, PadPrm['6'], findWave(PadPrm['6'].Wv, deviceWaveList));
-        this.pad8 = new Pad(this.device, PadPrm['7'], findWave(PadPrm['7'].Wv, deviceWaveList));
-        this.pad9 = new Pad(this.device, PadPrm['8'], findWave(PadPrm['8'].Wv, deviceWaveList));
-        this.trigger1 = new Pad(this.device, PadPrm['9'], findWave(PadPrm['9'].Wv, deviceWaveList));
-        this.trigger2 = new Pad(
+        this[PadNames.pad1] = new Pad(
+            this.device,
+            PadPrm['0'],
+            findWave(PadPrm['0'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad2] = new Pad(
+            this.device,
+            PadPrm['1'],
+            findWave(PadPrm['1'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad3] = new Pad(
+            this.device,
+            PadPrm['2'],
+            findWave(PadPrm['2'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad4] = new Pad(
+            this.device,
+            PadPrm['3'],
+            findWave(PadPrm['3'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad5] = new Pad(
+            this.device,
+            PadPrm['4'],
+            findWave(PadPrm['4'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad6] = new Pad(
+            this.device,
+            PadPrm['5'],
+            findWave(PadPrm['5'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad7] = new Pad(
+            this.device,
+            PadPrm['6'],
+            findWave(PadPrm['6'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad8] = new Pad(
+            this.device,
+            PadPrm['7'],
+            findWave(PadPrm['7'].Wv, deviceWaveList)
+        );
+        this[PadNames.pad9] = new Pad(
+            this.device,
+            PadPrm['8'],
+            findWave(PadPrm['8'].Wv, deviceWaveList)
+        );
+        this[PadNames.trigger1] = new Pad(
+            this.device,
+            PadPrm['9'],
+            findWave(PadPrm['9'].Wv, deviceWaveList)
+        );
+        this[PadNames.trigger2] = new Pad(
             this.device,
             PadPrm['10'],
             findWave(PadPrm['10'].Wv, deviceWaveList)
         );
-        this.trigger3 = new Pad(
+        this[PadNames.trigger3] = new Pad(
             this.device,
             PadPrm['11'],
             findWave(PadPrm['11'].Wv, deviceWaveList)
         );
-        this.trigger4 = new Pad(
+        this[PadNames.trigger4] = new Pad(
             this.device,
             PadPrm['12'],
             findWave(PadPrm['12'].Wv, deviceWaveList)
         );
-        this.footSwitch1 = new Pad(
+        this[PadNames.footSwitch1] = new Pad(
             this.device,
             PadPrm['13'],
             findWave(PadPrm['13'].Wv, deviceWaveList)
         );
-        this.footSwitch2 = new Pad(
+        this[PadNames.footSwitch2] = new Pad(
             this.device,
             PadPrm['14'],
             findWave(PadPrm['14'].Wv, deviceWaveList)
@@ -145,7 +205,77 @@ export class Kit {
         this.Tempo = Tempo;
     }
 
-    asObject() {
-        return this.object;
+    get kitPrmObject(): KitPrmType {
+        return {
+            ...(this.kitName.encodedObject as NameType),
+            ...(this.kitSubName.encodedObject as SubNameType),
+            Tempo: this.Tempo,
+            Level: this.Level,
+            PadPrm: {
+                '0': this[PadNames.pad1].padPrmObject,
+                '1': this[PadNames.pad2].padPrmObject,
+                '2': this[PadNames.pad3].padPrmObject,
+                '3': this[PadNames.pad4].padPrmObject,
+                '4': this[PadNames.pad5].padPrmObject,
+                '5': this[PadNames.pad6].padPrmObject,
+                '6': this[PadNames.pad7].padPrmObject,
+                '7': this[PadNames.pad8].padPrmObject,
+                '8': this[PadNames.pad9].padPrmObject,
+                '9': this[PadNames.trigger1].padPrmObject,
+                '10': this[PadNames.trigger2].padPrmObject,
+                '11': this[PadNames.trigger3].padPrmObject,
+                '12': this[PadNames.trigger4].padPrmObject,
+                '13': this[PadNames.footSwitch1].padPrmObject,
+                '14': this[PadNames.footSwitch2].padPrmObject
+            },
+            // TODO: map further from here
+            Fx2Asgn: 0,
+            LinkPad0: 0,
+            LinkPad1: 0,
+            Fx1Sw: 0,
+            Fx1Type: 0,
+            Fx1Prm0: 0,
+            Fx1Prm1: 0,
+            Fx1Prm2: 0,
+            Fx1Prm3: 0,
+            Fx1Prm4: 0,
+            Fx1Prm5: 0,
+            Fx1Prm6: 0,
+            Fx1Prm7: 0,
+            Fx1Prm8: 0,
+            Fx1Prm9: 0,
+            Fx1Prm10: 0,
+            Fx1Prm11: 0,
+            Fx1Prm12: 0,
+            Fx1Prm13: 0,
+            Fx1Prm14: 0,
+            Fx1Prm15: 0,
+            Fx1Prm16: 0,
+            Fx1Prm17: 0,
+            Fx1Prm18: 0,
+            Fx1Prm19: 0,
+            Fx2Sw: 0,
+            Fx2Type: 0,
+            Fx2Prm0: 0,
+            Fx2Prm1: 0,
+            Fx2Prm2: 0,
+            Fx2Prm3: 0,
+            Fx2Prm4: 0,
+            Fx2Prm5: 0,
+            Fx2Prm6: 0,
+            Fx2Prm7: 0,
+            Fx2Prm8: 0,
+            Fx2Prm9: 0,
+            Fx2Prm10: 0,
+            Fx2Prm11: 0,
+            Fx2Prm12: 0,
+            Fx2Prm13: 0,
+            Fx2Prm14: 0,
+            Fx2Prm15: 0,
+            Fx2Prm16: 0,
+            Fx2Prm17: 0,
+            Fx2Prm18: 0,
+            Fx2Prm19: 0
+        };
     }
 }
