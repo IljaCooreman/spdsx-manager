@@ -8,7 +8,6 @@ import { NameType } from '../renderer/store/types/NameTypes';
 import LocalWave from './LocalWave';
 
 export default class DeviceWave {
-    name: Name;
     device: Device;
     wvNr: number; // 120
     tag: number;
@@ -31,15 +30,19 @@ export default class DeviceWave {
                 );
             }
             this.tag = 0;
-            this.name = new Name(localWave.fileName, 'Nm');
+            // this.name = new Name(localWave.fileName, 'Nm');
             this.wavePath = `${path?.split('/')[0]}/${basename(localWave.path)}`;
             this.localWave = localWave;
         } else {
             const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;
             this.tag = Tag;
-            this.name = new Name(decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7]), 'Nm');
+            // this.name = new Name(decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7]), 'Nm');
             this.wavePath = Path;
         }
+    }
+
+    get name() {
+        return basename(this.wavePath);
     }
 
     get filePathOnDevice() {

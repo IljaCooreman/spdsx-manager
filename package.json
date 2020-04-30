@@ -1,7 +1,7 @@
 {
   "name": "electron-react-typescript",
-  "version": "0.0.7",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A wave manager for SPD-SX",
   "main": "./dist/main.js",
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
@@ -48,15 +48,15 @@
       "node"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|spd)$": "<rootDir>/mocks/fileMock.js",
       "\\.(s?css|sass)$": "<rootDir>/mocks/styleMock.js"
     }
   },
   "build": {
-    "productName": "ProductName",
-    "appId": "org.your.productname",
+    "productName": "SPD-SX wave manager",
+    "appId": "spdsx-wave-manager",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.music"
     },
     "directories": {
       "output": "release"
@@ -78,8 +78,8 @@
     "url": "git+ssh://git@github.com:Robinfr/electron-react-typescript.git"
   },
   "author": {
-    "name": "Your name",
-    "email": "Your email"
+    "name": "Ilja Cooreman",
+    "email": "ilja.cooreman@gmail.com"
   },
   "license": "SEE LICENSE",
   "bugs": {
@@ -141,9 +141,12 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
     "@types/ncp": "^2.0.3",
     "ncp": "^2.0.0",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
     "storeon": "^2.0.2",
