@@ -22,3 +22,9 @@ export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => 
     io.writeWvPrm(deviceWave.WvPrmObject, WvNr, device);
     return deviceWave;
 };
+
+// export const switchKitPosition = (kit1, position1, kit2, position2) => {
+
+// }
+
+// export const

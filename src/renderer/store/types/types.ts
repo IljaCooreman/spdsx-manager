@@ -26,7 +26,9 @@ export enum DeviceConnectorEvents {
 
 export enum KitNavigatorEvents {
     selectKit = 'kitNavigator/selectKit',
-    addKit = 'kitNavigator/addKit'
+    createKit = 'kitNavigator/createKit',
+    updateKit = 'kitNavigator/updateKit',
+    removeKit = 'kitNavigator/removeKit'
 }
 
 export interface Events {
@@ -37,7 +39,9 @@ export interface Events {
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
     [KitNavigatorEvents.selectKit]: string;
-    [KitNavigatorEvents.addKit]: Kit;
+    [KitNavigatorEvents.createKit]: Kit;
+    [KitNavigatorEvents.updateKit]: Kit;
+    [KitNavigatorEvents.removeKit]: Kit;
 }
 
 export enum PadNames {

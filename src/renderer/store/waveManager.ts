@@ -7,7 +7,7 @@ import LocalWave from '../../classes/LocalWave';
 import io from '../../classes/IO';
 import DeviceWave from '../../classes/DeviceWave';
 import { pathToWvNr } from '../utils/waveUtils';
-import { addWaveToDevice } from '../../classes/waveManager';
+import { addWaveToDevice } from '../../classes/waveMgmt';
 
 const initialState = { localWaves: [], deviceWaves: [] };
 
@@ -53,7 +53,6 @@ export const waveManager: StoreonModule<State, Events> = store => {
         }, acc);
 
         const deviceWaveArray = fileNames.map(file => {
-            console.log(device, file);
             return new DeviceWave(device, pathToWvNr(file));
         });
         return {

@@ -14,8 +14,8 @@ const Application = () => {
         <div>
             <h1>SPD-SX wave manager</h1>
             <DeviceConnModule />
-            <WaveManager />
             <Kits />
+            <WaveManager />
         </div>
     );
 };

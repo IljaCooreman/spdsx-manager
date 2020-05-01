@@ -58,9 +58,9 @@ export function pathToWvNr(shortPath: string): number {
  * @param device
  */
 export function paramLookup(waveNr: number | string, device: Device) {
-    const spdFile = io.localReadFile(
-        join(device.path, `Roland/SPD-SX/WAVE/PRM/${wvNrToPath(waveNr)}.spd`)
-    );
+    const path = join(device.path, `Roland/SPD-SX/WAVE/PRM/${wvNrToPath(waveNr)}.spd`);
+    if (!io.exists(path)) return undefined;
+    const spdFile = io.localReadFile(path);
     if (!spdFile) {
         return undefined;
     }

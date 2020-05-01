@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { join } from 'path';
 import { Pad } from './Pad';
 import { KitPrmType } from '../renderer/store/types/KitPrm';
 import { Name } from './Name';
@@ -7,11 +8,11 @@ import Device from './Device';
 import DeviceWave from './DeviceWave';
 import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
 import { PadNames } from '../renderer/store/types/types';
+import defaultKit from './defaultKit';
 
 export class Kit {
-    id: string = uuidv4();
+    id: number; // order number of the kit, between 0 and 99. e.g. 23 --> kit023.spd
     device: Device;
-    path = '';
     kitName = new Name('New Kit', 'Nm');
     kitSubName = new Name('new kit Subname', 'SubNm');
     Level = 100;
@@ -32,8 +33,15 @@ export class Kit {
     [PadNames.footSwitch1] = new Pad(this.device);
     [PadNames.footSwitch2] = new Pad(this.device);
 
-    constructor(kitPrm: KitPrmType, path: string, device: Device, deviceWaveList: DeviceWave[]) {
-        this.path = path;
+    constructor(
+        id: number,
+        device: Device,
+        deviceWaveList: DeviceWave[],
+        kitPrm: KitPrmType = defaultKit
+    ) {
+        if (id < 0 || id > 99)
+            throw new Error('Failed to initiate Kit class. Invalid id provided.');
+        this.id = id;
         this.device = device;
         try {
             this.assignPads(kitPrm, deviceWaveList);
@@ -42,6 +50,15 @@ export class Kit {
         } catch (e) {
             throw new Error(`Failed to initiate Kit class. ${e.message}`);
         }
+    }
+
+    get shortPath() {
+        return `kit0${`0${this.id}`.slice(-2)}.spd`;
+    }
+
+    get path() {
+        // full path
+        return join(this.device.path, `Roland/SPD-SX/KIT/${this.shortPath}`);
     }
 
     reassignPad(pad: Pad, targetPad: PadNames) {
@@ -195,23 +212,6 @@ export class Kit {
             ...(this.kitSubName.encodedObject as SubNameType),
             Tempo: this.Tempo,
             Level: this.Level,
-            PadPrm: {
-                '0': this[PadNames.pad1].padPrmObject,
-                '1': this[PadNames.pad2].padPrmObject,
-                '2': this[PadNames.pad3].padPrmObject,
-                '3': this[PadNames.pad4].padPrmObject,
-                '4': this[PadNames.pad5].padPrmObject,
-                '5': this[PadNames.pad6].padPrmObject,
-                '6': this[PadNames.pad7].padPrmObject,
-                '7': this[PadNames.pad8].padPrmObject,
-                '8': this[PadNames.pad9].padPrmObject,
-                '9': this[PadNames.trigger1].padPrmObject,
-                '10': this[PadNames.trigger2].padPrmObject,
-                '11': this[PadNames.trigger3].padPrmObject,
-                '12': this[PadNames.trigger4].padPrmObject,
-                '13': this[PadNames.footSwitch1].padPrmObject,
-                '14': this[PadNames.footSwitch2].padPrmObject
-            },
             // TODO: map further from here
             Fx2Asgn: 0,
             LinkPad0: 0,
@@ -259,7 +259,24 @@ export class Kit {
             Fx2Prm16: 0,
             Fx2Prm17: 0,
             Fx2Prm18: 0,
-            Fx2Prm19: 0
+            Fx2Prm19: 0,
+            PadPrm: [
+                this[PadNames.pad1].padPrmObject,
+                this[PadNames.pad2].padPrmObject,
+                this[PadNames.pad3].padPrmObject,
+                this[PadNames.pad4].padPrmObject,
+                this[PadNames.pad5].padPrmObject,
+                this[PadNames.pad6].padPrmObject,
+                this[PadNames.pad7].padPrmObject,
+                this[PadNames.pad8].padPrmObject,
+                this[PadNames.pad9].padPrmObject,
+                this[PadNames.trigger1].padPrmObject,
+                this[PadNames.trigger2].padPrmObject,
+                this[PadNames.trigger3].padPrmObject,
+                this[PadNames.trigger4].padPrmObject,
+                this[PadNames.footSwitch1].padPrmObject,
+                this[PadNames.footSwitch2].padPrmObject
+            ]
         };
     }
 }

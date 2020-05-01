@@ -34,8 +34,13 @@ const io = {
         try {
             writeFileSync(fullPath, content);
         } catch (e) {
+            console.log(e);
             throw new Error('unable to write file');
         }
+    },
+
+    exists(path: string) {
+        return existsSync(path);
     },
 
     createIfNotExists(path: string) {
@@ -57,7 +62,7 @@ const io = {
     writeKitPrm(contentObject: KitPrmType, fileName: string, device: Device) {
         this.writeFile(
             join(device.path, `Roland/SPD-SX/KIT/${stripExtension(fileName)}.spd`),
-            objectToXml(contentObject)
+            objectToXml({ KitPrm: contentObject })
         );
     },
 

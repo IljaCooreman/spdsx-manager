@@ -14,15 +14,17 @@ const initialState = {
 export const kitNavigator: StoreonModule<State, Events> = store => {
     store.on('@init', () => initialState);
 
+    // if connection status is changed, import all kits
     store.on(
         '@changed',
         ({ device, deviceWaves }, { deviceIsConnected, device: deviceHasChanged }) => {
             if (deviceIsConnected || (deviceHasChanged && deviceHasChanged.path)) {
                 const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
                 const fileNames = io.listFileNames(pathToKits);
+                console.log(fileNames, fileNames.length);
                 fileNames.forEach((file: string) => {
                     store.dispatch(
-                        KitNavigatorEvents.addKit,
+                        KitNavigatorEvents.createKit,
                         createKitFromPath(join(pathToKits, file), device, deviceWaves)
                     );
                 });
@@ -30,7 +32,7 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
         }
     );
 
-    store.on(KitNavigatorEvents.addKit, ({ kitList }, kit) => {
+    store.on(KitNavigatorEvents.createKit, ({ kitList }, kit) => {
         return {
             kitList: [...kitList, kit]
         };

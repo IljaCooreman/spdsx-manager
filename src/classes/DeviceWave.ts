@@ -63,7 +63,7 @@ export default class DeviceWave {
     }
 
     get WvPrmObject(): WvPrmType {
-        const encodedNameObject = this.name.encodedObject;
+        const encodedNameObject = new Name(this.name, 'Nm').encodedObject;
         return {
             ...(encodedNameObject as NameType),
             Tag: this.tag,
