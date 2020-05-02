@@ -9,11 +9,12 @@ import io from '../../classes/IO';
 import { Name } from '../../classes/Name';
 
 const initialState = {
-    selectedKit: '',
+    selectedKit: undefined,
     kitList: [...new Array(100)].map((_, i) => ({
         id: i,
         uuid: uuidv4(),
-        kitName: new Name('<empty>', 'Nm')
+        kitName: new Name('<empty>', 'Nm'),
+        type: 'EmptyKit'
     }))
 };
 
@@ -36,6 +37,11 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
             }
         }
     );
+
+    store.on(KitNavigatorEvents.selectKit, ({ kitList }, kit) => {
+        // const filteredKitList = kitList.filter(kit => kit.type === 'Kit') as Kit[]
+        return { selectedKit: kit };
+    });
 
     store.on(KitNavigatorEvents.addKit, ({ kitList }, kit) => {
         const index = kit.id;

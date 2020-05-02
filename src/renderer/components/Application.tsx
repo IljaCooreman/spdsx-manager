@@ -1,8 +1,8 @@
 import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
-import WaveManager from './WaveManager';
 import DeviceConnModule from './DeviceConnModule';
 import Kits from './Kits';
+import DndContainer from './DndContainer';
 
 require('./Main.scss');
 
@@ -14,8 +14,8 @@ const Application = () => {
         <div>
             <h1>SPD-SX wave manager</h1>
             <DeviceConnModule />
+            <DndContainer />
             <Kits />
-            <WaveManager />
         </div>
     );
 };

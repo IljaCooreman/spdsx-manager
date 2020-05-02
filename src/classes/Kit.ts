@@ -13,6 +13,7 @@ import defaultKit from './defaultKit';
 export class Kit {
     id: number; // order number of the kit, between 0 and 99. e.g. 23 --> kit023.spd
     uuid: string;
+    type = 'Kit';
     device: Device;
     kitName = new Name('New Kit', 'Nm');
     kitSubName = new Name('new kit Subname', 'SubNm');

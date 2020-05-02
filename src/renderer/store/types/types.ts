@@ -9,8 +9,8 @@ export interface State {
     deviceWaves: DeviceWave[];
     deviceIsConnected: boolean;
     device: Device;
-    selectedKit: string;
-    kitList: (Kit | { id: number; uuid: string; kitName: Name })[];
+    selectedKit: Kit | undefined;
+    kitList: (Kit | { id: number; uuid: string; kitName: Name; type: string })[];
 }
 
 export enum WaveManagerEvents {
@@ -40,7 +40,7 @@ export interface Events {
     [WaveManagerEvents.addWaveToDevice]: LocalWave;
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
-    [KitNavigatorEvents.selectKit]: string;
+    [KitNavigatorEvents.selectKit]: Kit | undefined;
     [KitNavigatorEvents.createNewKit]: number;
     [KitNavigatorEvents.addKit]: Kit;
     [KitNavigatorEvents.updateKit]: Kit;
