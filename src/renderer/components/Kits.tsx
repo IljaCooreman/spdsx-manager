@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { List, ListItem, RootRef, ListItemText } from '@material-ui/core';
 import { State, WaveManagerEvents, KitNavigatorEvents } from '../store/types/types';
 import { Kit } from '../../classes/Kit';
 
@@ -56,28 +57,29 @@ const Kits: React.FunctionComponent = () => {
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
                 {(provided: any, snapshot: any) => (
-                    <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}>
-                        {kitList.map((kit, index) => (
-                            <Draggable key={kit.id} draggableId={kit.id} index={index}>
-                                {(prov: any, snapsh: any) => (
-                                    <div
-                                        ref={prov.innerRef}
-                                        {...prov.draggableProps}
-                                        {...prov.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapsh.isDragging,
-                                            prov.draggableProps.style
-                                        )}>
-                                        {index}:{kit.kitName.name}
-                                    </div>
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
+                    <RootRef rootRef={provided.innerRef}>
+                        <List style={getListStyle(snapshot.isDraggingOver)}>
+                            {kitList.map((kit, index) => (
+                                <Draggable key={kit.uuid} draggableId={kit.uuid} index={index}>
+                                    {(prov: any, snapsh: any) => (
+                                        <ListItem
+                                            ref={prov.innerRef}
+                                            {...prov.draggableProps}
+                                            {...prov.dragHandleProps}
+                                            style={getItemStyle(
+                                                snapsh.isDragging,
+                                                prov.draggableProps.style
+                                            )}>
+                                            <ListItemText
+                                                primary={`${index}: ${kit.kitName.name}`}
+                                                />
+                                        </ListItem>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </List>
+                    </RootRef>
                 )}
             </Droppable>
         </DragDropContext>

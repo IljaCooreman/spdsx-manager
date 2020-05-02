@@ -2,13 +2,19 @@
 import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { State, Events, KitNavigatorEvents } from './types/types';
-import { createKitFromPath } from '../../classes/KitFactory';
+import { createKitFromPath, createNewKit } from '../../classes/KitFactory';
 import io from '../../classes/IO';
+import { Name } from '../../classes/Name';
 
 const initialState = {
     selectedKit: '',
-    kitList: []
+    kitList: [...new Array(100)].map((_, i) => ({
+        id: i,
+        uuid: uuidv4(),
+        kitName: new Name('<empty>', 'Nm')
+    }))
 };
 
 export const kitNavigator: StoreonModule<State, Events> = store => {
@@ -21,10 +27,9 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
             if (deviceIsConnected || (deviceHasChanged && deviceHasChanged.path)) {
                 const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
                 const fileNames = io.listFileNames(pathToKits);
-                console.log(fileNames, fileNames.length);
                 fileNames.forEach((file: string) => {
                     store.dispatch(
-                        KitNavigatorEvents.createKit,
+                        KitNavigatorEvents.addKit,
                         createKitFromPath(join(pathToKits, file), device, deviceWaves)
                     );
                 });
@@ -32,7 +37,15 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
         }
     );
 
-    store.on(KitNavigatorEvents.createKit, ({ kitList }, kit) => {
+    store.on(KitNavigatorEvents.addKit, ({ kitList }, kit) => {
+        const index = kit.id;
+        const kitListCopy = [...kitList];
+        kitListCopy[index] = kit;
+        return { kitList: kitListCopy };
+    });
+
+    store.on(KitNavigatorEvents.createNewKit, ({ kitList, device, deviceWaves }, id) => {
+        const kit = createNewKit(device, id, deviceWaves);
         return {
             kitList: [...kitList, kit]
         };

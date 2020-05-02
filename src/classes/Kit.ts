@@ -12,6 +12,7 @@ import defaultKit from './defaultKit';
 
 export class Kit {
     id: number; // order number of the kit, between 0 and 99. e.g. 23 --> kit023.spd
+    uuid: string;
     device: Device;
     kitName = new Name('New Kit', 'Nm');
     kitSubName = new Name('new kit Subname', 'SubNm');
@@ -39,6 +40,7 @@ export class Kit {
         deviceWaveList: DeviceWave[],
         kitPrm: KitPrmType = defaultKit
     ) {
+        this.uuid = uuidv4();
         if (id < 0 || id > 99)
             throw new Error('Failed to initiate Kit class. Invalid id provided.');
         this.id = id;

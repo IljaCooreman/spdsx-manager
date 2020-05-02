@@ -2,6 +2,7 @@ import { Kit } from '../../../classes/Kit';
 import LocalWave from '../../../classes/LocalWave';
 import DeviceWave from '../../../classes/DeviceWave';
 import Device from '../../../classes/Device';
+import { Name } from '../../../classes/Name';
 
 export interface State {
     localWaves: LocalWave[];
@@ -9,7 +10,7 @@ export interface State {
     deviceIsConnected: boolean;
     device: Device;
     selectedKit: string;
-    kitList: Kit[];
+    kitList: (Kit | { id: number; uuid: string; kitName: Name })[];
 }
 
 export enum WaveManagerEvents {
@@ -26,7 +27,8 @@ export enum DeviceConnectorEvents {
 
 export enum KitNavigatorEvents {
     selectKit = 'kitNavigator/selectKit',
-    createKit = 'kitNavigator/createKit',
+    addKit = 'kitNavigator/addKit',
+    createNewKit = 'kitNavigator/createNewKit',
     updateKit = 'kitNavigator/updateKit',
     removeKit = 'kitNavigator/removeKit'
 }
@@ -39,7 +41,8 @@ export interface Events {
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
     [KitNavigatorEvents.selectKit]: string;
-    [KitNavigatorEvents.createKit]: Kit;
+    [KitNavigatorEvents.createNewKit]: number;
+    [KitNavigatorEvents.addKit]: Kit;
     [KitNavigatorEvents.updateKit]: Kit;
     [KitNavigatorEvents.removeKit]: Kit;
 }
