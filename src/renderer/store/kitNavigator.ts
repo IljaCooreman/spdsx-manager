@@ -3,7 +3,7 @@ import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { State, Events, KitNavigatorEvents } from './types/types';
+import { State, Events, KitNavigatorEvents, DeviceConnectorEvents } from './types/types';
 import { createKitFromPath, createNewKit } from '../../classes/KitFactory';
 import io from '../../classes/IO';
 import { Name } from '../../classes/Name';
@@ -20,6 +20,13 @@ const initialState = {
 
 export const kitNavigator: StoreonModule<State, Events> = store => {
     store.on('@init', () => initialState);
+    // TODO: do only in development
+    // connect automatically to a (virtual) device
+    store.on('@init', () => {
+        store.dispatch(DeviceConnectorEvents.connect, [
+            '/Users/coorem43/Documents/projects/prive/spdsx2/data/playground'
+        ]);
+    });
 
     // if connection status is changed, import all kits
     store.on(
@@ -61,5 +68,15 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
         return {
             selectedKit: kitId
         };
+    });
+
+    store.on(KitNavigatorEvents.updatePadWave, ({ selectedKit, device }, { padName, wave }) => {
+        if (!selectedKit) return;
+        // 1 update class
+        selectedKit[padName].updateWave(wave);
+        // 2 write on spdsx
+        io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
+        // error: undo changes on class
+        // TODO: see above
     });
 };

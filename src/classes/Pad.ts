@@ -1,8 +1,10 @@
+import { v4 as uuidv4 } from 'uuid';
 import { PadPrmType } from '../renderer/store/types/PadPrm';
-import Device from './Device';
 import DeviceWave from './DeviceWave';
+import { PadNames, PadPrmSpdTags } from '../renderer/store/types/types';
 
 export class Pad {
+    uuid: string;
     wave: DeviceWave | undefined;
     WvLevel = 100;
     WvPan = 0; // L15 - center - R15
@@ -23,7 +25,8 @@ export class Pad {
     SubWvLevel = 0;
     SubWvPan = 0;
 
-    constructor(device: Device, pad?: PadPrmType, deviceWave?: DeviceWave) {
+    constructor(pad?: PadPrmType, deviceWave?: DeviceWave) {
+        this.uuid = uuidv4();
         if (pad) {
             const {
                 WvPan,
@@ -67,6 +70,14 @@ export class Pad {
             this.SubWvLevel = SubWvLevel;
             this.SubWvPan = SubWvPan;
         }
+    }
+
+    updateProperty(name: PadPrmSpdTags, value: any) {
+        this[name] = value;
+    }
+
+    updateWave(wave: DeviceWave) {
+        this.wave = wave;
     }
 
     get padPrmObject(): PadPrmType {

@@ -30,7 +30,8 @@ export enum KitNavigatorEvents {
     addKit = 'kitNavigator/addKit',
     createNewKit = 'kitNavigator/createNewKit',
     updateKit = 'kitNavigator/updateKit',
-    removeKit = 'kitNavigator/removeKit'
+    removeKit = 'kitNavigator/removeKit',
+    updatePadWave = 'kitNavigator/updatePadWave'
 }
 
 export interface Events {
@@ -45,6 +46,7 @@ export interface Events {
     [KitNavigatorEvents.addKit]: Kit;
     [KitNavigatorEvents.updateKit]: Kit;
     [KitNavigatorEvents.removeKit]: Kit;
+    [KitNavigatorEvents.updatePadWave]: { padName: PadNames; wave: DeviceWave };
 }
 
 export enum PadNames {

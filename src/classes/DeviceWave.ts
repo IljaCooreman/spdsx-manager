@@ -1,7 +1,7 @@
 import { join, basename } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { Name } from './Name';
 import { paramLookup, wvNrToPath } from '../renderer/utils/waveUtils';
-import { decimalToString } from './xmlUtils';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { NameType } from '../renderer/store/types/NameTypes';
@@ -9,12 +9,14 @@ import LocalWave from './LocalWave';
 
 export default class DeviceWave {
     device: Device;
+    uuid: string;
     wvNr: number; // 120
     tag: number;
     wavePath: string; // '00/clap__.wav'
     localWave: LocalWave | undefined = undefined;
 
     constructor(device: Device, wvNr: number, localWave?: LocalWave) {
+        this.uuid = uuidv4();
         this.device = device;
         this.wvNr = Number(wvNr);
         const path = wvNrToPath(wvNr);

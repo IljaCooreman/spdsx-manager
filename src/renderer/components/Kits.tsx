@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { List, ListItem, RootRef, ListItemText } from '@material-ui/core';
+import { List, ListItem, RootRef, ListItemText, Grid } from '@material-ui/core';
 import { State, WaveManagerEvents, KitNavigatorEvents } from '../store/types/types';
 import { Kit } from '../../classes/Kit';
 import { store } from '../store';
@@ -41,7 +41,9 @@ const Kits: React.FunctionComponent = () => {
     const getListStyle = (isDraggingOver: boolean) => ({
         background: isDraggingOver ? 'lightblue' : 'lightgrey',
         padding: grid,
-        width: 250
+        minWidth: '200px',
+        maxHeight: '100%',
+        overflow: 'auto'
     });
 
     const onDragEnd = (result: DropResult) => {
@@ -66,39 +68,41 @@ const Kits: React.FunctionComponent = () => {
     };
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <RootRef rootRef={provided.innerRef}>
-                        <List style={getListStyle(snapshot.isDraggingOver)}>
-                            {kitList.map((kit, index) => (
-                                <Draggable key={kit.uuid} draggableId={kit.uuid} index={index}>
-                                    {(prov, snapsh) => (
-                                        <ListItem
-                                            ref={prov.innerRef}
-                                            {...prov.draggableProps}
-                                            {...prov.dragHandleProps}
-                                            button
-                                            selected={kit.uuid === selectedKit?.uuid}
-                                            onClick={() => onItemClick(kit)}
-                                            style={getItemStyle(
-                                                snapsh.isDragging,
-                                                prov.draggableProps.style,
-                                                kit.uuid === selectedKit?.uuid
-                                            )}>
-                                            <ListItemText
-                                                primary={`${index}: ${kit.kitName.name}`}
-                                                />
-                                        </ListItem>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </List>
-                    </RootRef>
-                )}
-            </Droppable>
-        </DragDropContext>
+        <Grid item xs={3}>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                        <RootRef rootRef={provided.innerRef}>
+                            <List style={getListStyle(snapshot.isDraggingOver)}>
+                                {kitList.map((kit, index) => (
+                                    <Draggable key={kit.uuid} draggableId={kit.uuid} index={index}>
+                                        {(prov, snapsh) => (
+                                            <ListItem
+                                                ref={prov.innerRef}
+                                                {...prov.draggableProps}
+                                                {...prov.dragHandleProps}
+                                                button
+                                                selected={kit.uuid === selectedKit?.uuid}
+                                                onClick={() => onItemClick(kit)}
+                                                style={getItemStyle(
+                                                    snapsh.isDragging,
+                                                    prov.draggableProps.style,
+                                                    kit.uuid === selectedKit?.uuid
+                                                )}>
+                                                <ListItemText
+                                                    primary={`${index}: ${kit.kitName.name}`}
+                                                    />
+                                            </ListItem>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </List>
+                        </RootRef>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </Grid>
     );
 };
 

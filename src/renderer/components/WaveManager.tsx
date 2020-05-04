@@ -11,7 +11,12 @@ import {
     RootRef
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/Inbox';
-import { Draggable, DraggableProvided, Droppable } from 'react-beautiful-dnd';
+import {
+    Draggable,
+    DraggableProvided,
+    Droppable,
+    DraggableStateSnapshot
+} from 'react-beautiful-dnd';
 import { openImportDialog } from '../utils/openDialog';
 import { State, WaveManagerEvents } from '../store/types/types';
 import DeviceWave from '../../classes/DeviceWave';
@@ -21,12 +26,35 @@ const WaveManager: React.FunctionComponent = () => {
     const { deviceWaves } = useStoreon<State, WaveManagerEvents>('deviceWaves');
 
     const getListStyle = (isDraggingOver: any) => {
-        return {};
+        return {
+            background: 'lightgrey',
+            maxWidth: '250px',
+            listStyle: 'none',
+            padding: '8px',
+            overflow: 'scroll',
+            maxHeight: '100%'
+        };
     };
 
-    const getItemStyle = (isDragging: boolean, style: any) => {
+    const grid = 8;
+
+    const getItemStyle = (
+        {
+            isDragging,
+            isDropAnimating,
+            mode,
+            combineTargetFor,
+            combineWith,
+            draggingOver
+        }: DraggableStateSnapshot,
+        style: any
+    ) => {
         return {
+            userSelect: 'none',
+            padding: grid,
+            margin: `0 0 ${grid / 2}px ${grid / 2}px`,
             background: isDragging ? 'lightgreen' : 'white',
+            border: isDropAnimating ? '1px solid red' : 'none',
             ...style
         };
     };
@@ -35,35 +63,29 @@ const WaveManager: React.FunctionComponent = () => {
         // store.dispatch(WaveManagerEvents.addWaveToDevice, wave);
     };
     return (
-        <Grid item xs={6}>
+        <Grid item xs={3} style={{ maxHeight: '100%' }}>
             <Button
                 variant="outlined"
                 onClick={() => openImportDialog(WaveManagerEvents.import, {})}>
                 import
             </Button>
 
-            <Droppable droppableId="droppable">
-                {(provided: any, snapshot: any) => (
+            <Droppable droppableId="droppable" type="PAD" isDropDisabled={true}>
+                {(provided, snapshot) => (
                     <ul
                         style={getListStyle(snapshot.isDraggingOver)}
                         ref={provided.innerRef}
                         {...provided.droppableProps}>
                         {deviceWaves.map((wave, index) => (
-                            <Draggable
-                                key={wave.wvNr}
-                                draggableId={String(wave.wvNr)}
-                                index={index}>
-                                {(prov: any, snapsh: any) => (
+                            <Draggable key={wave.uuid} draggableId={wave.uuid} index={index}>
+                                {(prov, snapsh) => (
                                     <li
                                         ref={prov.innerRef}
                                         {...prov.draggableProps}
                                         {...prov.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapsh.isDragging,
-                                            prov.draggableProps.style
-                                        )}
-                                        key={wave.wvNr}>
-                                        wave.name
+                                        style={getItemStyle(snapsh, prov.draggableProps.style)}
+                                        key={wave.uuid}>
+                                        {wave.name}
                                     </li>
                                 )}
                             </Draggable>
@@ -72,46 +94,6 @@ const WaveManager: React.FunctionComponent = () => {
                     </ul>
                 )}
             </Droppable>
-
-            {/* <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <RootRef rootRef={provided.innerRef}></RootRef>
-                    
-            <List
-                component="div"
-                aria-labelledby="waves-on-device"
-                subheader={
-                    <ListSubheader component="div" id="waves-on-device">
-                        Waves on device
-                    </ListSubheader>
-                }>
-                {deviceWaves.map((wave: DeviceWave, index: number) => (
-                    <Draggable key={wave.wvNr} draggableId={String(wave.wvNr)} index={index}>
-                        {(provided: DraggableProvided, snapshot) => {
-                            return (
-                                <ListItem
-                                    button
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    key={wave.wvNr}
-                                    onClick={() => {
-                                        console.log(wave);
-                                    }}>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={wave.name} />
-                                </ListItem>
-                            )
-                        }}
-                    </Draggable>
-                ))}
-            </List>
-
-            </RootRef>
-                )}
-            </Droppable> */}
 
             <Button>Export all</Button>
         </Grid>

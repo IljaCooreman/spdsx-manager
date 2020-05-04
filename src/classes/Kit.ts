@@ -19,21 +19,21 @@ export class Kit {
     kitSubName = new Name('new kit Subname', 'SubNm');
     Level = 100;
     Tempo = 120;
-    [PadNames.pad1] = new Pad(this.device);
-    [PadNames.pad2] = new Pad(this.device);
-    [PadNames.pad3] = new Pad(this.device);
-    [PadNames.pad4] = new Pad(this.device);
-    [PadNames.pad5] = new Pad(this.device);
-    [PadNames.pad6] = new Pad(this.device);
-    [PadNames.pad7] = new Pad(this.device);
-    [PadNames.pad8] = new Pad(this.device);
-    [PadNames.pad9] = new Pad(this.device);
-    [PadNames.trigger1] = new Pad(this.device);
-    [PadNames.trigger2] = new Pad(this.device);
-    [PadNames.trigger3] = new Pad(this.device);
-    [PadNames.trigger4] = new Pad(this.device);
-    [PadNames.footSwitch1] = new Pad(this.device);
-    [PadNames.footSwitch2] = new Pad(this.device);
+    [PadNames.pad1] = new Pad();
+    [PadNames.pad2] = new Pad();
+    [PadNames.pad3] = new Pad();
+    [PadNames.pad4] = new Pad();
+    [PadNames.pad5] = new Pad();
+    [PadNames.pad6] = new Pad();
+    [PadNames.pad7] = new Pad();
+    [PadNames.pad8] = new Pad();
+    [PadNames.pad9] = new Pad();
+    [PadNames.trigger1] = new Pad();
+    [PadNames.trigger2] = new Pad();
+    [PadNames.trigger3] = new Pad();
+    [PadNames.trigger4] = new Pad();
+    [PadNames.footSwitch1] = new Pad();
+    [PadNames.footSwitch2] = new Pad();
 
     constructor(
         id: number,
@@ -55,6 +55,10 @@ export class Kit {
         }
     }
 
+    updateProperty(name: 'Level' | 'Tempo', value: number) {
+        this[name] = value;
+    }
+
     get shortPath() {
         return `kit0${`0${this.id}`.slice(-2)}.spd`;
     }
@@ -74,78 +78,25 @@ export class Kit {
             return waveList.find(deviceWave => deviceWave.wvNr === WvNr);
         };
         const { PadPrm } = kitPrm;
-        this[PadNames.pad1] = new Pad(
-            this.device,
-            PadPrm['0'],
-            findWave(PadPrm['0'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad2] = new Pad(
-            this.device,
-            PadPrm['1'],
-            findWave(PadPrm['1'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad3] = new Pad(
-            this.device,
-            PadPrm['2'],
-            findWave(PadPrm['2'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad4] = new Pad(
-            this.device,
-            PadPrm['3'],
-            findWave(PadPrm['3'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad5] = new Pad(
-            this.device,
-            PadPrm['4'],
-            findWave(PadPrm['4'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad6] = new Pad(
-            this.device,
-            PadPrm['5'],
-            findWave(PadPrm['5'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad7] = new Pad(
-            this.device,
-            PadPrm['6'],
-            findWave(PadPrm['6'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad8] = new Pad(
-            this.device,
-            PadPrm['7'],
-            findWave(PadPrm['7'].Wv, deviceWaveList)
-        );
-        this[PadNames.pad9] = new Pad(
-            this.device,
-            PadPrm['8'],
-            findWave(PadPrm['8'].Wv, deviceWaveList)
-        );
-        this[PadNames.trigger1] = new Pad(
-            this.device,
-            PadPrm['9'],
-            findWave(PadPrm['9'].Wv, deviceWaveList)
-        );
-        this[PadNames.trigger2] = new Pad(
-            this.device,
-            PadPrm['10'],
-            findWave(PadPrm['10'].Wv, deviceWaveList)
-        );
-        this[PadNames.trigger3] = new Pad(
-            this.device,
-            PadPrm['11'],
-            findWave(PadPrm['11'].Wv, deviceWaveList)
-        );
-        this[PadNames.trigger4] = new Pad(
-            this.device,
-            PadPrm['12'],
-            findWave(PadPrm['12'].Wv, deviceWaveList)
-        );
+        //  TODO: this lookup (findWave) might be slow, but it seems not the main issue
+        this[PadNames.pad1] = new Pad(PadPrm['0'], findWave(PadPrm['0'].Wv, deviceWaveList));
+        this[PadNames.pad2] = new Pad(PadPrm['1'], findWave(PadPrm['1'].Wv, deviceWaveList));
+        this[PadNames.pad3] = new Pad(PadPrm['2'], findWave(PadPrm['2'].Wv, deviceWaveList));
+        this[PadNames.pad4] = new Pad(PadPrm['3'], findWave(PadPrm['3'].Wv, deviceWaveList));
+        this[PadNames.pad5] = new Pad(PadPrm['4'], findWave(PadPrm['4'].Wv, deviceWaveList));
+        this[PadNames.pad6] = new Pad(PadPrm['5'], findWave(PadPrm['5'].Wv, deviceWaveList));
+        this[PadNames.pad7] = new Pad(PadPrm['6'], findWave(PadPrm['6'].Wv, deviceWaveList));
+        this[PadNames.pad8] = new Pad(PadPrm['7'], findWave(PadPrm['7'].Wv, deviceWaveList));
+        this[PadNames.pad9] = new Pad(PadPrm['8'], findWave(PadPrm['8'].Wv, deviceWaveList));
+        this[PadNames.trigger1] = new Pad(PadPrm['9'], findWave(PadPrm['9'].Wv, deviceWaveList));
+        this[PadNames.trigger2] = new Pad(PadPrm['10'], findWave(PadPrm['10'].Wv, deviceWaveList));
+        this[PadNames.trigger3] = new Pad(PadPrm['11'], findWave(PadPrm['11'].Wv, deviceWaveList));
+        this[PadNames.trigger4] = new Pad(PadPrm['12'], findWave(PadPrm['12'].Wv, deviceWaveList));
         this[PadNames.footSwitch1] = new Pad(
-            this.device,
             PadPrm['13'],
             findWave(PadPrm['13'].Wv, deviceWaveList)
         );
         this[PadNames.footSwitch2] = new Pad(
-            this.device,
             PadPrm['14'],
             findWave(PadPrm['14'].Wv, deviceWaveList)
         );
