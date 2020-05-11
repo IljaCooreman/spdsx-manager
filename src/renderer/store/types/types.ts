@@ -1,15 +1,20 @@
+import { DropResult } from 'react-beautiful-dnd';
 import { Kit } from '../../../classes/Kit';
 import LocalWave from '../../../classes/LocalWave';
-import DeviceWave from '../../../classes/DeviceWave';
+import DeviceWave, { DndObject } from '../../../classes/DeviceWave';
 import Device from '../../../classes/Device';
 import { Name } from '../../../classes/Name';
+import { Pad } from '../../../classes/Pad';
 
 export interface State {
     localWaves: LocalWave[];
     deviceWaves: DeviceWave[];
+    dndDeviceWaves: DndObject<DeviceWave>[];
+    dndPadWaves: DndPadWaves;
     deviceIsConnected: boolean;
     device: Device;
     selectedKit: Kit | undefined;
+    selectedPad: PadNames | undefined;
     kitList: (Kit | { id: number; uuid: string; kitName: Name; type: string })[];
 }
 
@@ -29,9 +34,14 @@ export enum KitNavigatorEvents {
     selectKit = 'kitNavigator/selectKit',
     addKit = 'kitNavigator/addKit',
     createNewKit = 'kitNavigator/createNewKit',
-    updateKit = 'kitNavigator/updateKit',
-    removeKit = 'kitNavigator/removeKit',
-    updatePadWave = 'kitNavigator/updatePadWave'
+    removeKit = 'kitNavigator/removeKit'
+}
+
+export enum KitConfiguratorEvents {
+    dropOnPad = 'kitConfigurator/dropOnPad',
+    removeWaveFromPad = 'kitConfigurator/removeWaveFromPad',
+    clickOnPad = 'kitConfigurator/clickOnPad',
+    updateKit = 'kitConfigurator/updateKit'
 }
 
 export interface Events {
@@ -44,9 +54,44 @@ export interface Events {
     [KitNavigatorEvents.selectKit]: Kit | undefined;
     [KitNavigatorEvents.createNewKit]: number;
     [KitNavigatorEvents.addKit]: Kit;
-    [KitNavigatorEvents.updateKit]: Kit;
+    [KitConfiguratorEvents.updateKit]: Kit;
     [KitNavigatorEvents.removeKit]: Kit;
-    [KitNavigatorEvents.updatePadWave]: { padName: PadNames; wave: DeviceWave };
+    [KitConfiguratorEvents.dropOnPad]: DropResult;
+    [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
+    [KitConfiguratorEvents.clickOnPad]: PadNames;
+}
+
+export enum PadWaveTypes {
+    main = 'main',
+    sub = 'sub'
+}
+
+export type DndPadWavesObject = {
+    [PadWaveTypes.main]: DndObject<DeviceWave | undefined> | undefined;
+    [PadWaveTypes.sub]: DndObject<DeviceWave | undefined> | undefined;
+};
+
+export enum DroppableTypes {
+    pad = 'pad',
+    list = 'list'
+}
+
+export interface DndPadWaves {
+    [PadNames.pad1]: DndPadWavesObject;
+    [PadNames.pad2]: DndPadWavesObject;
+    [PadNames.pad3]: DndPadWavesObject;
+    [PadNames.pad4]: DndPadWavesObject;
+    [PadNames.pad5]: DndPadWavesObject;
+    [PadNames.pad6]: DndPadWavesObject;
+    [PadNames.pad7]: DndPadWavesObject;
+    [PadNames.pad8]: DndPadWavesObject;
+    [PadNames.pad9]: DndPadWavesObject;
+    [PadNames.trigger1]: DndPadWavesObject;
+    [PadNames.trigger2]: DndPadWavesObject;
+    [PadNames.trigger3]: DndPadWavesObject;
+    [PadNames.trigger4]: DndPadWavesObject;
+    [PadNames.footSwitch1]: DndPadWavesObject;
+    [PadNames.footSwitch2]: DndPadWavesObject;
 }
 
 export enum PadNames {

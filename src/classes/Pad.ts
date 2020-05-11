@@ -76,7 +76,7 @@ export class Pad {
         this[name] = value;
     }
 
-    updateWave(wave: DeviceWave) {
+    updateWave(wave: DeviceWave | undefined) {
         this.wave = wave;
     }
 

@@ -25,7 +25,7 @@ const DeviceConnModule: React.FunctionComponent = () => {
     );
 
     return (
-        <Grid item xs={12}>
+        <Grid item xs={2}>
             <div>{deviceIsConnected ? 'connected to device' : 'no connection with device'}</div>
             {connectButton}
             <hr />

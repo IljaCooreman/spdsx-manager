@@ -7,6 +7,10 @@ import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { NameType } from '../renderer/store/types/NameTypes';
 import LocalWave from './LocalWave';
 
+export interface DndObject<T> {
+    id: string;
+    item: T;
+}
 export default class DeviceWave {
     device: Device;
     uuid: string;

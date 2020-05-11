@@ -3,10 +3,17 @@ import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { State, Events, KitNavigatorEvents, DeviceConnectorEvents } from './types/types';
+import {
+    State,
+    Events,
+    KitNavigatorEvents,
+    DeviceConnectorEvents,
+    KitConfiguratorEvents
+} from './types/types';
 import { createKitFromPath, createNewKit } from '../../classes/KitFactory';
 import io from '../../classes/IO';
 import { Name } from '../../classes/Name';
+import { createDndPadWaves } from '../utils/createDndPadWaves';
 
 const initialState = {
     selectedKit: undefined,
@@ -36,47 +43,33 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
                 const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
                 const fileNames = io.listFileNames(pathToKits);
                 fileNames.forEach((file: string) => {
-                    store.dispatch(
-                        KitNavigatorEvents.addKit,
-                        createKitFromPath(join(pathToKits, file), device, deviceWaves)
-                    );
+                    const kit = createKitFromPath(join(pathToKits, file), device, deviceWaves);
+                    store.dispatch(KitNavigatorEvents.addKit, kit);
                 });
             }
         }
     );
 
     store.on(KitNavigatorEvents.selectKit, ({ kitList }, kit) => {
-        // const filteredKitList = kitList.filter(kit => kit.type === 'Kit') as Kit[]
-        return { selectedKit: kit };
+        if (!kit) return {};
+        return { selectedKit: kit, dndPadWaves: createDndPadWaves(kit) };
     });
 
     store.on(KitNavigatorEvents.addKit, ({ kitList }, kit) => {
         const index = kit.id;
         const kitListCopy = [...kitList];
         kitListCopy[index] = kit;
-        return { kitList: kitListCopy };
+        return {
+            kitList: kitListCopy,
+            dndPadWaves: createDndPadWaves(kit)
+        };
     });
 
     store.on(KitNavigatorEvents.createNewKit, ({ kitList, device, deviceWaves }, id) => {
         const kit = createNewKit(device, id, deviceWaves);
         return {
-            kitList: [...kitList, kit]
+            kitList: [...kitList, kit],
+            dndPadWaves: createDndPadWaves(kit)
         };
-    });
-
-    store.on(KitNavigatorEvents.selectKit, (_, kitId) => {
-        return {
-            selectedKit: kitId
-        };
-    });
-
-    store.on(KitNavigatorEvents.updatePadWave, ({ selectedKit, device }, { padName, wave }) => {
-        if (!selectedKit) return;
-        // 1 update class
-        selectedKit[padName].updateWave(wave);
-        // 2 write on spdsx
-        io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
-        // error: undo changes on class
-        // TODO: see above
     });
 };

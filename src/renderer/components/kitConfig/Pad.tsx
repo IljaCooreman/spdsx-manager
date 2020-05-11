@@ -6,63 +6,65 @@ import {
     DroppableStateSnapshot,
     DroppableProvided
 } from 'react-beautiful-dnd';
+import { useStoreon } from 'storeon/react';
 import { Pad as PadClass } from '../../../classes/Pad';
-import { PadNames } from '../../store/types/types';
+import { PadNames, KitConfiguratorEvents, PadWaveTypes, State } from '../../store/types/types';
+import { store } from '../../store';
+import PadDroppable from './PadDroppable';
 
 interface PadProps {
     padName: PadNames;
-    pad: PadClass | undefined;
+    pad: PadClass;
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-    createStyles({
-        root: {
-            flexGrow: 1
-        },
-        paper: {
-            textAlign: 'center',
-            color: theme.palette.text.secondary
-        }
-    });
-});
-
-const getPadStyle = (snapshot: DroppableStateSnapshot) => {
-    return {
-        height: '100px',
-        background: snapshot.isDraggingOver ? 'red' : 'white'
-    };
-};
-
 const Pad: React.FunctionComponent<PadProps> = ({ padName, pad }) => {
-    const classes = useStyles();
+    const { selectedPad, selectedKit, dndPadWaves }: State = useStoreon(
+        'selectedPad',
+        'selectedKit',
+        'dndPadWaves'
+    );
+
+    const getPadStyle = () => {
+        return {
+            height: '100px',
+            background: 'white',
+            border: `1px ${selectedPad === padName ? 'solid red' : 'solid white'}`
+        };
+    };
+
+    if (!selectedKit)
+        return (
+            <Grid item xs={4}>
+                <Paper
+                    style={{
+                        height: '100px',
+                        background: '#e3e3e3'
+                    }}>
+                    <div>pad {padName}</div>
+                </Paper>
+            </Grid>
+        );
+
     return (
         <Grid item xs={4}>
-            <Paper>
-                <Droppable droppableId={String(padName)} type="PAD">
-                    {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-                        <div
-                            ref={provided.innerRef}
-                            style={getPadStyle(snapshot)}
-                            {...provided.droppableProps}>
-                            <div>pad {padName}</div>
-                            <Draggable
-                                key={`pad-${pad?.uuid || 0}`}
-                                isDragDisabled={!pad?.wave}
-                                draggableId={String(pad?.wave?.uuid) || '0'}
-                                index={0}>
-                                {(prov, snapsh) => (
-                                    <div
-                                        ref={prov.innerRef}
-                                        {...prov.draggableProps}
-                                        {...prov.dragHandleProps}>
-                                        <div>{pad?.wave?.name}</div>
-                                    </div>
-                                )}
-                            </Draggable>
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
+            <Paper
+                style={getPadStyle()}
+                onClick={() => store.dispatch(KitConfiguratorEvents.clickOnPad, padName)}>
+                <div>pad {padName}</div>
+                {selectedKit && (
+                    <PadDroppable
+                        padName={padName}
+                        dndObject={dndPadWaves?.[padName][PadWaveTypes.main]}
+                        padWaveType={PadWaveTypes.main}
+                        />
+                )}
+                {selectedKit && (
+                    <PadDroppable
+                        padName={padName}
+                        dndObject={dndPadWaves?.[padName][PadWaveTypes.sub]}
+                        padWaveType={PadWaveTypes.sub}
+                        />
+                )}
             </Paper>
         </Grid>
     );

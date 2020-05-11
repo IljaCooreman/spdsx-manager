@@ -10,7 +10,7 @@ export interface SpdsxProps {
 
 const Spdsx: React.FunctionComponent<SpdsxProps> = ({ kit }) => {
     return (
-        <Grid item container xs={6} spacing={2}>
+        <Grid item container xs={12} spacing={2}>
             <Grid container spacing={2}>
                 <Pad padName={PadNames.pad1} pad={kit?.[PadNames.pad1]} />
                 <Pad padName={PadNames.pad2} pad={kit?.[PadNames.pad2]} />
@@ -20,6 +20,11 @@ const Spdsx: React.FunctionComponent<SpdsxProps> = ({ kit }) => {
                 <Pad padName={PadNames.pad4} pad={kit?.[PadNames.pad4]} />
                 <Pad padName={PadNames.pad5} pad={kit?.[PadNames.pad5]} />
                 <Pad padName={PadNames.pad6} pad={kit?.[PadNames.pad6]} />
+            </Grid>
+            <Grid container spacing={2}>
+                <Pad padName={PadNames.pad7} pad={kit?.[PadNames.pad7]} />
+                <Pad padName={PadNames.pad8} pad={kit?.[PadNames.pad8]} />
+                <Pad padName={PadNames.pad9} pad={kit?.[PadNames.pad9]} />
             </Grid>
         </Grid>
     );

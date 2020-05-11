@@ -5,20 +5,33 @@ import { useStoreon } from 'storeon/react';
 import WaveManager from './WaveManager';
 import KitConfigContainer from './kitConfig/Container';
 import { store } from '../store';
-import { KitNavigatorEvents, PadNames, State } from '../store/types/types';
+import {
+    KitNavigatorEvents,
+    PadNames,
+    State,
+    KitConfiguratorEvents,
+    DroppableTypes
+} from '../store/types/types';
 import Kits from './Kits';
+import { parseDroppableId } from '../utils/parseDroppableId';
 
 const DndContainer: React.FunctionComponent = () => {
-    const { deviceWaves }: State = useStoreon('deviceWaves');
     const onDragEnd = (result: DropResult) => {
-        console.log(result);
-        const typedPadName = Number(result.destination?.droppableId) as PadNames;
-        const wave = deviceWaves.find(deviceWave => deviceWave.uuid === result.draggableId);
-        if (!wave) {
-            throw new Error('invalid wave found');
+        console.log(result.destination);
+        if (parseDroppableId(result.destination?.droppableId).type === DroppableTypes.pad) {
+            store.dispatch(KitConfiguratorEvents.dropOnPad, result);
         }
-        store.dispatch(KitNavigatorEvents.updatePadWave, { padName: typedPadName, wave });
+
+        if (
+            (parseDroppableId(result.source.droppableId).type === DroppableTypes.pad &&
+                !result.destination) ||
+            parseDroppableId(result.destination?.droppableId).type !== DroppableTypes.pad
+        ) {
+            console.log('delete me');
+            store.dispatch(KitConfiguratorEvents.removeWaveFromPad, result);
+        }
     };
+
     return (
         <Grid
             item
@@ -30,8 +43,8 @@ const DndContainer: React.FunctionComponent = () => {
             style={{ maxHeight: 'calc(100vh - 300px)' }}>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Kits />
-                <WaveManager />
                 <KitConfigContainer />
+                <WaveManager />
             </DragDropContext>
         </Grid>
     );

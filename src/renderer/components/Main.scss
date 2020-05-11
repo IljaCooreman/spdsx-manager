@@ -31,8 +31,25 @@
 
 :root {
     font-family: Roboto;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
 }
 
 h1 {
+    margin: 0;
     font-family: Roboto;
+}
+
+.hide-children {
+    border: 2px solid orange;
+}
+
+.hide-children + li {
+    display: none !important;
+    border: 3px solid red;
 }
