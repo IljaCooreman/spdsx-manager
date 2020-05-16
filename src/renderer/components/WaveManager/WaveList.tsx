@@ -6,14 +6,17 @@ import { Draggable, Droppable, DraggableStateSnapshot } from 'react-beautiful-dn
 import { openImportDialog } from '../../utils/openDialog';
 import { State, WaveManagerEvents } from '../../store/types/types';
 import DeviceWave from '../../../classes/DeviceWave';
+import DraggableAudio from '../DraggableAudio';
+import { GeneralContainer } from '../../styling';
 
 const WaveList: React.FunctionComponent = () => {
     const { dndDeviceWaves } = useStoreon<State, WaveManagerEvents>('dndDeviceWaves');
 
-    const getListStyle = (isDraggingOver: any) => {
+    const getListStyle = () => {
         return {
             background: 'lightgrey',
             maxWidth: '250px',
+            minWidth: '200px',
             listStyle: 'none',
             padding: '8px',
             overflow: 'scroll',
@@ -68,41 +71,25 @@ const WaveList: React.FunctionComponent = () => {
 
     // `;
 
+    const Container = GeneralContainer();
+
     const onAddWaveClick = (wave: DeviceWave) => {
         // store.dispatch(WaveManagerEvents.addWaveToDevice, wave);
     };
     return (
-        <Grid item xs={3} style={{ maxHeight: '100%' }}>
-            <Button
-                variant="outlined"
-                onClick={() => openImportDialog(WaveManagerEvents.import, {})}>
-                import
-            </Button>
+        <Container>
+            <h3>Files on device</h3>
 
             <Droppable droppableId="list-wave" type="PAD" isDropDisabled={true}>
                 {(provided, snapshot) => (
-                    <ul
-                        style={getListStyle(snapshot.isDraggingOver)}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}>
+                    <ul style={getListStyle()} ref={provided.innerRef}>
                         {dndDeviceWaves.map((item, index) => (
-                            <Draggable key={item.id} draggableId={item.id} index={index}>
-                                {(prov, snapsh) => (
-                                    <>
-                                        <li
-                                            ref={prov.innerRef}
-                                            {...prov.draggableProps}
-                                            {...prov.dragHandleProps}
-                                            style={getItemStyle(snapsh, prov.draggableProps.style)}
-                                            key={item.item.uuid}>
-                                            {item.item.name}
-                                        </li>
-                                        {snapsh.isDragging && (
-                                            <li style={essentialItemStyle()}>{item.item.name}</li>
-                                        )}
-                                    </>
-                                )}
-                            </Draggable>
+                            <DraggableAudio
+                                key={item.id}
+                                dndObject={item}
+                                index={index}
+                                shouldCopy={true}
+                                />
                         ))}
                         {provided.placeholder}
                     </ul>
@@ -110,7 +97,7 @@ const WaveList: React.FunctionComponent = () => {
             </Droppable>
 
             <Button>Export all</Button>
-        </Grid>
+        </Container>
     );
 };
 

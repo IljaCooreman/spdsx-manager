@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Grid, Box } from '@material-ui/core';
-import { useStoreon } from 'storeon/react';
+import styled from 'styled-components';
 import WaveManager from './WaveManager';
-import KitConfigContainer from './kitConfig/Container';
 import { store } from '../store';
 import {
     KitNavigatorEvents,
@@ -14,6 +13,15 @@ import {
 } from '../store/types/types';
 import Kits from './Kits';
 import { parseDroppableId } from '../utils/parseDroppableId';
+import KitConfig from './kitConfig/KitConfig';
+import Spdsx from './kitConfig/Spdsx';
+import LocalWaveList from './WaveManager/LocalWavesList';
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+`;
 
 const DndContainer: React.FunctionComponent = () => {
     const onDragEnd = (result: DropResult) => {
@@ -33,20 +41,22 @@ const DndContainer: React.FunctionComponent = () => {
     };
 
     return (
-        <Grid
-            item
-            xs={12}
-            container
-            direction="row"
-            spacing={2}
-            alignItems="stretch"
-            style={{ maxHeight: 'calc(100vh - 300px)' }}>
+        <Container>
             <DragDropContext onDragEnd={onDragEnd}>
-                <Kits />
-                <KitConfigContainer />
-                <WaveManager />
+                <div>
+                    <KitConfig />
+                    <Grid item xs={12} style={{}}>
+                        pad
+                    </Grid>
+                    <Kits />
+                </div>
+                <Spdsx />
+                <div>
+                    <LocalWaveList />
+                    <WaveManager />
+                </div>
             </DragDropContext>
-        </Grid>
+        </Container>
     );
 };
 

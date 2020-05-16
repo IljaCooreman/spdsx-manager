@@ -5,6 +5,11 @@ import Device from './Device';
 import io from './IO';
 import DeviceWave from './DeviceWave';
 
+/**
+ * write a file from pc storage to the selected (spdsx) device
+ * @param wave LocalWave class instance
+ * @param device
+ */
 export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => {
     const { path, WvNr } = assignPath(device);
     if (!path) {
@@ -12,7 +17,7 @@ export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => 
     }
     // write wave
     const folder = path?.split('/')[0];
-    const wavePath = `${folder}/${wave.fileName}`;
+    const wavePath = `${folder}/${wave.name}`;
 
     io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/PRM/${path}`));
     io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}`));
@@ -22,9 +27,3 @@ export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => 
     io.writeWvPrm(deviceWave.WvPrmObject, WvNr, device);
     return deviceWave;
 };
-
-// export const switchKitPosition = (kit1, position1, kit2, position2) => {
-
-// }
-
-// export const

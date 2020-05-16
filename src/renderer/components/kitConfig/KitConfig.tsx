@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Grid, TextField } from '@material-ui/core';
+import { useStoreon } from 'storeon/react';
 import { Kit } from '../../../classes/Kit';
+import { State } from '../../store/types/types';
 
-interface KitConfigProps {
-    kit: Kit | undefined;
-}
-
-const KitConfig: React.FunctionComponent<KitConfigProps> = ({ kit }) => {
+const KitConfig: React.FunctionComponent = () => {
+    const { selectedKit }: State = useStoreon('selectedKit');
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // setName(event.target.value);
         // console.log(event.target.value)
@@ -19,24 +18,10 @@ const KitConfig: React.FunctionComponent<KitConfigProps> = ({ kit }) => {
                     id="name"
                     label="Kit name"
                     variant="outlined"
-                    value={kit?.kitName?.name || ''}
+                    value={selectedKit?.kitName?.name || ''}
                     onChange={handleChange}
-                    disabled={!kit}
+                    disabled={!selectedKit}
                     />
-                {/* <TextField
-          id="Tempo"
-          label="Tempo"
-          size="small"
-          value={kit?.Tempo}
-          onChange={handleChange}
-        />
-        <TextField
-          id="Level"
-          label="Level"
-          size="small"
-          value={kit?.Tempo}
-          onChange={handleChange}
-        /> */}
             </form>
         </Grid>
     );

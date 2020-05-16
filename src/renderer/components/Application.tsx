@@ -9,10 +9,7 @@ require('./Main.scss');
 
 const Application = () => {
     return (
-        <Container fixed style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
-            <Grid item>
-                <h1>SPD-SX wave manager</h1>
-            </Grid>
+        <Container style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
             <DeviceConnModule />
             <DndContainer />
         </Container>

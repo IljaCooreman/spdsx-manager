@@ -64,7 +64,7 @@ export default class DeviceWave {
         return join(this.basePath, `PRM/${this.filePathOnDevice}.spd`);
     }
 
-    get fullWavePath() {
+    get fullPath() {
         return join(this.basePath, `DATA/${this.wavePath}`);
     }
 

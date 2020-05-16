@@ -9,6 +9,7 @@ import { Pad } from '../../../classes/Pad';
 export interface State {
     localWaves: LocalWave[];
     deviceWaves: DeviceWave[];
+    dndLocalWaves: DndObject<LocalWave>[];
     dndDeviceWaves: DndObject<DeviceWave>[];
     dndPadWaves: DndPadWaves;
     deviceIsConnected: boolean;

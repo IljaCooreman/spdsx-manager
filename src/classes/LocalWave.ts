@@ -7,15 +7,15 @@ import { basename } from 'path';
 export default class LocalWave {
     id: string;
     wave: WaveFile;
-    fileName: string;
-    path: string;
+    name: string;
+    fullPath: string;
     isResampled = false;
 
-    constructor(path: string) {
+    constructor(fullPath: string) {
         this.id = uuidv4();
-        this.path = path; // full path
-        this.fileName = basename(path);
-        this.wave = new WaveFile(readFileSync(path));
+        this.fullPath = fullPath;
+        this.name = basename(fullPath);
+        this.wave = new WaveFile(readFileSync(fullPath));
         this.resampleForSpdsx();
     }
 

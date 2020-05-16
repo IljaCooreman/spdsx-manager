@@ -10,7 +10,7 @@ import DeviceWave from '../../classes/DeviceWave';
 import { pathToWvNr } from '../utils/waveUtils';
 import { addWaveToDevice } from '../../classes/waveMgmt';
 
-const initialState = { localWaves: [], deviceWaves: [], dndDeviceWaves: [] };
+const initialState = { localWaves: [], deviceWaves: [], dndDeviceWaves: [], dndLocalWaves: [] };
 
 export const waveManager: StoreonModule<State, Events> = store => {
     store.on('@init', () => initialState);
@@ -21,10 +21,10 @@ export const waveManager: StoreonModule<State, Events> = store => {
         }
     });
 
-    store.on(WaveManagerEvents.import, (state: State, paths) => {
+    store.on(WaveManagerEvents.import, ({ localWaves }: State, paths) => {
         // prevent duplicate entries
         paths.forEach(path => {
-            if (store.get().localWaves.find(wave => wave.path === path)) {
+            if (localWaves.find(wave => wave.path === path)) {
                 // we could dispatch a message action here
                 console.log('this is already imported');
                 return;
@@ -40,6 +40,7 @@ export const waveManager: StoreonModule<State, Events> = store => {
         };
     });
 
+    // bulk import all waves on device
     store.on(WaveManagerEvents.importFromDevice, ({ device }, _) => {
         // get the list of files
         const path = join(device.path, 'Roland/SPD-SX/WAVE/PRM');
