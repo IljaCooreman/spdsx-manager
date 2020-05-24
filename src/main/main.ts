@@ -23,7 +23,8 @@ const createWindow = async () => {
         width: 1000,
         height: 800,
         webPreferences: {
-            preload: `${__dirname}/preload.js`
+            preload: `${__dirname}/preload.js`,
+            webSecurity: false
         }
     });
 

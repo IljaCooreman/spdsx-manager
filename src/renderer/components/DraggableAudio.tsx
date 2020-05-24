@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { PlayArrow } from '@material-ui/icons';
+import { PlayArrow, Stop, MoreVert } from '@material-ui/icons';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { IconButton } from '@material-ui/core';
+import { Howl } from 'howler';
 import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import LocalWave from '../../classes/LocalWave';
 import { stripExtension } from '../../classes/xmlUtils';
@@ -40,12 +41,25 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
     index,
     shouldCopy = false
 }) => {
+    const [isHovering, setIsHovering] = React.useState<boolean>(false);
+    const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
+    const [sound] = React.useState<Howl>(
+        new Howl({ src: [`file://${dndObject.item.fullPath}`], preload: false })
+    );
+
     const onClick = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
-        const audio = new Audio(stripExtension(dndObject.item.fullPath));
-        console.log(dndObject.item.fullPath);
-        audio.play();
+        setIsPlaying(false);
+        sound.load();
+        sound.stop();
+        if (!isPlaying) {
+            sound.play();
+            setIsPlaying(true);
+            sound.once('end', () => {
+                setIsPlaying(false);
+            });
+        }
         if (!handleClick) return;
         handleClick(dndObject.id);
     };
@@ -55,6 +69,8 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
             {(prov, snapsh) => (
                 <>
                     <Container
+                        onMouseEnter={() => setIsHovering(true)}
+                        onMouseLeave={() => setIsHovering(false)}
                         isDragging={snapsh.isDragging}
                         onClick={(e: any) => e.stopPropagation()}
                         isDark={theme === 'dark'}
@@ -62,14 +78,27 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                         {...prov.draggableProps}
                         {...prov.dragHandleProps}
                         style={snapsh.isDragging ? { ...prov.draggableProps.style } : {}}
-                        key={dndObject.id}>
+                        key={dndObject.id}
+                    >
                         <IconButton aria-label="play/pauze" size="small" onClick={onClick}>
-                            <PlayArrow
-                                fontSize="inherit"
-                                htmlColor={theme === 'dark' ? colors.bgWhite : colors.black}
+                            {isPlaying ? (
+                                <Stop
+                                    fontSize="inherit"
+                                    htmlColor={theme === 'dark' ? colors.bgWhite : colors.black}
                                 />
+                            ) : (
+                                <PlayArrow
+                                    fontSize="inherit"
+                                    htmlColor={theme === 'dark' ? colors.bgWhite : colors.black}
+                                />
+                            )}
                         </IconButton>
-                        {dndObject.item.name}
+                        {stripExtension(dndObject.item.name)}
+                        {isHovering && (
+                            <IconButton size="small">
+                                <MoreVert />
+                            </IconButton>
+                        )}
                     </Container>
                     {shouldCopy && snapsh.isDragging && (
                         <Container isDragging={false} isDark={theme === 'dark'}>
@@ -77,7 +106,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                                 <PlayArrow
                                     fontSize="inherit"
                                     htmlColor={theme === 'dark' ? colors.bgWhite : colors.black}
-                                    />
+                                />
                             </IconButton>
                             {stripExtension(dndObject.item.name)}
                         </Container>

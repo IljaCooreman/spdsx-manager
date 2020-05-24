@@ -44,38 +44,16 @@ const PadDroppable: React.FunctionComponent<PadDroppableProps> = ({
     return (
         <Droppable droppableId={`pad-${padName}-${padWaveType}`} type="PAD">
             {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
-                // if (!dndObject.item) return null;
                 const castedDndObj = dndObject as DndObject<DeviceWave>;
                 return (
                     <div
                         ref={provided.innerRef}
                         style={getPadStyle(snapshot)}
-                        {...provided.droppableProps}>
-                        {dndObject &&
-                        dndObject.item && ( // make sure the object is not undefined
-                                // <Draggable
-                                //     key={dndObject.id}
-                                //     isDragDisabled={isDisabled}
-                                //     draggableId={dndObject.id}
-                                //     index={0}>
-                                //     {(prov, snapsh) => (
-                                //         <div
-                                //             ref={prov.innerRef}
-                                //             {...prov.draggableProps}
-                                //             {...prov.dragHandleProps}>
-                                //             <div>{dndObject.item?.name}</div>
-                                //         </div>
-                                //     )}
-                                // </Draggable>
-                                <DraggableAudio
-                                    dndObject={castedDndObj}
-                                    handleClick={id => {
-                                        console.log(id);
-                                    }}
-                                    theme="light"
-                                    index={0}
-                                    />
-                            )}
+                        {...provided.droppableProps}
+                    >
+                        {dndObject && dndObject.item && (
+                            <DraggableAudio dndObject={castedDndObj} theme="light" index={0} />
+                        )}
                         {provided.placeholder}
                     </div>
                 );

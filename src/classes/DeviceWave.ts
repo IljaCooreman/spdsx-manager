@@ -57,7 +57,7 @@ export default class DeviceWave {
     }
 
     get basePath() {
-        return join(this.device.path, 'Roland/SPD_SX/WAVE');
+        return join(this.device.path, 'Roland/SPD-SX/WAVE');
     }
 
     get paramPath() {

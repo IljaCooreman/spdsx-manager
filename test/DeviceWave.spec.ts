@@ -11,7 +11,7 @@ describe('deviceWave class', () => {
         expect(wave.wavePath).toBe('00/Clap__01.wav');
         expect(wave.name).toBe('Clap__01.wav');
         expect(wave.fullPath).toBe(
-            '/Users/coorem43/Documents/projects/prive/spdsx2/test/mock/temp/Roland/SPD_SX/WAVE/DATA/00/Clap__01.wav'
+            '/Users/coorem43/Documents/projects/prive/spdsx2/test/mock/temp/Roland/SPD-SX/WAVE/DATA/00/Clap__01.wav'
         );
     });
 });
