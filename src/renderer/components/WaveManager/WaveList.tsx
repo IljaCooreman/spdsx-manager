@@ -89,7 +89,7 @@ const WaveList: React.FunctionComponent = () => {
                                 dndObject={item}
                                 index={index}
                                 shouldCopy={true}
-                                />
+                            />
                         ))}
                         {provided.placeholder}
                     </ul>

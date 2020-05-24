@@ -88,10 +88,11 @@ const Kits: React.FunctionComponent = () => {
                                                     snapsh.isDragging,
                                                     prov.draggableProps.style,
                                                     kit.uuid === selectedKit?.uuid
-                                                )}>
+                                                )}
+                                            >
                                                 <ListItemText
                                                     primary={`${index}: ${kit.kitName.name}`}
-                                                    />
+                                                />
                                             </ListItem>
                                         )}
                                     </Draggable>

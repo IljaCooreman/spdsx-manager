@@ -21,7 +21,7 @@ const KitConfig: React.FunctionComponent = () => {
                     value={selectedKit?.kitName?.name || ''}
                     onChange={handleChange}
                     disabled={!selectedKit}
-                    />
+                />
             </form>
         </Grid>
     );

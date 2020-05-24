@@ -29,19 +29,20 @@ const Pad: React.FunctionComponent<PadProps> = ({ padName, pad, isActive }) => {
                 padName={padName}
                 dndObject={dndPadWaves?.[padName][PadWaveTypes.main]}
                 padWaveType={PadWaveTypes.main}
-                />
+            />
             <PadDroppable
                 padName={padName}
                 dndObject={dndPadWaves?.[padName][PadWaveTypes.sub]}
                 padWaveType={PadWaveTypes.sub}
-                />
+            />
         </>
     );
 
     return (
         <PadContainer
             isSelected={selectedPad === padName}
-            onClick={() => store.dispatch(KitConfiguratorEvents.clickOnPad, padName)}>
+            onClick={() => store.dispatch(KitConfiguratorEvents.clickOnPad, padName)}
+        >
             <PadName>pad {padName}</PadName>
             {isActive && PadDroppables()}
         </PadContainer>

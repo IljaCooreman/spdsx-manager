@@ -42,7 +42,8 @@ const LocalWaveList: React.FunctionComponent = props => {
                 <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => openImportDialog(WaveManagerEvents.import, {})}>
+                    onClick={() => openImportDialog(WaveManagerEvents.import, {})}
+                >
                     import
                 </Button>
             </TitleContainer>
@@ -57,7 +58,7 @@ const LocalWaveList: React.FunctionComponent = props => {
                                         dndObject={item}
                                         index={index}
                                         shouldCopy={true}
-                                        />
+                                    />
                                 );
                             })
                         ) : (

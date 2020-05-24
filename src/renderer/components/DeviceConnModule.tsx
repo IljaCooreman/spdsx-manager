@@ -19,7 +19,8 @@ const DeviceConnModule: React.FunctionComponent = () => {
                     properties: ['openDirectory'],
                     filters: []
                 })
-            }>
+            }
+        >
             {deviceIsConnected ? 'Other device' : 'Connect to device'}
         </Button>
     );
