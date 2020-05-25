@@ -23,7 +23,9 @@ export enum WaveManagerEvents {
     import = 'waveManager/import',
     createWave = 'waveManager/createWave',
     importFromDevice = 'waveManager/importFromDevice',
-    addWaveToDevice = 'waveManager/addWaveToDevice'
+    addWaveToDevice = 'waveManager/addWaveToDevice',
+    addNewDeviceWave = 'waveManager/addNewDeviceWave',
+    addExistingDeviceWave = 'waveManager/addExistingDeviceWave'
 }
 
 export enum DeviceConnectorEvents {
@@ -50,6 +52,8 @@ export interface Events {
     [WaveManagerEvents.createWave]: string;
     [WaveManagerEvents.importFromDevice]: undefined;
     [WaveManagerEvents.addWaveToDevice]: LocalWave;
+    [WaveManagerEvents.addNewDeviceWave]: string;
+    [WaveManagerEvents.addExistingDeviceWave]: DeviceWave;
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
     [KitNavigatorEvents.selectKit]: Kit | undefined;
@@ -74,25 +78,8 @@ export type DndPadWavesObject = {
 
 export enum DroppableTypes {
     pad = 'pad',
-    list = 'list'
-}
-
-export interface DndPadWaves {
-    [PadNames.pad1]: DndPadWavesObject;
-    [PadNames.pad2]: DndPadWavesObject;
-    [PadNames.pad3]: DndPadWavesObject;
-    [PadNames.pad4]: DndPadWavesObject;
-    [PadNames.pad5]: DndPadWavesObject;
-    [PadNames.pad6]: DndPadWavesObject;
-    [PadNames.pad7]: DndPadWavesObject;
-    [PadNames.pad8]: DndPadWavesObject;
-    [PadNames.pad9]: DndPadWavesObject;
-    [PadNames.trigger1]: DndPadWavesObject;
-    [PadNames.trigger2]: DndPadWavesObject;
-    [PadNames.trigger3]: DndPadWavesObject;
-    [PadNames.trigger4]: DndPadWavesObject;
-    [PadNames.footSwitch1]: DndPadWavesObject;
-    [PadNames.footSwitch2]: DndPadWavesObject;
+    list = 'list',
+    local = 'local'
 }
 
 export enum PadNames {
@@ -111,6 +98,23 @@ export enum PadNames {
     trigger4,
     footSwitch1,
     footSwitch2
+}
+export interface DndPadWaves {
+    [PadNames.pad1]: DndPadWavesObject;
+    [PadNames.pad2]: DndPadWavesObject;
+    [PadNames.pad3]: DndPadWavesObject;
+    [PadNames.pad4]: DndPadWavesObject;
+    [PadNames.pad5]: DndPadWavesObject;
+    [PadNames.pad6]: DndPadWavesObject;
+    [PadNames.pad7]: DndPadWavesObject;
+    [PadNames.pad8]: DndPadWavesObject;
+    [PadNames.pad9]: DndPadWavesObject;
+    [PadNames.trigger1]: DndPadWavesObject;
+    [PadNames.trigger2]: DndPadWavesObject;
+    [PadNames.trigger3]: DndPadWavesObject;
+    [PadNames.trigger4]: DndPadWavesObject;
+    [PadNames.footSwitch1]: DndPadWavesObject;
+    [PadNames.footSwitch2]: DndPadWavesObject;
 }
 
 export type SpdTags = KitPrmSpdTags | WvPrmSpdTags | MainSpdTags;

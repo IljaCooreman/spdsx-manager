@@ -6,7 +6,7 @@ import { pathToWvNr, wvNrToPath } from './waveUtils';
 export function assignPath(device: Device) {
     const numbers = listWavePaths(device).map(path => pathToWvNr(path));
     const missingNr = findMissingNumber(numbers);
-    if (missingNr !== undefined) {
+    if (missingNr !== undefined && missingNr >= 0) {
         return {
             WvNr: missingNr,
             path: wvNrToPath(missingNr)
@@ -16,6 +16,7 @@ export function assignPath(device: Device) {
     if (nextNr > 9999) {
         throw new Error('Theres more than 10000 samples');
     }
+    console.log(missingNr, nextNr, wvNrToPath(nextNr));
     return {
         WvNr: nextNr,
         path: wvNrToPath(nextNr)

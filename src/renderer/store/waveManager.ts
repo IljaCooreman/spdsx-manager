@@ -24,7 +24,7 @@ export const waveManager: StoreonModule<State, Events> = store => {
     store.on(WaveManagerEvents.import, ({ localWaves }: State, paths) => {
         // prevent duplicate entries
         paths.forEach(path => {
-            if (localWaves.find(wave => wave.path === path)) {
+            if (localWaves.find(wave => wave.fullPath === path)) {
                 // we could dispatch a message action here
                 console.log('this is already imported');
                 return;
@@ -33,10 +33,11 @@ export const waveManager: StoreonModule<State, Events> = store => {
         });
     });
 
-    store.on(WaveManagerEvents.createWave, ({ localWaves }, path) => {
+    store.on(WaveManagerEvents.createWave, ({ localWaves, dndLocalWaves }, path) => {
         const wave = new LocalWave(path);
         return {
-            localWaves: [...localWaves, wave]
+            localWaves: [...localWaves, wave],
+            dndLocalWaves: [...dndLocalWaves, { id: uuidv4(), item: wave }]
         };
     });
 
@@ -55,19 +56,29 @@ export const waveManager: StoreonModule<State, Events> = store => {
                 })
             ];
         }, acc);
-        // create a list of devicewaves
-        const deviceWaves = fileNames.map(file => {
-            return new DeviceWave(device, pathToWvNr(file));
+        fileNames.forEach(file => {
+            store.dispatch(WaveManagerEvents.addNewDeviceWave, file);
         });
-        // map the devices for the drag and drop list
-        const dndDeviceWaves = deviceWaves.map(wave => ({ item: wave, id: uuidv4() }));
-        return {
-            deviceWaves,
-            dndDeviceWaves
-        };
     });
 
-    store.on(WaveManagerEvents.addWaveToDevice, ({ device }, wave) => {
-        addWaveToDevice(wave, device);
-    });
+    store.on(
+        WaveManagerEvents.addNewDeviceWave,
+        ({ device, deviceWaves, dndDeviceWaves }, path) => {
+            const deviceWave = new DeviceWave(device, pathToWvNr(path));
+            return {
+                deviceWaves: [...deviceWaves, deviceWave],
+                dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
+            };
+        }
+    );
+
+    store.on(
+        WaveManagerEvents.addExistingDeviceWave,
+        ({ deviceWaves, dndDeviceWaves }, deviceWave) => {
+            return {
+                deviceWaves: [...deviceWaves, deviceWave],
+                dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
+            };
+        }
+    );
 };

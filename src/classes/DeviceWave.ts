@@ -37,7 +37,7 @@ export default class DeviceWave {
             }
             this.tag = 0;
             // this.name = new Name(localWave.fileName, 'Nm');
-            this.wavePath = `${path?.split('/')[0]}/${basename(localWave.path)}`;
+            this.wavePath = `${path?.split('/')[0]}/${basename(localWave.fullPath)}`;
             this.localWave = localWave;
         } else {
             const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;

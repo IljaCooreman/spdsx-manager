@@ -47,7 +47,7 @@ const LocalWaveList: React.FunctionComponent = props => {
                     import
                 </Button>
             </TitleContainer>
-            <Droppable droppableId="list-localwave" type="PAD" isDropDisabled={true}>
+            <Droppable droppableId="local-localwavelist" type="PAD" isDropDisabled={true}>
                 {(provided, snapshot) => (
                     <ContentContainer ref={provided.innerRef}>
                         {dndLocalWaves.length > 0 ? (

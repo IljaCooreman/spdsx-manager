@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import Button from '@material-ui/core/Button';
-import { Grid } from '@material-ui/core';
 import { Draggable, Droppable, DraggableStateSnapshot } from 'react-beautiful-dnd';
-import { openImportDialog } from '../../utils/openDialog';
 import { State, WaveManagerEvents } from '../../store/types/types';
 import DeviceWave from '../../../classes/DeviceWave';
 import DraggableAudio from '../DraggableAudio';
@@ -73,9 +71,6 @@ const WaveList: React.FunctionComponent = () => {
 
     const Container = GeneralContainer();
 
-    const onAddWaveClick = (wave: DeviceWave) => {
-        // store.dispatch(WaveManagerEvents.addWaveToDevice, wave);
-    };
     return (
         <Container>
             <h3>Files on device</h3>
