@@ -36,7 +36,7 @@ export class Kit {
     [PadNames.footSwitch2] = new Pad();
 
     constructor(
-        id: number,
+        id: number, // the order number on the device, between 0 and 99.
         device: Device,
         deviceWaveList: DeviceWave[],
         kitPrm: KitPrmType = defaultKit

@@ -4,7 +4,9 @@ export const colors = {
     red: '#D04444',
     black: `#282D31`,
     bgWhite: `#F8FBFC`,
-    bgDarkGrey: '#474A4C'
+    bgDarkGrey: '#474A4C',
+    lightGrey: '#B0B2B4',
+    lightHover: '#F3F3F3'
 };
 
 export const GeneralContainer = () => {

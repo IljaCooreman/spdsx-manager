@@ -67,8 +67,13 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
 
     store.on(KitNavigatorEvents.createNewKit, ({ kitList, device, deviceWaves }, id) => {
         const kit = createNewKit(device, id, deviceWaves);
+        const index = kitList.findIndex(kt => kt.id === id);
+        const newKitList = [...kitList];
+        if (index !== -1) {
+            newKitList[index] = kit;
+        }
         return {
-            kitList: [...kitList, kit],
+            kitList: newKitList,
             dndPadWaves: createDndPadWaves(kit)
         };
     });

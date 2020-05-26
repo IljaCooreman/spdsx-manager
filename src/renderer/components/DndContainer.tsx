@@ -48,7 +48,6 @@ const DndContainer: React.FunctionComponent = () => {
                     <Grid item xs={12} style={{}}>
                         pad
                     </Grid>
-                    <Kits />
                 </div>
                 <Spdsx />
                 <div>
