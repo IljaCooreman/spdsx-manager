@@ -76,8 +76,8 @@ export const waveManager: StoreonModule<State, Events> = store => {
         WaveManagerEvents.addExistingDeviceWave,
         ({ deviceWaves, dndDeviceWaves }, deviceWave) => {
             return {
-                deviceWaves: [...deviceWaves, deviceWave],
-                dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
+                deviceWaves: [deviceWave, ...deviceWaves],
+                dndDeviceWaves: [{ item: deviceWave, id: uuidv4() }, ...dndDeviceWaves]
             };
         }
     );

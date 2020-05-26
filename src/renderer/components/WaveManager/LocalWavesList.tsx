@@ -17,6 +17,7 @@ const TitleContainer = styled.div`
 const ContentContainer = styled.div`
     min-height: 120px;
     display: flex;
+    flex-flow: column;
 `;
 
 const EmptyMessage = styled.div`
