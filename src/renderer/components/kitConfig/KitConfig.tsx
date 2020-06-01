@@ -96,14 +96,14 @@ const KitConfig: React.FunctionComponent = () => {
             <MiddleRow>
                 <CircleSlider
                     label="Kit volume"
-                    value={selectedKit?.Level || 100}
+                    value={selectedKit?.Level}
                     min={0}
                     max={100}
                     handleChange={setVolume}
                 />
                 <CircleSlider
                     label="Tempo"
-                    value={selectedKit?.Level || 120}
+                    value={selectedKit?.Level}
                     min={40}
                     max={250}
                     handleChange={setTempo}

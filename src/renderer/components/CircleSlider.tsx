@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { colors } from '../styling';
 
 interface CircleSliderProps {
-    value: number;
+    value?: number;
     handleChange: (value: number) => any;
     size?: number;
     strokeWidth?: number;
@@ -52,7 +52,7 @@ const CircleSlider: React.FunctionComponent<CircleSliderProps> = ({
 }) => {
     const [innerValue, setInnerValue] = React.useState<number>(valueToPercent(value, min, max));
     React.useEffect(() => {
-        setInnerValue(valueToPercent(value, min, max));
+        setInnerValue(value ? valueToPercent(value, min, max) : 0);
     }, [value]);
 
     return (
@@ -79,7 +79,13 @@ const CircleSlider: React.FunctionComponent<CircleSliderProps> = ({
                     </filter>
                 </defs>
                 <CircularTrack strokeWidth={strokeWidth} stroke="#CACACA" />
-                <CircularProgress stroke="#666666" strokeWidth={strokeWidth} strokeLinecap="butt" />
+                {value && (
+                    <CircularProgress
+                        stroke="#666666"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="butt"
+                    />
+                )}
                 <circle
                     cx={size}
                     cy={size}
@@ -87,19 +93,21 @@ const CircleSlider: React.FunctionComponent<CircleSliderProps> = ({
                     fill="#E2E9EC"
                     filter="url(#shadow)"
                 />
-                <text
-                    x={size}
-                    y={size}
-                    pointerEvents="none"
-                    textAnchor="middle"
-                    dy="0.3em"
-                    fontFamily="Roboto-medium"
-                    fontSize="14"
-                    fill="#55636D"
-                    opacity=".5"
-                >
-                    {percentToValue(innerValue, min, max)}
-                </text>
+                {value && (
+                    <text
+                        x={size}
+                        y={size}
+                        pointerEvents="none"
+                        textAnchor="middle"
+                        dy="0.3em"
+                        fontFamily="Roboto-medium"
+                        fontSize="14"
+                        fill="#55636D"
+                        opacity=".5"
+                    >
+                        {percentToValue(innerValue, min, max)}
+                    </text>
+                )}
                 <CustomDragger radius={size} />
             </CircularInput>
         </Container>
