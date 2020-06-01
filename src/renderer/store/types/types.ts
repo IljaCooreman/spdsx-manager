@@ -4,7 +4,6 @@ import LocalWave from '../../../classes/LocalWave';
 import DeviceWave, { DndObject } from '../../../classes/DeviceWave';
 import Device from '../../../classes/Device';
 import { Name } from '../../../classes/Name';
-import { Pad } from '../../../classes/Pad';
 
 export interface State {
     localWaves: LocalWave[];
@@ -43,8 +42,12 @@ export enum KitNavigatorEvents {
 export enum KitConfiguratorEvents {
     dropOnPad = 'kitConfigurator/dropOnPad',
     removeWaveFromPad = 'kitConfigurator/removeWaveFromPad',
-    clickOnPad = 'kitConfigurator/clickOnPad',
-    updateKit = 'kitConfigurator/updateKit'
+    clickOnPad = 'kitConfigurator/clickOnPad'
+    // updateKit = 'kitConfigurator/updateKit'
+}
+
+export enum IOEvents {
+    saveKitToDevice = 'IOEvents/saveKitToDevice'
 }
 
 export interface Events {
@@ -59,11 +62,12 @@ export interface Events {
     [KitNavigatorEvents.selectKit]: Kit | undefined;
     [KitNavigatorEvents.createNewKit]: number;
     [KitNavigatorEvents.addKit]: Kit;
-    [KitConfiguratorEvents.updateKit]: Kit;
+    // [KitConfiguratorEvents.updateKit]: Kit;
     [KitNavigatorEvents.removeKit]: Kit;
     [KitConfiguratorEvents.dropOnPad]: DropResult;
     [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
     [KitConfiguratorEvents.clickOnPad]: PadNames;
+    [IOEvents.saveKitToDevice]: Kit;
 }
 
 export enum PadWaveTypes {

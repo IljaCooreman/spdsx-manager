@@ -2,9 +2,14 @@ import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import Button from '@material-ui/core/Button';
 import { Droppable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 import { State, WaveManagerEvents } from '../../store/types/types';
 import DraggableAudio from '../DraggableAudio';
-import { GeneralContainer } from '../../styling';
+import { GeneralContainerStyle } from '../../styling';
+
+const Container = styled.div`
+    ${GeneralContainerStyle()}
+`;
 
 const WaveList: React.FunctionComponent = () => {
     const { dndDeviceWaves } = useStoreon<State, WaveManagerEvents>('dndDeviceWaves');
@@ -19,8 +24,6 @@ const WaveList: React.FunctionComponent = () => {
             maxHeight: '100%'
         };
     };
-
-    const Container = GeneralContainer();
 
     return (
         <Container>

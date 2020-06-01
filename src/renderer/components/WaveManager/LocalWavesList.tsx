@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useStoreon } from 'storeon/react';
 import { Droppable } from 'react-beautiful-dnd';
 import { openImportDialog } from '../../utils/openDialog';
-import { GeneralContainer, colors } from '../../styling';
+import { GeneralContainerStyle, colors } from '../../styling';
 
 import { WaveManagerEvents, State } from '../../store/types/types';
 import DraggableAudio from '../DraggableAudio';
@@ -32,7 +32,9 @@ const EmptyMessage = styled.div`
     color: ${colors.black};
 `;
 
-const Container = GeneralContainer();
+const Container = styled.div`
+    ${GeneralContainerStyle()}
+`;
 
 const LocalWaveList: React.FunctionComponent = props => {
     const { dndLocalWaves }: State = useStoreon('dndLocalWaves');

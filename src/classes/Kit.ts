@@ -55,7 +55,7 @@ export class Kit {
         }
     }
 
-    updateProperty(name: 'Level' | 'Tempo', value: number) {
+    setParam(name: 'Level' | 'Tempo', value: number) {
         this[name] = value;
     }
 

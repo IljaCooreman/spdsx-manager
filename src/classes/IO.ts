@@ -59,9 +59,15 @@ const io = {
         );
     },
 
-    writeKitPrm(contentObject: KitPrmType, fileName: string, device: Device) {
+    /**
+     * overwrite a complete kit file to the device
+     * @param contentObject a KitPrmType object
+     * @param shortPath short shortPath, e.g. kit01 or kit01.spd
+     * @param device
+     */
+    writeKitPrm(contentObject: KitPrmType, shortPath: string, device: Device) {
         this.writeFile(
-            join(device.path, `Roland/SPD-SX/KIT/${stripExtension(fileName)}.spd`),
+            join(device.path, `Roland/SPD-SX/KIT/${stripExtension(shortPath)}.spd`),
             objectToXml({ KitPrm: contentObject })
         );
     },

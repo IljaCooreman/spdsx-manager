@@ -151,6 +151,7 @@
     "ncp": "^2.0.0",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
+    "react-circular-input": "^0.2.0",
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
     "storeon": "^2.0.2",

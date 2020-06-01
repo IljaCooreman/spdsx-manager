@@ -14,7 +14,9 @@ module.exports = merge.smart(baseConfig, {
         rules: [
             {
                 test: /\.tsx?$/,
-                exclude: /node_modules/,
+                exclude: [
+                    path.join(process.cwd(), 'node_modules')
+                ],
                 loader: 'babel-loader',
                 options: {
                     cacheDirectory: true,

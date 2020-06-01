@@ -7,11 +7,13 @@ import { State, Events } from './types/types';
 import { deviceConnector } from './deviceConnector';
 import { kitNavigator } from './kitNavigator';
 import { kitConfigurator } from './kitConfigurator';
+import { IOReducer } from './IOReducer';
 
 export const store = createStoreon<State, Events>([
     waveManager,
     deviceConnector,
     kitNavigator,
     kitConfigurator,
+    IOReducer,
     process.env.NODE_ENV !== 'production' && storeonLogger
 ]);

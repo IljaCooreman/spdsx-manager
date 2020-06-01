@@ -22,6 +22,11 @@ export class Name {
         this.type = type;
     }
 
+    setName(name: string) {
+        this.name = name.substring(0, this.length);
+        console.log(this.name);
+    }
+
     get length(): number {
         return nameTypes[this.type]?.length;
     }
