@@ -13,10 +13,8 @@ import { Pad } from '../../classes/Pad';
 const updateWavePad = (pad: Pad, wave: DeviceWave | undefined, padWaveType?: PadWaveTypes) => {
     // 1 update class
     if (padWaveType === PadWaveTypes.sub) {
-        console.log('setting subwave');
         pad.setSubWave(wave);
     } else {
-        console.log('setting wave');
         pad.setWave(wave);
     }
 };

@@ -66,7 +66,6 @@ const io = {
      * @param device
      */
     writeKitPrm(contentObject: KitPrmType, shortPath: string, device: Device) {
-        console.log('writing file', contentObject);
         this.writeFile(
             join(device.path, `Roland/SPD-SX/KIT/${stripExtension(shortPath)}.spd`),
             objectToXml({ KitPrm: contentObject })

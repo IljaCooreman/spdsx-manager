@@ -22,9 +22,6 @@ interface PadProps {
 
 const Pad: React.FunctionComponent<PadProps> = ({ padName, isActive }) => {
     const { selectedPad, dndPadWaves }: State = useStoreon('selectedPad', 'dndPadWaves');
-    if (padName === PadNames.pad1) {
-        console.log(dndPadWaves?.['Pad 1']);
-    }
 
     const PadDroppables = () => (
         <>
