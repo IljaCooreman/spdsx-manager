@@ -1,21 +1,15 @@
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Grid, Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import styled from 'styled-components';
 import WaveManager from './WaveManager';
 import { store } from '../store';
-import {
-    KitNavigatorEvents,
-    PadNames,
-    State,
-    KitConfiguratorEvents,
-    DroppableTypes
-} from '../store/types/types';
-import Kits from './Kits';
+import { KitConfiguratorEvents, DroppableTypes } from '../store/types/types';
 import { parseDroppableId } from '../utils/parseDroppableId';
 import KitConfig from './kitConfig/KitConfig';
 import Spdsx from './kitConfig/Spdsx';
 import LocalWaveList from './WaveManager/LocalWavesList';
+import PadConfig from './padConfig/PadConfig';
 
 const Container = styled.div`
     display: flex;
@@ -35,7 +29,6 @@ const DndContainer: React.FunctionComponent = () => {
                 !result.destination) ||
             parseDroppableId(result.destination?.droppableId).type !== DroppableTypes.pad
         ) {
-            console.log('delete me');
             store.dispatch(KitConfiguratorEvents.removeWaveFromPad, result);
         }
     };
@@ -46,7 +39,7 @@ const DndContainer: React.FunctionComponent = () => {
                 <div>
                     <KitConfig />
                     <Grid item xs={12} style={{}}>
-                        pad
+                        <PadConfig />
                     </Grid>
                 </div>
                 <Spdsx />

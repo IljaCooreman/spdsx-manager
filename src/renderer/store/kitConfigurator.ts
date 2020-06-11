@@ -11,7 +11,8 @@ import {
     KitConfiguratorEvents,
     PadNames,
     DroppableTypes,
-    PadWaveTypes
+    PadWaveTypes,
+    PadPrmSpdTags
 } from './types/types';
 
 import io from '../../classes/IO';
@@ -20,6 +21,7 @@ import Device from '../../classes/Device';
 import { Kit } from '../../classes/Kit';
 import DeviceWave from '../../classes/DeviceWave';
 import { handleListToPadDrop, handlePadToPadDrop, handleLocalToPadDrop } from '../utils/dndUtils';
+import { Pad } from '../../classes/Pad';
 
 const updateWavePad = (
     device: Device,
@@ -28,7 +30,7 @@ const updateWavePad = (
     wave: DeviceWave | undefined
 ) => {
     // 1 update class
-    selectedKit[padName].updateWave(wave);
+    selectedKit[padName].setWave(wave);
     // 2 write on spdsx
     io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
     // error: undo changes on class
@@ -75,6 +77,65 @@ export const kitConfigurator: StoreonModule<State, Events> = store => {
                         [src.padWaveType]: undefined
                     }
                 }
+            };
+        }
+    );
+
+    store.on(
+        KitConfiguratorEvents.setPadParam,
+        (
+            { selectedPad }: State,
+            { pad, paramType, value }: { pad: Pad; paramType: PadPrmSpdTags; value: number }
+        ) => {
+            switch (paramType) {
+                case 'WvLevel':
+                    pad.setWvLevel(value);
+                    break;
+                case 'WvPan':
+                    pad.setWvPan(value);
+                    break;
+                case 'PlayMode':
+                    pad.setPlayMode(value);
+                    break;
+                case 'OutAsgn':
+                    pad.setOutAsgn(value);
+                    break;
+                case 'MuteGrp':
+                    pad.setMuteGrp(value);
+                    break;
+                case 'TempoSync':
+                    pad.setTempoSync(value);
+                    break;
+                // case 'PadMidiCh': pad.setPadMidiCh(value); break;
+                // case 'NoteNum': pad.setNoteNum(value); break;
+                // case 'MidiCtrl': pad.setMidiCtrl(value); break;
+                case 'Loop':
+                    pad.setLoop(value);
+                    break;
+                case 'TrigType':
+                    pad.setTrigType(value);
+                    break;
+                // case 'GateTime': pad.setGateTime(value); break;
+                case 'Dynamics':
+                    pad.setDynamics(value);
+                    break;
+                case 'VoiceAsgn':
+                    pad.setVoiceAsgn(value);
+                    break;
+                // case 'Reverse': pad.setReverse(value); break;
+                case 'SubWvLevel':
+                    pad.setSubWvLevel(value);
+                    break;
+                case 'SubWvPan':
+                    pad.setSubWvPan(value);
+                    break;
+
+                default:
+                    break;
+            }
+            // TODO: this is hacky, only to cause a retrigger
+            return {
+                selectedPad
             };
         }
     );

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-    Grid,
     TextField,
     IconButton,
     Dialog,
@@ -12,7 +11,6 @@ import {
 import { useStoreon } from 'storeon/react';
 import { ArrowDropDown } from '@material-ui/icons';
 import styled from 'styled-components';
-// import CircleSlider from 'react-circle-slider';
 
 import { State, IOEvents } from '../../store/types/types';
 import { GeneralContainerStyle } from '../../styling';
@@ -67,13 +65,13 @@ const KitConfig: React.FunctionComponent = () => {
 
     const setVolume = (v: number) => {
         if (!selectedKit) return;
-        selectedKit.setParam('Level', v);
+        selectedKit.setLevel(v);
         writeToDevice(selectedKit);
     };
 
     const setTempo = (v: number) => {
         if (!selectedKit) return;
-        selectedKit.setParam('Tempo', v);
+        selectedKit.setTempo(v);
         writeToDevice(selectedKit);
     };
 

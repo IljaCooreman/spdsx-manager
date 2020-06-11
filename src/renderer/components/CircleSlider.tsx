@@ -50,7 +50,9 @@ const CircleSlider: React.FunctionComponent<CircleSliderProps> = ({
     strokeWidth = 6,
     label
 }) => {
-    const [innerValue, setInnerValue] = React.useState<number>(valueToPercent(value, min, max));
+    const [innerValue, setInnerValue] = React.useState<number>(
+        value ? valueToPercent(value, min, max) : 0
+    );
     React.useEffect(() => {
         setInnerValue(value ? valueToPercent(value, min, max) : 0);
     }, [value]);

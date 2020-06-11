@@ -16,7 +16,7 @@ const updateWavePad = (
     wave: DeviceWave | undefined
 ) => {
     // 1 update class
-    selectedKit[padName].updateWave(wave);
+    selectedKit[padName].setWave(wave);
     // 2 write on spdsx
     io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
     // error: undo changes on class

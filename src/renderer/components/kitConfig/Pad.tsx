@@ -43,7 +43,7 @@ const Pad: React.FunctionComponent<PadProps> = ({ padName, pad, isActive }) => {
             isSelected={selectedPad === padName}
             onClick={() => store.dispatch(KitConfiguratorEvents.clickOnPad, padName)}
         >
-            <PadName>pad {padName}</PadName>
+            <PadName>{padName}</PadName>
             {isActive && PadDroppables()}
         </PadContainer>
     );

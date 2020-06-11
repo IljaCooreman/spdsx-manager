@@ -4,6 +4,7 @@ import LocalWave from '../../../classes/LocalWave';
 import DeviceWave, { DndObject } from '../../../classes/DeviceWave';
 import Device from '../../../classes/Device';
 import { Name } from '../../../classes/Name';
+import { Pad } from '../../../classes/Pad';
 
 export interface State {
     localWaves: LocalWave[];
@@ -42,8 +43,8 @@ export enum KitNavigatorEvents {
 export enum KitConfiguratorEvents {
     dropOnPad = 'kitConfigurator/dropOnPad',
     removeWaveFromPad = 'kitConfigurator/removeWaveFromPad',
-    clickOnPad = 'kitConfigurator/clickOnPad'
-    // updateKit = 'kitConfigurator/updateKit'
+    clickOnPad = 'kitConfigurator/clickOnPad',
+    setPadParam = 'kitConfigurator/setPadParam'
 }
 
 export enum IOEvents {
@@ -62,7 +63,7 @@ export interface Events {
     [KitNavigatorEvents.selectKit]: Kit | undefined;
     [KitNavigatorEvents.createNewKit]: number;
     [KitNavigatorEvents.addKit]: Kit;
-    // [KitConfiguratorEvents.updateKit]: Kit;
+    [KitConfiguratorEvents.setPadParam]: { pad: Pad; paramType: PadPrmSpdTags; value: number };
     [KitNavigatorEvents.removeKit]: Kit;
     [KitConfiguratorEvents.dropOnPad]: DropResult;
     [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
@@ -87,21 +88,21 @@ export enum DroppableTypes {
 }
 
 export enum PadNames {
-    pad1,
-    pad2,
-    pad3,
-    pad4,
-    pad5,
-    pad6,
-    pad7,
-    pad8,
-    pad9,
-    trigger1,
-    trigger2,
-    trigger3,
-    trigger4,
-    footSwitch1,
-    footSwitch2
+    pad1 = 'Pad 1',
+    pad2 = 'Pad 2',
+    pad3 = 'Pad 3',
+    pad4 = 'Pad 4',
+    pad5 = 'Pad 5',
+    pad6 = 'Pad 6',
+    pad7 = 'Pad 7',
+    pad8 = 'Pad 8',
+    pad9 = 'Pad 9',
+    trigger1 = 'Trigger 1',
+    trigger2 = 'Trigger 2',
+    trigger3 = 'Trigger 3',
+    trigger4 = 'Trigger 4',
+    footSwitch1 = 'Footswitch 1',
+    footSwitch2 = 'Footswitch 2'
 }
 export interface DndPadWaves {
     [PadNames.pad1]: DndPadWavesObject;
@@ -119,6 +120,60 @@ export interface DndPadWaves {
     [PadNames.trigger4]: DndPadWavesObject;
     [PadNames.footSwitch1]: DndPadWavesObject;
     [PadNames.footSwitch2]: DndPadWavesObject;
+}
+
+// export enum LinkPadOptions {
+//     none = -1,
+//     [PadNames.pad1] = 1,
+// }
+
+export enum MuteGrpOptions {
+    OFF = 0,
+    GRP1 = 1,
+    GRP2 = 2,
+    GRP3 = 3,
+    GRP4 = 4,
+    GRP5 = 5,
+    GRP6 = 6,
+    GRP7 = 7,
+    GRP8 = 8,
+    GRP9 = 9
+}
+export enum TempoSyncOptions {
+    OFF = 0,
+    ON = 1
+}
+export enum LoopOptions {
+    OFF = 0,
+    ON = 1,
+    x2 = 2, // ??
+    x4 = 3, // ??
+    x8 = 4 // ??
+}
+export enum TrigTypeOptions {
+    ALT = 0,
+    SHOT = 1
+}
+export enum DynamicsOptions {
+    OFF = 0,
+    ON = 1
+}
+export enum VoiceAssignOptions {
+    MONO = 0,
+    POLY = 1
+}
+export enum PlayModeOptions {
+    none = -1,
+    SINGLE = 0,
+    PHRASE = 1,
+    LOOP = 1
+}
+export enum OutAsgnOptions { // ???? complete unknown!
+    MASTER = 0,
+    FX1 = 1,
+    FX2 = 2,
+    SUB = 3,
+    HEADPHONES = 4
 }
 
 export type SpdTags = KitPrmSpdTags | WvPrmSpdTags | MainSpdTags;
