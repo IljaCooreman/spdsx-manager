@@ -27,10 +27,14 @@ const updateWavePad = (
     device: Device,
     selectedKit: Kit,
     padName: PadNames,
-    wave: DeviceWave | undefined
+    padWaveType?: PadWaveTypes
 ) => {
     // 1 update class
-    selectedKit[padName].setWave(wave);
+    if (padWaveType === PadWaveTypes.sub) {
+        selectedKit[padName].setSubWave(undefined);
+    } else {
+        selectedKit[padName].setWave(undefined);
+    }
     // 2 write on spdsx
     io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
     // error: undo changes on class
@@ -68,7 +72,7 @@ export const kitConfigurator: StoreonModule<State, Events> = store => {
         ({ device, selectedKit, dndPadWaves }: State, { draggableId, source }) => {
             const src = parseDroppableId(source.droppableId);
             if (!selectedKit || !src.padName || !src.padWaveType) return {};
-            updateWavePad(device, selectedKit, src.padName, undefined);
+            updateWavePad(device, selectedKit, src.padName, src.padWaveType);
             return {
                 dndPadWaves: {
                     ...dndPadWaves,

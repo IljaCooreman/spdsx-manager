@@ -1,26 +1,24 @@
 import { DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import DeviceWave, { DndObject } from '../../classes/DeviceWave';
-import { State, PadNames, WaveManagerEvents } from '../store/types/types';
+import { State, PadNames, WaveManagerEvents, PadWaveTypes } from '../store/types/types';
 import Device from '../../classes/Device';
 import { Kit } from '../../classes/Kit';
 import io from '../../classes/IO';
 import { parseDroppableId } from './parseDroppableId';
 import { addWaveToDevice } from '../../classes/waveMgmt';
 import { store } from '../store';
+import { Pad } from '../../classes/Pad';
 
-const updateWavePad = (
-    device: Device,
-    selectedKit: Kit,
-    padName: PadNames,
-    wave: DeviceWave | undefined
-) => {
+const updateWavePad = (pad: Pad, wave: DeviceWave | undefined, padWaveType?: PadWaveTypes) => {
     // 1 update class
-    selectedKit[padName].setWave(wave);
-    // 2 write on spdsx
-    io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
-    // error: undo changes on class
-    // TODO: see above
+    if (padWaveType === PadWaveTypes.sub) {
+        console.log('setting subwave');
+        pad.setSubWave(wave);
+    } else {
+        console.log('setting wave');
+        pad.setWave(wave);
+    }
 };
 
 export const handleListToPadDrop = (
@@ -46,7 +44,8 @@ export const handleListToPadDrop = (
         return {};
     }
     // update dndObject for pad
-    updateWavePad(device, selectedKit, dest.padName, dndObject.item);
+    updateWavePad(selectedKit[dest.padName], dndObject.item, dest.padWaveType);
+    io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
 
     return {
         dndPadWaves: {
@@ -94,8 +93,9 @@ export const handlePadToPadDrop = (
         return {};
     }
     // TODO: test if this works in all situations: e.g. main to sub
-    updateWavePad(device, selectedKit, src.padName, destObj?.item);
-    updateWavePad(device, selectedKit, dest.padName, srcObj.item);
+    updateWavePad(selectedKit[src.padName], destObj?.item, src.padWaveType);
+    updateWavePad(selectedKit[dest.padName], srcObj.item, dest.padWaveType);
+    io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
     // drop from main to sub pad
     if (src.padName === dest.padName) {
         return {
@@ -151,7 +151,8 @@ export const handleLocalToPadDrop = (
     const deviceWave = addWaveToDevice(dndObject.item, device);
     store.dispatch(WaveManagerEvents.addExistingDeviceWave, deviceWave);
     // update dndObject for pad
-    updateWavePad(device, selectedKit, dest.padName, deviceWave);
+    updateWavePad(selectedKit[dest.padName], deviceWave, dest.padWaveType);
+    io.writeKitPrm(selectedKit.kitPrmObject, selectedKit.shortPath, device);
 
     return {
         dndPadWaves: {

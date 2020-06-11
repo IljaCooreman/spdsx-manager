@@ -104,11 +104,11 @@ export class Pad {
     }
 
     setWvPan(value: number) {
-        this.WvPan = inputSanitize.pan(value);
+        this.WvPan = inputSanitize.Pan(value);
     }
 
     setSubWvPan(value: number) {
-        this.SubWvPan = inputSanitize.pan(value);
+        this.SubWvPan = inputSanitize.Pan(value);
     }
 
     setMuteGrp(value: MuteGrpOptions) {
