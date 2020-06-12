@@ -31,6 +31,7 @@ export const waveManager: StoreonModule<State, Events> = store => {
     // second, import all kits
     store.on(
         '@changed',
+        // eslint-disable-next-line consistent-return
         ({ device, deviceWaves }, { deviceIsConnected, device: deviceHasChanged }) => {
             if (deviceIsConnected || (deviceHasChanged && deviceHasChanged.path)) {
                 const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
@@ -61,7 +62,6 @@ export const waveManager: StoreonModule<State, Events> = store => {
                     kitList
                 };
             }
-            return {};
         }
     );
 
