@@ -17,6 +17,12 @@ export interface State {
     selectedKit: Kit | undefined;
     selectedPad: PadNames | undefined;
     kitList: (Kit | { id: number; uuid: string; kitName: Name; type: string })[];
+    notification: Notification | undefined;
+}
+
+export interface Notification {
+    type: 'error' | 'success' | 'info';
+    message: string;
 }
 
 export enum WaveManagerEvents {
@@ -51,6 +57,12 @@ export enum IOEvents {
     saveKitToDevice = 'IOEvents/saveKitToDevice'
 }
 
+export enum NotificationEvents {
+    showError = 'notificationEvents/showError',
+    showSuccess = 'notificationEvents/showSuccess',
+    showInfo = 'notificationEvents/showInfo'
+}
+
 export interface Events {
     [WaveManagerEvents.import]: string[];
     [WaveManagerEvents.createWave]: string;
@@ -69,6 +81,9 @@ export interface Events {
     [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
     [KitConfiguratorEvents.clickOnPad]: PadNames;
     [IOEvents.saveKitToDevice]: Kit;
+    [NotificationEvents.showError]: string;
+    [NotificationEvents.showSuccess]: string;
+    [NotificationEvents.showInfo]: string;
 }
 
 export enum PadWaveTypes {

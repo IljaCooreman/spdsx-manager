@@ -77,8 +77,8 @@ const defaultKit: KitPrmType = {
     PadPrm: [
         {
             Wv: -1,
-            WvLevel: 1,
-            WvPan: 1,
+            WvLevel: 100,
+            WvPan: 15,
             PlayMode: 0,
             OutAsgn: 0,
             MuteGrp: 0,

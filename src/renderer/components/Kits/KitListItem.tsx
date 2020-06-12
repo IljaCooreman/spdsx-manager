@@ -7,7 +7,6 @@ import { colors } from '../../styling';
 import { Kit } from '../../../classes/Kit';
 import { store } from '../../store';
 import { KitNavigatorEvents } from '../../store/types/types';
-import { kitNavigator } from '../../store/kitNavigator';
 
 interface KitListItemProps {
     kit: Kit | { id: number; uuid: string; kitName: any };
@@ -18,6 +17,8 @@ interface KitListItemProps {
 
 const createNewKit = (id: number) => {
     store.dispatch(KitNavigatorEvents.createNewKit, id);
+    // TODO: automatically select new kit
+    store.dispatch(KitNavigatorEvents.selectKit, undefined);
 };
 
 const getItemStyle = (isDragging: any, draggableStyle: any, isSelected: boolean) => ({

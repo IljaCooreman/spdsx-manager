@@ -43,13 +43,16 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
 }) => {
     const [isHovering, setIsHovering] = React.useState<boolean>(false);
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
-    const [sound] = React.useState<Howl>(
-        new Howl({ src: [`file://${dndObject.item.fullPath}`], preload: false })
-    );
+    const [sound, setSound] = React.useState<Howl | undefined>(undefined);
+
+    React.useEffect(() => {
+        setSound(new Howl({ src: [`file://${dndObject.item.fullPath}`], preload: false }));
+    }, [dndObject]);
 
     const onClick = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
+        if (!sound) return;
         setIsPlaying(false);
         sound.load();
         sound.stop();

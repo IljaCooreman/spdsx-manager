@@ -18,7 +18,10 @@ describe('wave utils', () => {
         expect(pathToWvNr('10/20')).toBe(1020);
         expect(pathToWvNr('/10/20')).toBe(1020);
         expect(pathToWvNr('/10/20.psd')).toBe(1020);
-        // expect(pathToWvNr('/10/103')).toThrow()
+        expect(() => {
+            pathToWvNr('00/._00.spd');
+        }).toThrow();
+
         expect(wvNrToPath(pathToWvNr('00/01'))).toBe('00/01');
     });
 });

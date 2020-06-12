@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { RootRef, ListItemText, Grid } from '@material-ui/core';
-import { DragHandle } from '@material-ui/icons';
-import styled from 'styled-components';
-import { State, WaveManagerEvents, KitNavigatorEvents } from '../../store/types/types';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { RootRef } from '@material-ui/core';
+
+import { State, KitNavigatorEvents } from '../../store/types/types';
 import { Kit } from '../../../classes/Kit';
 import { store } from '../../store';
-import { colors } from '../../styling';
 import KitListItem from './KitListItem';
 
 interface KitsProps {

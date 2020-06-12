@@ -3,30 +3,74 @@ import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { State, Events, WaveManagerEvents } from './types/types';
+import {
+    State,
+    Events,
+    WaveManagerEvents,
+    NotificationEvents,
+    KitNavigatorEvents
+} from './types/types';
 import LocalWave from '../../classes/LocalWave';
 import io from '../../classes/IO';
-import DeviceWave from '../../classes/DeviceWave';
+import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import { pathToWvNr } from '../utils/waveUtils';
-import { addWaveToDevice } from '../../classes/waveMgmt';
-
-const initialState = { localWaves: [], deviceWaves: [], dndDeviceWaves: [], dndLocalWaves: [] };
+import { Kit } from '../../classes/Kit';
+import { createKitFromPath } from '../../classes/KitFactory';
 
 export const waveManager: StoreonModule<State, Events> = store => {
-    store.on('@init', () => initialState);
-
+    // first, import waves
     store.on('@changed', (_, { deviceIsConnected }) => {
         if (deviceIsConnected) {
+            store.dispatch(NotificationEvents.showInfo, 'Importing...');
+            // import waves from device
             store.dispatch(WaveManagerEvents.importFromDevice);
+            store.dispatch(NotificationEvents.showSuccess, 'Connected');
         }
     });
+
+    // second, import all kits
+    store.on(
+        '@changed',
+        ({ device, deviceWaves }, { deviceIsConnected, device: deviceHasChanged }) => {
+            if (deviceIsConnected || (deviceHasChanged && deviceHasChanged.path)) {
+                const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
+                const fileNames = io.listFileNames(pathToKits);
+
+                const kitList: Kit[] = [];
+                // easier rewritten with a reduce
+                fileNames.forEach((file: string) => {
+                    try {
+                        const kit = createKitFromPath(join(pathToKits, file), device, deviceWaves);
+                        kitList.push(kit);
+                    } catch (e) {
+                        store.dispatch(
+                            NotificationEvents.showError,
+                            `Failed to read kit. ${e.message}`
+                        );
+                    }
+                });
+
+                // select first kit, if exists
+                const firstRealKit = kitList.find(kit => kit.type !== 'EmptyKit');
+                if (firstRealKit) {
+                    const typedAsKit = firstRealKit as Kit;
+                    store.dispatch(KitNavigatorEvents.selectKit, typedAsKit);
+                }
+
+                return {
+                    kitList
+                };
+            }
+            return {};
+        }
+    );
 
     store.on(WaveManagerEvents.import, ({ localWaves }: State, paths) => {
         // prevent duplicate entries
         paths.forEach(path => {
             if (localWaves.find(wave => wave.fullPath === path)) {
                 // we could dispatch a message action here
-                console.log('this is already imported');
+                store.dispatch(NotificationEvents.showInfo, 'This wave is already imported');
                 return;
             }
             store.dispatch(WaveManagerEvents.createWave, path);
@@ -56,21 +100,55 @@ export const waveManager: StoreonModule<State, Events> = store => {
                 })
             ];
         }, acc);
-        fileNames.forEach(file => {
-            store.dispatch(WaveManagerEvents.addNewDeviceWave, file);
-        });
+
+        const acc2: { deviceWaves: DeviceWave[]; dndDeviceWaves: DndObject<DeviceWave>[] } = {
+            deviceWaves: [],
+            dndDeviceWaves: []
+        };
+        // eslint-disable-next-line no-shadow
+        const result = fileNames.reduce((acc2, path2: string) => {
+            try {
+                const deviceWave = new DeviceWave(device, pathToWvNr(path2));
+                acc2.deviceWaves.push(deviceWave);
+                acc2.dndDeviceWaves.push({
+                    item: deviceWave,
+                    id: uuidv4()
+                });
+            } catch (e) {
+                store.dispatch(
+                    NotificationEvents.showError,
+                    `Failed to import a wave from your device. Path ${path2}`
+                );
+            }
+            return acc2;
+        }, acc2);
+
+        return result;
     });
 
-    store.on(
-        WaveManagerEvents.addNewDeviceWave,
-        ({ device, deviceWaves, dndDeviceWaves }, path) => {
-            const deviceWave = new DeviceWave(device, pathToWvNr(path));
-            return {
-                deviceWaves: [...deviceWaves, deviceWave],
-                dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
-            };
-        }
-    );
+    // TODO: remove this, it's unused
+    // store.on(
+    //     WaveManagerEvents.addNewDeviceWave,
+    //     ({ device, deviceWaves, dndDeviceWaves }, path) => {
+    //         try {
+    //             const deviceWave = new DeviceWave(device, pathToWvNr(path));
+    //             return {
+    //                 deviceWaves: [...deviceWaves, deviceWave],
+    //                 dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
+    //             };
+    //         } catch (e) {
+    //             console.log('#### ERROR: ', e);
+    //             store.dispatch(
+    //                 NotificationEvents.showError,
+    //                 `Failed to import a wave from your device. Path ${path}`
+    //             );
+    //             return {
+    //                 deviceWaves,
+    //                 dndDeviceWaves
+    //             };
+    //         }
+    //     }
+    // );
 
     store.on(
         WaveManagerEvents.addExistingDeviceWave,

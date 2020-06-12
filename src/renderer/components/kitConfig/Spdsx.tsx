@@ -39,6 +39,25 @@ const Spdsx: React.FunctionComponent = () => {
                 <Pad padName={PadNames.pad8} pad={kit?.[PadNames.pad8]} isActive={!!kit} />
                 <Pad padName={PadNames.pad9} pad={kit?.[PadNames.pad9]} isActive={!!kit} />
             </Row>
+            <Row />
+            <Row>
+                <Pad padName={PadNames.trigger1} pad={kit?.[PadNames.trigger1]} isActive={!!kit} />
+                <Pad padName={PadNames.trigger2} pad={kit?.[PadNames.trigger2]} isActive={!!kit} />
+                <Pad
+                    padName={PadNames.footSwitch1}
+                    pad={kit?.[PadNames.footSwitch1]}
+                    isActive={!!kit}
+                />
+            </Row>
+            <Row>
+                <Pad padName={PadNames.trigger3} pad={kit?.[PadNames.trigger3]} isActive={!!kit} />
+                <Pad padName={PadNames.trigger4} pad={kit?.[PadNames.trigger4]} isActive={!!kit} />
+                <Pad
+                    padName={PadNames.footSwitch2}
+                    pad={kit?.[PadNames.footSwitch2]}
+                    isActive={!!kit}
+                />
+            </Row>
         </Container>
     );
 };

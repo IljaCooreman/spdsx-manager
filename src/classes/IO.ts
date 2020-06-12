@@ -15,12 +15,15 @@ import { objectToXml, stripExtension } from './xmlUtils';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { KitPrmType } from '../renderer/store/types/KitPrm';
+import { store } from '../renderer/store';
+import { NotificationEvents } from '../renderer/store/types/types';
 
 const io = {
     localReadFile(path: string): string | undefined {
         try {
             return readFileSync(path, 'utf8');
         } catch (e) {
+            store.dispatch(NotificationEvents.showError, `Failed to read file ${path}.`);
             console.log(e);
             return undefined;
         }
@@ -34,8 +37,8 @@ const io = {
         try {
             writeFileSync(fullPath, content);
         } catch (e) {
+            store.dispatch(NotificationEvents.showError, `unable to save. ${fullPath}.`);
             console.log(e);
-            throw new Error('unable to write file');
         }
     },
 
@@ -82,7 +85,7 @@ const io = {
         try {
             unlinkSync(fullPath);
         } catch (e) {
-            throw new Error('Failed to delete file');
+            store.dispatch(NotificationEvents.showError, `Failed to remove file ${fullPath}.`);
         }
     }
 };

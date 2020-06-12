@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import { store } from '../renderer/store';
+import { NotificationEvents } from '../renderer/store/types/types';
 
 let win: BrowserWindow | null;
 
@@ -11,7 +13,9 @@ const installExtensions = async () => {
 
     return Promise.all(
         extensions.map(name => installer.default(installer[name], forceDownload))
-    ).catch(console.log); // eslint-disable-line no-console
+    ).catch(e => {
+        store.dispatch(NotificationEvents.showError, `Error: ${e.message}.`);
+    }); // eslint-disable-line no-console
 };
 
 const createWindow = async () => {
@@ -20,7 +24,7 @@ const createWindow = async () => {
     }
 
     win = new BrowserWindow({
-        width: 1000,
+        width: 1080,
         height: 800,
         webPreferences: {
             preload: `${__dirname}/preload.js`,

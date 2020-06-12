@@ -8,6 +8,7 @@ import { deviceConnector } from './deviceConnector';
 import { kitNavigator } from './kitNavigator';
 import { kitConfigurator } from './kitConfigurator';
 import { IOReducer } from './IOReducer';
+import { notificationReducer } from './notificationReducer';
 
 export const store = createStoreon<State, Events>([
     waveManager,
@@ -15,5 +16,6 @@ export const store = createStoreon<State, Events>([
     kitNavigator,
     kitConfigurator,
     IOReducer,
+    notificationReducer,
     process.env.NODE_ENV !== 'production' && storeonLogger
 ]);

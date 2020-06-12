@@ -10,7 +10,7 @@ import { kitPathToNumber } from '../renderer/utils/kitUtils';
 export function createKitFromPath(path: string, device: Device, deviceWaveList: DeviceWave[]): Kit {
     try {
         if (hasWeirdFileName(basename(path))) {
-            console.log(`Abnormal filename. skipping ${basename(path)}`);
+            throw new Error(`Abnormal filename:  ${basename(path)}`);
         } // TODO: fix this issue
         const file = io.localReadFile(path);
         if (!file) throw new Error('Not a file');
