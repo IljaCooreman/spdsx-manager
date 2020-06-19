@@ -29,7 +29,12 @@ const createWindow = async () => {
         webPreferences: {
             preload: `${__dirname}/preload.js`,
             webSecurity: false
-        }
+        },
+        icon: url.format({
+            pathname: path.join(__dirname, 'icon.icns'),
+            protocol: 'file:',
+            slashes: true
+        })
     });
 
     if (process.env.NODE_ENV !== 'production') {

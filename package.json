@@ -157,6 +157,7 @@
     "storeon": "^2.0.2",
     "styled-components": "^5.1.0",
     "typescript-plugin-styled-components": "^1.4.4",
+    "usb-detection": "^4.9.0",
     "uuid": "^7.0.3",
     "wavefile": "^11.0.0",
     "xml-js": "^1.6.11"
