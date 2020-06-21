@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Grid } from '@material-ui/core';
 import styled from 'styled-components';
 import WaveManager from './WaveManager';
 import { store } from '../store';
@@ -15,6 +14,12 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+    position: relative;
+`;
+
+const RightColumn = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 const DndContainer: React.FunctionComponent = () => {
@@ -38,15 +43,13 @@ const DndContainer: React.FunctionComponent = () => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <div>
                     <KitConfig />
-                    <Grid item xs={12} style={{}}>
-                        <PadConfig />
-                    </Grid>
+                    <PadConfig />
                 </div>
                 <Spdsx />
-                <div>
+                <RightColumn>
                     <LocalWaveList />
                     <WaveManager />
-                </div>
+                </RightColumn>
             </DragDropContext>
         </Container>
     );

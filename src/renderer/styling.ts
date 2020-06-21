@@ -19,5 +19,7 @@ export const GeneralContainerStyle = () => {
         color: ${colors.bgDarkGrey};
         padding: 12px;
         margin: 12px;
+        position: relative;
+        max-height: 100%;
     `;
 };

@@ -11,6 +11,17 @@ import DeviceWave, { DndObject } from '../../../classes/DeviceWave';
 
 const Container = styled.div`
     ${GeneralContainerStyle()}
+    display: flex;
+    flex-flow: column;
+`;
+
+const List = styled.ul`
+    max-width: 250px;
+    min-width: 200px;
+    list-style: none;
+    padding: 8px;
+    overflow: scroll;
+    max-height: 100%;
 `;
 
 const WaveList: React.FunctionComponent = () => {
@@ -27,21 +38,11 @@ const WaveList: React.FunctionComponent = () => {
         }
     }, [filterValue, dndDeviceWaves]);
 
-    const getListStyle = () => {
-        return {
-            maxWidth: '250px',
-            minWidth: '200px',
-            listStyle: 'none',
-            padding: '8px',
-            overflow: 'scroll',
-            maxHeight: '100%'
-        };
-    };
-
     return (
         <Container>
             <h3>Files on device</h3>
             <TextField
+                style={{ flexShrink: 0 }}
                 label="Filter"
                 size="small"
                 value={filterValue}
@@ -50,7 +51,7 @@ const WaveList: React.FunctionComponent = () => {
 
             <Droppable droppableId="list-wave" type="PAD" isDropDisabled={true}>
                 {(provided, snapshot) => (
-                    <ul style={getListStyle()} ref={provided.innerRef}>
+                    <List ref={provided.innerRef}>
                         {filteredList.map((item, index) => (
                             <DraggableAudio
                                 key={item.id}
@@ -60,11 +61,14 @@ const WaveList: React.FunctionComponent = () => {
                             />
                         ))}
                         {provided.placeholder}
-                    </ul>
+                    </List>
                 )}
             </Droppable>
-
-            <Button>Export all</Button>
+            <div style={{ opacity: 0.3 }}>
+                {filteredList.length === dndDeviceWaves.length
+                    ? `${dndDeviceWaves.length} waves`
+                    : `${filteredList.length} / ${dndDeviceWaves.length} waves`}
+            </div>
         </Container>
     );
 };

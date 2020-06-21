@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import { PlayArrow, Stop, MoreVert } from '@material-ui/icons';
 import styled from 'styled-components';
@@ -18,7 +19,7 @@ interface DraggableAudioProps {
     shouldCopy?: boolean;
 }
 
-const Container = styled.div<{ isDark: boolean; isDragging: boolean }>`
+const Container = styled.div<{ isDark: boolean; isDragging: boolean; isHovering: boolean }>`
     display: flex;
     align-items: center;
     padding: 4px;
@@ -29,7 +30,8 @@ const Container = styled.div<{ isDark: boolean; isDragging: boolean }>`
 
     border: ${({ isDragging }) => (isDragging ? `1px solid ${colors.bgDarkGrey}` : 'none')};
     box-shadow: ${({ isDragging }) => (isDragging ? '0 2px 8px 0 rgba(0,0,0,0.20)' : 'none')};
-    background: ${({ isDragging }) => (isDragging ? colors.bgWhite : 'none')};
+    background: ${({ isDragging, isHovering }) =>
+        isDragging ? colors.bgWhite : isHovering ? 'rgba(0,0,0,.05)' : 'none'};
     color: ${({ isDark }: any) => (isDark ? colors.bgWhite : colors.black)};
 `;
 
@@ -77,6 +79,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                         isDragging={snapsh.isDragging}
                         onClick={(e: any) => e.stopPropagation()}
                         isDark={theme === 'dark'}
+                        isHovering={isHovering}
                         ref={prov.innerRef}
                         {...prov.draggableProps}
                         {...prov.dragHandleProps}
@@ -97,11 +100,11 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                             )}
                         </IconButton>
                         {stripExtension(dndObject.item.name)}
-                        {isHovering && (
+                        {/* {isHovering && (
                             <IconButton size="small">
                                 <MoreVert />
                             </IconButton>
-                        )}
+                        )} */}
                     </Container>
                     {shouldCopy && snapsh.isDragging && (
                         <Container isDragging={false} isDark={theme === 'dark'}>

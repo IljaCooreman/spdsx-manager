@@ -9,7 +9,9 @@ require('./Main.scss');
 
 const Application = () => {
     return (
-        <Container style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
+        <Container
+            style={{ height: '100vh', display: 'flex', flexFlow: 'column', position: 'relative' }}
+        >
             <DeviceConnModule />
             <DndContainer />
             <Notification />

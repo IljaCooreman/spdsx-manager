@@ -17,6 +17,7 @@ const Container = styled.div<{ isActive: boolean }>`
     border-radius: 26px;
     padding: 26px;
     opacity: ${({ isActive }: any) => (isActive ? 1 : 0.4)};
+    align-self: flex-start;
 `;
 
 const Spdsx: React.FunctionComponent = () => {
