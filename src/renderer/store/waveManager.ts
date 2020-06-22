@@ -32,17 +32,17 @@ export const waveManager: StoreonModule<State, Events> = store => {
     store.on(
         '@changed',
         // eslint-disable-next-line consistent-return
-        ({ device, deviceWaves }, { deviceIsConnected, device: deviceHasChanged }) => {
+        ({ device, deviceWaves, kitList }, { deviceIsConnected, device: deviceHasChanged }) => {
             if (deviceIsConnected || (deviceHasChanged && deviceHasChanged.path)) {
                 const pathToKits = join(device.path, 'Roland/SPD-SX/KIT');
                 const fileNames = io.listFileNames(pathToKits);
+                const kitListCopy = [...kitList];
 
-                const kitList: Kit[] = [];
                 // easier rewritten with a reduce
                 fileNames.forEach((file: string) => {
                     try {
                         const kit = createKitFromPath(join(pathToKits, file), device, deviceWaves);
-                        kitList.push(kit);
+                        kitListCopy[kit.id] = kit;
                     } catch (e) {
                         store.dispatch(
                             NotificationEvents.showError,
@@ -59,7 +59,7 @@ export const waveManager: StoreonModule<State, Events> = store => {
                 }
 
                 return {
-                    kitList
+                    kitList: kitListCopy
                 };
             }
         }

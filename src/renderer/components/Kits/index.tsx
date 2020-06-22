@@ -3,7 +3,7 @@ import { useStoreon } from 'storeon/react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { RootRef } from '@material-ui/core';
 
-import { State, KitNavigatorEvents } from '../../store/types/types';
+import { State, KitNavigatorEvents, DummyKit } from '../../store/types/types';
 import { Kit } from '../../../classes/Kit';
 import { store } from '../../store';
 import KitListItem from './KitListItem';
@@ -14,10 +14,23 @@ interface KitsProps {
 
 // idea from https://codesandbox.io/s/k260nyxq9v?file=/index.js
 const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
+    const [orderedKits, setOrderedKits] = React.useState<(Kit | DummyKit)[]>([]);
+    const [isReordered, setIsReordered] = React.useState<boolean>(false);
     const { kitList, selectedKit } = useStoreon<State, KitNavigatorEvents>(
         'kitList',
         'selectedKit'
     );
+    React.useEffect(() => {
+        setOrderedKits(kitList);
+    }, [kitList]);
+
+    React.useEffect(() => {
+        return () => {
+            if (isReordered) {
+                store.dispatch(KitNavigatorEvents.reorder, orderedKits);
+            }
+        };
+    }, [isReordered]);
 
     // a little function to help us with reordering the result
     function reorder<T>(list: T[], startIndex: number, endIndex: number) {
@@ -39,20 +52,14 @@ const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
     });
 
     const onDragEnd = (result: DropResult) => {
-        console.log(result);
-        // dropped outside the list
-        if (!result.destination) {
+        if (!result.destination || result.destination?.index === result.source?.index) {
             return;
         }
-
-        const items = reorder(kitList, result.source.index, result.destination.index);
-        // TODO: set new state here!
-        // this.setState({
-        //     items
-        // });
+        setIsReordered(true);
+        setOrderedKits(reorder(orderedKits, result.source.index, result.destination.index));
     };
 
-    const onItemClick = (kit: Kit | { id: number; uuid: string; kitName: any }) => {
+    const onItemClick = (kit: Kit | DummyKit) => {
         if ((kit as Kit).type === 'Kit') {
             const castedKit = kit as Kit;
             store.dispatch(KitNavigatorEvents.selectKit, castedKit);
@@ -63,11 +70,11 @@ const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
     return (
         <div>
             <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable">
+                <Droppable droppableId="kitlist-droppable">
                     {(provided, snapshot) => (
                         <RootRef rootRef={provided.innerRef}>
                             <ul style={getListStyle(snapshot.isDraggingOver)}>
-                                {kitList.map((kit, index: number) => (
+                                {orderedKits.map((kit, index: number) => (
                                     <KitListItem
                                         key={kit.uuid}
                                         kit={kit}

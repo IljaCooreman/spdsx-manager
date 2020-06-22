@@ -10,6 +10,7 @@ import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
 import { PadNames } from '../renderer/store/types/types';
 import defaultKit from './defaultKit';
 import { inputSanitize } from './inputSanitize';
+import { kitIndexToShortPath } from '../renderer/utils/kitUtils';
 
 export class Kit {
     id: number; // order number of the kit, between 0 and 99. e.g. 23 --> kit023.spd
@@ -56,6 +57,10 @@ export class Kit {
         }
     }
 
+    setId(value: number) {
+        this.id = value;
+    }
+
     setLevel(value: number) {
         this.Level = inputSanitize.Level(value);
     }
@@ -65,7 +70,7 @@ export class Kit {
     }
 
     get shortPath() {
-        return `kit0${`0${this.id}`.slice(-2)}.spd`;
+        return kitIndexToShortPath(this.id);
     }
 
     get path() {

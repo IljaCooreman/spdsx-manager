@@ -6,13 +6,13 @@ import { Button } from '@material-ui/core';
 import { colors } from '../../styling';
 import { Kit } from '../../../classes/Kit';
 import { store } from '../../store';
-import { KitNavigatorEvents } from '../../store/types/types';
+import { KitNavigatorEvents, DummyKit } from '../../store/types/types';
 
 interface KitListItemProps {
-    kit: Kit | { id: number; uuid: string; kitName: any };
+    kit: Kit | DummyKit;
     index: number;
     selectedKit: Kit | undefined;
-    onItemClick: (kit: Kit | { id: number; uuid: string; kitName: any }) => any;
+    onItemClick: (kit: Kit | DummyKit) => any;
 }
 
 const createNewKit = (id: number) => {

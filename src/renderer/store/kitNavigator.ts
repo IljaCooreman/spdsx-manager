@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
-import { State, Events, KitNavigatorEvents } from './types/types';
+import { State, Events, KitNavigatorEvents, DummyKit, IOEvents } from './types/types';
 import { createNewKit } from '../../classes/KitFactory';
 import { createDndPadWaves } from '../utils/createDndPadWaves';
+import { Kit } from '../../classes/Kit';
 
 export const kitNavigator: StoreonModule<State, Events> = store => {
     // @init happens in deviceConnector.ts
@@ -31,6 +32,29 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
         }
         return {
             kitList: newKitList
+        };
+    });
+
+    store.on(KitNavigatorEvents.reorder, (_: State, list: (Kit | DummyKit)[]) => {
+        list.forEach((kit, i) => {
+            if (kit.id !== i) {
+                switch (kit.type) {
+                    case 'Kit':
+                        // eslint-disable-next-line no-case-declarations
+                        const castedKit = kit as Kit;
+                        castedKit.setId(i);
+                        store.dispatch(IOEvents.saveKitToDevice, castedKit);
+                        break;
+                    case 'EmptyKit':
+                        store.dispatch(IOEvents.removeKit, i);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        return {
+            kitList: list
         };
     });
 };

@@ -29,7 +29,7 @@ export const deviceConnector: StoreonModule<State, Events> = store => {
     store.on('@init', () => {
         if (process.env.NODE_ENV !== 'production') {
             store.dispatch(DeviceConnectorEvents.connect, [
-                '/Users/coorem43/Documents/projects/prive/spdsx2/data/filestructure backup'
+                '/Users/coorem43/Documents/projects/prive/spdsx2/data/playground'
             ]);
             store.dispatch(NotificationEvents.showInfo, 'Connected to playground');
         }

@@ -16,9 +16,16 @@ export interface State {
     device: Device;
     selectedKit: Kit | undefined;
     selectedPad: PadNames | undefined;
-    kitList: (Kit | { id: number; uuid: string; kitName: Name; type: string })[];
+    kitList: (Kit | DummyKit)[];
     notification: Notification | undefined;
 }
+
+export type DummyKit = {
+    id: number;
+    uuid: string;
+    kitName: Name;
+    type: string;
+};
 
 export interface Notification {
     type: 'error' | 'success' | 'info';
@@ -43,7 +50,8 @@ export enum KitNavigatorEvents {
     selectKit = 'kitNavigator/selectKit',
     addKit = 'kitNavigator/addKit',
     createNewKit = 'kitNavigator/createNewKit',
-    removeKit = 'kitNavigator/removeKit'
+    removeKit = 'kitNavigator/removeKit',
+    reorder = 'kitNavigator/reorder'
 }
 
 export enum KitConfiguratorEvents {
@@ -54,7 +62,8 @@ export enum KitConfiguratorEvents {
 }
 
 export enum IOEvents {
-    saveKitToDevice = 'IOEvents/saveKitToDevice'
+    saveKitToDevice = 'IOEvents/saveKitToDevice',
+    removeKit = 'IOEvents/removeKit'
 }
 
 export enum NotificationEvents {
@@ -75,12 +84,14 @@ export interface Events {
     [KitNavigatorEvents.selectKit]: Kit | undefined;
     [KitNavigatorEvents.createNewKit]: number;
     [KitNavigatorEvents.addKit]: Kit;
+    [KitNavigatorEvents.reorder]: (Kit | DummyKit)[];
     [KitConfiguratorEvents.setPadParam]: { pad: Pad; paramType: PadPrmSpdTags; value: number };
     [KitNavigatorEvents.removeKit]: Kit;
     [KitConfiguratorEvents.dropOnPad]: DropResult;
     [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
     [KitConfiguratorEvents.clickOnPad]: PadNames;
     [IOEvents.saveKitToDevice]: Kit;
+    [IOEvents.removeKit]: number;
     [NotificationEvents.showError]: string;
     [NotificationEvents.showSuccess]: string;
     [NotificationEvents.showInfo]: string;
