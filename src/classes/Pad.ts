@@ -116,7 +116,7 @@ export class Pad {
     }
 
     setTempoSync(value: TempoSyncOptions) {
-        this.TempoSync = inputSanitize.Tempo(value);
+        this.TempoSync = value;
     }
 
     setPlayMode(value: PlayModeOptions) {

@@ -34,6 +34,8 @@ const Container = styled.div`
     ${GeneralContainerStyle()}
 `;
 
+const SelectContainer = styled.div``;
+
 const PadConfig: React.FunctionComponent = () => {
     const { selectedPad, selectedKit }: State = useStoreon('selectedPad', 'selectedKit');
     const pad = selectedPad !== undefined && !!selectedKit ? selectedKit[selectedPad] : undefined;
@@ -72,62 +74,64 @@ const PadConfig: React.FunctionComponent = () => {
                 aria-labelledby="continuous-slider"
                 valueLabelDisplay="auto"
             />
-            <SelectInput
-                label="Mute group"
-                options={muteGrpOptions}
-                selectedValue={pad.MuteGrp}
-                handleChange={(value: number) => {
-                    handleChange(value, 'MuteGrp');
-                }}
-            />
-            <SelectInput
-                label="Tempo sync"
-                options={tempoSyncOptions}
-                selectedValue={pad.TempoSync}
-                handleChange={(value: number) => {
-                    handleChange(value, 'TempoSync');
-                }}
-            />
-            <SelectInput
-                label="Loop"
-                options={loopOptions}
-                selectedValue={pad.Loop}
-                handleChange={(value: number) => {
-                    handleChange(value, 'Loop');
-                }}
-            />
-            <SelectInput
-                label="Trigger type"
-                options={trigTypeOptions}
-                selectedValue={pad.TrigType}
-                handleChange={(value: number) => {
-                    handleChange(value, 'TrigType');
-                }}
-            />
-            <SelectInput
-                label="Dynamics"
-                options={dynamicsOptions}
-                selectedValue={pad.Dynamics}
-                handleChange={(value: number) => {
-                    handleChange(value, 'Dynamics');
-                }}
-            />
-            <SelectInput
-                label="Poly/Mono"
-                options={voiceAssignOptions}
-                selectedValue={pad.VoiceAsgn}
-                handleChange={(value: number) => {
-                    handleChange(value, 'VoiceAsgn');
-                }}
-            />
-            <SelectInput
-                label="Output"
-                options={outAsgnOptions}
-                selectedValue={pad.OutAsgn}
-                handleChange={(value: number) => {
-                    handleChange(value, 'OutAsgn');
-                }}
-            />
+            <SelectContainer>
+                <SelectInput
+                    label="Mute group"
+                    options={muteGrpOptions}
+                    selectedValue={pad.MuteGrp}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'MuteGrp');
+                    }}
+                />
+                <SelectInput
+                    label="Tempo sync"
+                    options={tempoSyncOptions}
+                    selectedValue={pad.TempoSync}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'TempoSync');
+                    }}
+                />
+                <SelectInput
+                    label="Loop"
+                    options={loopOptions}
+                    selectedValue={pad.Loop}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'Loop');
+                    }}
+                />
+                <SelectInput
+                    label="Trigger type"
+                    options={trigTypeOptions}
+                    selectedValue={pad.TrigType}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'TrigType');
+                    }}
+                />
+                <SelectInput
+                    label="Dynamics"
+                    options={dynamicsOptions}
+                    selectedValue={pad.Dynamics}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'Dynamics');
+                    }}
+                />
+                <SelectInput
+                    label="Poly/Mono"
+                    options={voiceAssignOptions}
+                    selectedValue={pad.VoiceAsgn}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'VoiceAsgn');
+                    }}
+                />
+                <SelectInput
+                    label="Output"
+                    options={outAsgnOptions}
+                    selectedValue={pad.OutAsgn}
+                    handleChange={(value: number) => {
+                        handleChange(value, 'OutAsgn');
+                    }}
+                />
+            </SelectContainer>
         </Container>
     );
 };

@@ -20,7 +20,7 @@ const List = styled.ul`
     min-width: 200px;
     list-style: none;
     padding: 8px;
-    overflow: scroll;
+    overflow-y: auto;
     max-height: 100%;
 `;
 

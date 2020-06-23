@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { useStoreon } from 'storeon/react';
 import Button from '@material-ui/core/Button';
-import { Grid } from '@material-ui/core';
+import styled from 'styled-components';
 import { openImportDialog } from '../utils/openDialog';
 import { State, WaveManagerEvents, DeviceConnectorEvents } from '../store/types/types';
+
+const Container = styled.div`
+    flex-grow: 0;
+    margin: 12px;
+`;
 
 const DeviceConnModule: React.FunctionComponent = () => {
     const { deviceIsConnected } = useStoreon<State, WaveManagerEvents>('deviceIsConnected');
@@ -26,11 +31,10 @@ const DeviceConnModule: React.FunctionComponent = () => {
     );
 
     return (
-        <Grid item xs={2}>
+        <Container>
             <div>{deviceIsConnected ? 'connected to device' : 'no connection with device'}</div>
             {connectButton}
-            <hr />
-        </Grid>
+        </Container>
     );
 };
 

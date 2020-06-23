@@ -19,7 +19,7 @@ interface DraggableAudioProps {
     shouldCopy?: boolean;
 }
 
-const Container = styled.div<{ isDark: boolean; isDragging: boolean; isHovering: boolean }>`
+const Container = styled.div<{ isDark: boolean; isDragging: boolean; isHovering?: boolean }>`
     display: flex;
     align-items: center;
     padding: 4px;
@@ -107,7 +107,11 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                         )} */}
                     </Container>
                     {shouldCopy && snapsh.isDragging && (
-                        <Container isDragging={false} isDark={theme === 'dark'}>
+                        <Container
+                            isDragging={false}
+                            isDark={theme === 'dark'}
+                            isHovering={isHovering}
+                        >
                             <IconButton aria-label="play/pauze" size="small">
                                 <PlayArrow
                                     fontSize="inherit"

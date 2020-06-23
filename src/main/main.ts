@@ -24,7 +24,7 @@ const createWindow = async () => {
     }
 
     win = new BrowserWindow({
-        width: 1080,
+        width: 1130,
         height: 800,
         webPreferences: {
             preload: `${__dirname}/preload.js`,

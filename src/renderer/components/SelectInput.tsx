@@ -15,15 +15,15 @@ const SelectInput: React.FunctionComponent<SelectInputProps> = ({
     handleChange
 }) => {
     const onChange = (e: any) => {
-        console.log('handling', e.target.value);
         handleChange(e.target.value);
     };
     return (
         <FormControl
             // variant="outlined"
             style={{
-                minWidth: '150px',
-                margin: '12px'
+                minWidth: '110px',
+                margin: '12px',
+                flexGrow: 1
             }}
         >
             <InputLabel id={`outlined-input-${label}`}>{label}</InputLabel>

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { State, Events, DeviceConnectorEvents, NotificationEvents } from './types/types';
 import Device from '../../classes/Device';
 import { Name } from '../../classes/Name';
+import { usbListener } from '../../usbDetection';
 
 const initialState = {
     deviceIsConnected: false,
@@ -24,6 +25,7 @@ const initialState = {
 
 export const deviceConnector: StoreonModule<State, Events> = store => {
     store.on('@init', () => initialState);
+    // store.on('@init', () => usbListener());
 
     // connect automatically to a (virtual) device in dev mode
     store.on('@init', () => {
