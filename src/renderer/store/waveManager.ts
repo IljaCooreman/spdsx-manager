@@ -52,7 +52,7 @@ export const waveManager: StoreonModule<State, Events> = store => {
                 });
 
                 // select first kit, if exists
-                const firstRealKit = kitList.find(kit => kit.type !== 'EmptyKit');
+                const firstRealKit = kitListCopy.find(kit => kit.type === 'Kit');
                 if (firstRealKit) {
                     const typedAsKit = firstRealKit as Kit;
                     store.dispatch(KitNavigatorEvents.selectKit, typedAsKit);
