@@ -21,7 +21,6 @@ export const waveManager: StoreonModule<State, Events> = store => {
     // first, import waves
     store.on('@changed', (_, { deviceIsConnected }) => {
         if (deviceIsConnected) {
-            store.dispatch(NotificationEvents.showInfo, 'Importing...');
             // import waves from device
             store.dispatch(WaveManagerEvents.importFromDevice);
             store.dispatch(NotificationEvents.showSuccess, 'Connected');

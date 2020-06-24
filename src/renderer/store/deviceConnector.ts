@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { State, Events, DeviceConnectorEvents, NotificationEvents } from './types/types';
 import Device from '../../classes/Device';
 import { Name } from '../../classes/Name';
+import { validateDevicePath } from '../utils/validateDevicePath';
 
 const initialState = {
     deviceIsConnected: false,
@@ -39,8 +40,16 @@ export const deviceConnector: StoreonModule<State, Events> = store => {
         if (deviceIsConnected) {
             store.dispatch(DeviceConnectorEvents.disconnect);
         }
+        const strippedPath = validateDevicePath(path);
+        if (!strippedPath) {
+            store.dispatch(
+                NotificationEvents.showError,
+                'Could not connect to device. Wrong path?'
+            );
+            return {};
+        }
         return {
-            device: new Device(path),
+            device: new Device(strippedPath),
             deviceIsConnected: true
         };
     });
