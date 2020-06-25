@@ -38,7 +38,7 @@ const valueToPercent = (value: number, min: number, max: number) => {
 };
 
 const percentToValue = (value: number, min: number, max: number) => {
-    return Math.round((value * (max - min) + min) * 1) / 1;
+    return Math.round(value * (max - min) * 1) / 1;
 };
 
 const CircleSlider: React.FunctionComponent<CircleSliderProps> = ({
