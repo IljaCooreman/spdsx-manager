@@ -54,7 +54,10 @@ export const deviceConnector: StoreonModule<State, Events> = store => {
         };
     });
 
-    store.on(DeviceConnectorEvents.disconnect, ({ deviceIsConnected }, _) => ({
-        ...initialState
-    }));
+    store.on(DeviceConnectorEvents.disconnect, ({ deviceIsConnected }, _) => {
+        store.dispatch(NotificationEvents.showInfo, 'Disconnected from device');
+        return {
+            ...initialState
+        };
+    });
 };

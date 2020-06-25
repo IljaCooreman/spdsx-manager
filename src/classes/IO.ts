@@ -16,14 +16,18 @@ import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { KitPrmType } from '../renderer/store/types/KitPrm';
 import { store } from '../renderer/store';
-import { NotificationEvents } from '../renderer/store/types/types';
+import { NotificationEvents, DeviceConnectorEvents } from '../renderer/store/types/types';
 
 const io = {
     localReadFile(path: string): string | undefined {
         try {
             return readFileSync(path, 'utf8');
         } catch (e) {
-            store.dispatch(NotificationEvents.showError, `Failed to read file ${path}.`);
+            if (existsSync(store.get().device?.path)) {
+                store.dispatch(NotificationEvents.showError, `Failed to read file ${path}.`);
+            } else {
+                store.dispatch(DeviceConnectorEvents.disconnect);
+            }
             console.log(e);
             return undefined;
         }
@@ -37,7 +41,11 @@ const io = {
         try {
             writeFileSync(fullPath, content);
         } catch (e) {
-            store.dispatch(NotificationEvents.showError, `unable to save. ${fullPath}.`);
+            if (existsSync(store.get().device?.path)) {
+                store.dispatch(NotificationEvents.showError, `unable to save. ${fullPath}.`);
+            } else {
+                store.dispatch(DeviceConnectorEvents.disconnect);
+            }
             console.log(e);
         }
     },
@@ -85,7 +93,11 @@ const io = {
         try {
             unlinkSync(fullPath);
         } catch (e) {
-            store.dispatch(NotificationEvents.showError, `Failed to remove file ${fullPath}.`);
+            if (existsSync(store.get().device?.path)) {
+                store.dispatch(NotificationEvents.showError, `Failed to remove file ${fullPath}.`);
+            } else {
+                store.dispatch(DeviceConnectorEvents.disconnect);
+            }
         }
     }
 };
