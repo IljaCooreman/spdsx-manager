@@ -21,13 +21,16 @@ const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
         'selectedKit'
     );
     React.useEffect(() => {
+        console.log('resetting');
         setOrderedKits(kitList);
     }, [kitList]);
 
     React.useEffect(() => {
         return () => {
+            console.log('dismounting');
+            console.log(orderedKits);
             if (isReordered) {
-                store.dispatch(KitNavigatorEvents.reorder, orderedKits);
+                store.dispatch(KitNavigatorEvents.reorder, [...orderedKits]);
             }
         };
     }, [isReordered]);
@@ -47,16 +50,16 @@ const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
         background: isDraggingOver ? 'lightblue' : 'none',
         padding: grid,
         minWidth: '200px',
-        maxHeight: '100%',
-        overflow: 'auto'
+        maxHeight: '100%'
     });
 
     const onDragEnd = (result: DropResult) => {
         if (!result.destination || result.destination?.index === result.source?.index) {
             return;
         }
-        setIsReordered(true);
+        console.log(orderedKits);
         setOrderedKits(reorder(orderedKits, result.source.index, result.destination.index));
+        setIsReordered(true);
     };
 
     const onItemClick = (kit: Kit | DummyKit) => {
