@@ -14,26 +14,10 @@ interface KitsProps {
 
 // idea from https://codesandbox.io/s/k260nyxq9v?file=/index.js
 const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
-    // const [orderedKits, setOrderedKits] = React.useState<(Kit | DummyKit)[]>([]);
-    // const [isReordered, setIsReordered] = React.useState<boolean>(false);
     const { kitList, selectedKit } = useStoreon<State, KitNavigatorEvents>(
         'kitList',
         'selectedKit'
     );
-    // React.useEffect(() => {
-    //     console.log('resetting');
-    //     setOrderedKits(kitList);
-    // }, [kitList]);
-
-    // React.useEffect(() => {
-    //     return () => {
-    //         console.log('dismounting');
-    //         console.log(orderedKits);
-    //         if (isReordered) {
-    //             store.dispatch(KitNavigatorEvents.reorder, [...orderedKits]);
-    //         }
-    //     };
-    // }, [isReordered]);
 
     // a little function to help us with reordering the result
     function reorder<T>(list: T[], startIndex: number, endIndex: number) {
@@ -61,8 +45,6 @@ const Kits: React.FunctionComponent<KitsProps> = ({ handleSelectKit }) => {
             KitNavigatorEvents.reorder,
             reorder(kitList, result.source.index, result.destination.index)
         );
-        // setOrderedKits(reorder(orderedKits, result.source.index, result.destination.index));
-        // setIsReordered(true);
     };
 
     const onItemClick = (kit: Kit | DummyKit) => {
