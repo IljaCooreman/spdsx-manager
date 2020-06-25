@@ -125,30 +125,6 @@ export const waveManager: StoreonModule<State, Events> = store => {
         return result;
     });
 
-    // TODO: remove this, it's unused
-    // store.on(
-    //     WaveManagerEvents.addNewDeviceWave,
-    //     ({ device, deviceWaves, dndDeviceWaves }, path) => {
-    //         try {
-    //             const deviceWave = new DeviceWave(device, pathToWvNr(path));
-    //             return {
-    //                 deviceWaves: [...deviceWaves, deviceWave],
-    //                 dndDeviceWaves: [...dndDeviceWaves, { item: deviceWave, id: uuidv4() }]
-    //             };
-    //         } catch (e) {
-    //             console.log('#### ERROR: ', e);
-    //             store.dispatch(
-    //                 NotificationEvents.showError,
-    //                 `Failed to import a wave from your device. Path ${path}`
-    //             );
-    //             return {
-    //                 deviceWaves,
-    //                 dndDeviceWaves
-    //             };
-    //         }
-    //     }
-    // );
-
     store.on(
         WaveManagerEvents.addExistingDeviceWave,
         ({ deviceWaves, dndDeviceWaves }, deviceWave) => {

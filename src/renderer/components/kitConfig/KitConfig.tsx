@@ -17,7 +17,6 @@ import { GeneralContainerStyle } from '../../styling';
 import Kits from '../Kits/index';
 import { store } from '../../store';
 import CircleSlider from '../CircleSlider';
-import io from '../../../classes/IO';
 import { Kit } from '../../../classes/Kit';
 
 const TopRow = styled.div`
@@ -60,7 +59,7 @@ const KitConfig: React.FunctionComponent = () => {
     };
 
     const writeToDevice = (kit: Kit) => {
-        io.writeKitPrm(kit.kitPrmObject, kit.shortPath, kit.device);
+        store.dispatch(IOEvents.saveKitToDevice, kit);
     };
 
     const setVolume = (v: number) => {
@@ -101,7 +100,7 @@ const KitConfig: React.FunctionComponent = () => {
                 />
                 <CircleSlider
                     label="Tempo"
-                    value={selectedKit?.Level}
+                    value={selectedKit ? Math.round(selectedKit.Tempo / 10) : undefined}
                     min={40}
                     max={250}
                     handleChange={setTempo}

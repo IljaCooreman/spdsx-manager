@@ -16,7 +16,6 @@ export function assignPath(device: Device) {
     if (nextNr > 9999) {
         throw new Error('Theres more than 10000 samples');
     }
-    console.log(missingNr, nextNr, wvNrToPath(nextNr));
     return {
         WvNr: nextNr,
         path: wvNrToPath(nextNr)

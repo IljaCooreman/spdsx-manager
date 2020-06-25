@@ -66,7 +66,7 @@ export class Kit {
     }
 
     setTempo(value: number) {
-        this.Tempo = inputSanitize.Tempo(value); // ?? max tempo value??
+        this.Tempo = inputSanitize.Tempo(value * 10); // * 10 because tempo is in decimals -> 20.0 bpm = 200
     }
 
     get shortPath() {

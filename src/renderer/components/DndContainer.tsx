@@ -24,7 +24,6 @@ const RightColumn = styled.div`
 
 const DndContainer: React.FunctionComponent = () => {
     const onDragEnd = (result: DropResult) => {
-        console.log(result.destination);
         if (parseDroppableId(result.destination?.droppableId).type === DroppableTypes.pad) {
             store.dispatch(KitConfiguratorEvents.dropOnPad, result);
         }

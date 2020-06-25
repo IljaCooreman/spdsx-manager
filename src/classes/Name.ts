@@ -24,7 +24,6 @@ export class Name {
 
     setName(name: string) {
         this.name = name.substring(0, this.length);
-        console.log(this.name);
     }
 
     get length(): number {
