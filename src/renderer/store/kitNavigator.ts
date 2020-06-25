@@ -36,11 +36,8 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
     });
 
     store.on(KitNavigatorEvents.reorder, (_: State, list: (Kit | DummyKit)[]) => {
-        console.log('reordering in store');
-        console.log(list);
         [...list].forEach((kit, i) => {
             if (kit.id !== i) {
-                console.log(kit.id, i, list);
                 switch (kit.type) {
                     case 'Kit':
                         // eslint-disable-next-line no-case-declarations
@@ -49,6 +46,8 @@ export const kitNavigator: StoreonModule<State, Events> = store => {
                         store.dispatch(IOEvents.saveKitToDevice, castedKit);
                         break;
                     case 'EmptyKit':
+                        // eslint-disable-next-line no-param-reassign
+                        kit.id = i;
                         store.dispatch(IOEvents.removeKit, i);
                         break;
                     default:
