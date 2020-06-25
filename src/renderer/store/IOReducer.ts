@@ -3,6 +3,7 @@
 import { StoreonModule } from 'storeon';
 import { join } from 'path';
 // eslint-disable-next-line import/no-cycle
+import { existsSync } from 'fs';
 import { State, Events, IOEvents } from './types/types';
 import { Kit } from '../../classes/Kit';
 import io from '../../classes/IO';
@@ -15,6 +16,8 @@ export const IOReducer: StoreonModule<State, Events> = store => {
 
     store.on(IOEvents.removeKit, ({ device }: State, index: number) => {
         const path = join(device.path, `Roland/SPD-SX/KIT/${kitIndexToShortPath(index)}`);
-        io.removeFile(path);
+        if (existsSync(path)) {
+            io.removeFile(path);
+        }
     });
 };
