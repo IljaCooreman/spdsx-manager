@@ -33,8 +33,8 @@ const WaveList: React.FunctionComponent = () => {
         if (filterValue.length <= 0) {
             setFilteredList(dndDeviceWaves);
         } else {
-            const regex = new RegExp(filterValue, 'ig');
-            setFilteredList(dndDeviceWaves.filter(wave => regex.test(wave.item.name)));
+            const regex = new RegExp(filterValue, 'i');
+            setFilteredList(dndDeviceWaves.filter(wave => regex.test(wave.item.name.name)));
         }
     }, [filterValue, dndDeviceWaves]);
 

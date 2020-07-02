@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 const Version: React.FunctionComponent = () => {
-    return <Container>v{process.env.npm_package_version}</Container>;
+    return <Container>v{require('electron').remote.app.getVersion()}</Container>;
 };
 
 export default Version;

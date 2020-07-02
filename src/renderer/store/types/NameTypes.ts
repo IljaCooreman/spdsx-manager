@@ -23,3 +23,19 @@ export interface SubNameType
         | 'SubNm14'
         | 'SubNm15'
     > {}
+export interface WaveNameType
+    extends Pick<
+        KitPrmType,
+        | 'SubNm0'
+        | 'SubNm1'
+        | 'SubNm2'
+        | 'SubNm3'
+        | 'SubNm4'
+        | 'SubNm5'
+        | 'SubNm6'
+        | 'SubNm7'
+        | 'SubNm8'
+        | 'SubNm9'
+        | 'SubNm10'
+        | 'SubNm11'
+    > {}

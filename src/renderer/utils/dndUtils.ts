@@ -1,9 +1,7 @@
 import { DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
-import DeviceWave, { DndObject } from '../../classes/DeviceWave';
-import { State, PadNames, WaveManagerEvents, PadWaveTypes } from '../store/types/types';
-import Device from '../../classes/Device';
-import { Kit } from '../../classes/Kit';
+import DeviceWave from '../../classes/DeviceWave';
+import { State, WaveManagerEvents, PadWaveTypes } from '../store/types/types';
 import io from '../../classes/IO';
 import { parseDroppableId } from './parseDroppableId';
 import { addWaveToDevice } from '../../classes/waveMgmt';

@@ -54,7 +54,7 @@ const PadConfig: React.FunctionComponent = () => {
     return (
         <Container>
             <h3>{selectedPad === undefined || !selectedKit ? 'No selection' : `${selectedPad}`}</h3>
-            <h1>{stripExtension(pad?.wave?.name || 'No wave')}</h1>
+            <h1>{stripExtension(pad?.wave?.name.name || 'No wave')}</h1>
             <CircleSlider
                 label="Pad volume"
                 value={pad.WvLevel}

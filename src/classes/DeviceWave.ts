@@ -6,6 +6,7 @@ import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { NameType } from '../renderer/store/types/NameTypes';
 import LocalWave from './LocalWave';
+import { decimalToString } from './xmlUtils';
 
 export interface DndObject<T> {
     id: string;
@@ -18,6 +19,7 @@ export default class DeviceWave {
     tag: number;
     wavePath: string; // '00/clap__.wav'
     localWave: LocalWave | undefined = undefined;
+    name: Name;
 
     constructor(device: Device, wvNr: number, localWave?: LocalWave) {
         this.uuid = uuidv4();
@@ -30,24 +32,44 @@ export default class DeviceWave {
 
         const wvPrmObject: WvPrmType | undefined = paramLookup(wvNr, device)?.WvPrm;
         if (!wvPrmObject) {
+            // this is a new wave, created from pc import
             if (!localWave) {
                 throw new Error(
                     'cannot create new deviceWave instance with an invalid wave number'
                 );
             }
             this.tag = 0;
-            // this.name = new Name(localWave.fileName, 'Nm');
+            this.name = new Name(localWave.fileName, 'waveNm');
             this.wavePath = `${path?.split('/')[0]}/${basename(localWave.fullPath)}`;
             this.localWave = localWave;
         } else {
-            const { Tag, Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Path } = wvPrmObject;
+            // this is a wave that's already on device
+            const {
+                Tag,
+                Nm0,
+                Nm1,
+                Nm2,
+                Nm3,
+                Nm4,
+                Nm5,
+                Nm6,
+                Nm7,
+                Nm8,
+                Nm9,
+                Nm10,
+                Nm11,
+                Path
+            } = wvPrmObject;
             this.tag = Tag;
-            // this.name = new Name(decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7]), 'Nm');
+            this.name = new Name(
+                decimalToString([Nm0, Nm1, Nm2, Nm3, Nm4, Nm5, Nm6, Nm7, Nm8, Nm9, Nm10, Nm11]),
+                'waveNm'
+            );
             this.wavePath = Path;
         }
     }
 
-    get name() {
+    get fileName() {
         return basename(this.wavePath);
     }
 

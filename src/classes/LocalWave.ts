@@ -3,20 +3,24 @@ import { WaveFile } from 'wavefile';
 import { v4 as uuidv4 } from 'uuid';
 import { readFileSync } from 'fs';
 import { basename } from 'path';
+import { Name } from './Name';
+import { stripExtension } from './xmlUtils';
 
 export default class LocalWave {
     id: string;
     wave: WaveFile;
-    name: string;
+    fileName: string;
     fullPath: string;
     isResampled = false;
+    name: Name;
 
     constructor(fullPath: string) {
         this.id = uuidv4();
         this.fullPath = fullPath;
-        this.name = basename(fullPath);
+        this.fileName = basename(fullPath);
         this.wave = new WaveFile(readFileSync(fullPath));
         this.resampleForSpdsx();
+        this.name = new Name(stripExtension(this.fileName), 'waveNm');
     }
 
     changeSampleRate(requestedSampleRate: number): void {

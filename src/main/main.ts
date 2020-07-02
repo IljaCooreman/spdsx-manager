@@ -5,6 +5,7 @@ import { store } from '../renderer/store';
 import { NotificationEvents } from '../renderer/store/types/types';
 
 let win: BrowserWindow | null;
+console.log(app.getVersion());
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer');
@@ -65,9 +66,9 @@ const createWindow = async () => {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    // if (process.platform !== 'darwin') {
+    app.quit();
+    // }
 });
 
 app.on('activate', () => {

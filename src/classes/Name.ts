@@ -1,8 +1,8 @@
 import { stringToDecimal } from './xmlUtils';
-import { NameType, SubNameType } from '../renderer/store/types/NameTypes';
+import { NameType, SubNameType, WaveNameType } from '../renderer/store/types/NameTypes';
 
 /* eslint-disable class-methods-use-this */
-type Type = 'Nm' | 'SubNm';
+type Type = 'Nm' | 'SubNm' | 'waveNm';
 
 const nameTypes = {
     Nm: {
@@ -10,6 +10,9 @@ const nameTypes = {
     },
     SubNm: {
         length: 16
+    },
+    waveNm: {
+        length: 12
     }
 };
 
@@ -52,9 +55,15 @@ export class Name {
         array.forEach(number => {
             result[`${this.type}${number}`] = number;
         });
-        if (this.type === 'Nm') {
-            return result as NameType;
+        switch (this.type) {
+            case 'Nm':
+                return result as NameType;
+            case 'waveNm':
+                return result as WaveNameType;
+            case 'SubNm':
+                return result as SubNameType;
+            default:
+                throw new Error('unknown naming scheme');
         }
-        return result as SubNameType;
     }
 }

@@ -99,7 +99,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                                 />
                             )}
                         </IconButton>
-                        {stripExtension(dndObject.item.name)}
+                        {dndObject.item.name.name}
                         {/* {isHovering && (
                             <IconButton size="small">
                                 <MoreVert />
@@ -118,7 +118,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                                     htmlColor={theme === 'dark' ? colors.bgWhite : colors.black}
                                 />
                             </IconButton>
-                            {stripExtension(dndObject.item.name)}
+                            {dndObject.item.name.name}
                         </Container>
                     )}
                 </>
