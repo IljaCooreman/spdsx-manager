@@ -4,7 +4,7 @@ import { Name } from './Name';
 import { paramLookup, wvNrToPath } from '../renderer/utils/waveUtils';
 import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
-import { NameType } from '../renderer/store/types/NameTypes';
+import { WaveNameType } from '../renderer/store/types/NameTypes';
 import LocalWave from './LocalWave';
 import { decimalToString } from './xmlUtils';
 
@@ -91,9 +91,9 @@ export default class DeviceWave {
     }
 
     get WvPrmObject(): WvPrmType {
-        const encodedNameObject = new Name(this.name, 'Nm').encodedObject;
+        const encodedNameObject = this.name.encodedObject;
         return {
-            ...(encodedNameObject as NameType),
+            ...(encodedNameObject as WaveNameType),
             Tag: this.tag,
             Path: this.wavePath
         };

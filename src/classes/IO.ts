@@ -39,6 +39,7 @@ const io = {
 
     writeFile(fullPath: string, content: string) {
         try {
+            console.log(fullPath, content);
             writeFileSync(fullPath, content);
         } catch (e) {
             if (existsSync(store.get().device?.path)) {
@@ -62,6 +63,12 @@ const io = {
         }
     },
 
+    /**
+     * write a wave param to a file
+     * @param contentObject waveParamType
+     * @param file the number of the file OR the short wave path
+     * @param device
+     */
     writeWvPrm(contentObject: WvPrmType, file: string | number, device: Device) {
         const path = typeof file === 'number' || Number(file) ? wvNrToPath(file) : file;
         this.writeFile(

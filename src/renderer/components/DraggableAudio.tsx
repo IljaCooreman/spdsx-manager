@@ -3,12 +3,16 @@ import * as React from 'react';
 import { PlayArrow, Stop, MoreVert } from '@material-ui/icons';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
-import { IconButton } from '@material-ui/core';
+import { IconButton, MenuItem, Menu, TextField } from '@material-ui/core';
 import { Howl } from 'howler';
 import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import LocalWave from '../../classes/LocalWave';
 import { stripExtension } from '../../classes/xmlUtils';
 import { colors } from '../styling';
+import AudioPopupMenu from './AudioPopupMenu';
+import RenameTextField from './RenameTextField';
+import { store } from '../store';
+import { IOEvents } from '../store/types/types';
 
 interface DraggableAudioProps {
     handleClick?: (id: string) => void;
@@ -23,7 +27,7 @@ const Container = styled.div<{ isDark: boolean; isDragging: boolean; isHovering?
     display: flex;
     align-items: center;
     padding: 4px;
-    padding-right: 20px;
+    padding-right: 4px;
     border-radius: 4px;
     user-select: none;
     font-family: Roboto-Light;
@@ -45,6 +49,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
 }) => {
     const [isHovering, setIsHovering] = React.useState<boolean>(false);
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
+    const [isRenaming, setIsRenaming] = React.useState<boolean>(false);
     const [sound, setSound] = React.useState<Howl | undefined>(undefined);
 
     React.useEffect(() => {
@@ -69,6 +74,21 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
         handleClick(dndObject.id);
     };
 
+    const handleRenameBlur = (newName: string) => {
+        if (newName !== dndObject.item.name.name) {
+            console.log('handleRename', newName);
+            dndObject.item.name.setName(newName);
+            if (dndObject.item instanceof DeviceWave) {
+                store.dispatch(IOEvents.saveWaveToDevice, dndObject.item);
+            }
+        }
+        setIsRenaming(false);
+    };
+
+    const handleRenameStart = () => {
+        setIsRenaming(true);
+    };
+
     return (
         <Draggable key={dndObject.id} draggableId={dndObject.id} index={index}>
             {(prov, snapsh) => (
@@ -86,7 +106,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                         style={snapsh.isDragging ? { ...prov.draggableProps.style } : {}}
                         key={dndObject.id}
                     >
-                        <IconButton aria-label="play/pauze" size="small" onClick={onClick}>
+                        <IconButton aria-label="play/pause" size="small" onClick={onClick}>
                             {isPlaying ? (
                                 <Stop
                                     fontSize="inherit"
@@ -99,12 +119,19 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
                                 />
                             )}
                         </IconButton>
-                        {dndObject.item.name.name}
-                        {/* {isHovering && (
-                            <IconButton size="small">
-                                <MoreVert />
-                            </IconButton>
-                        )} */}
+                        {!isRenaming ? (
+                            dndObject.item.name.name
+                        ) : (
+                            <RenameTextField
+                                handleRenameBlur={handleRenameBlur}
+                                initialName={dndObject.item.name.name}
+                            />
+                        )}
+                        <AudioPopupMenu
+                            isHovering={isHovering}
+                            dndObject={dndObject}
+                            handleRenameStart={handleRenameStart}
+                        />
                     </Container>
                     {shouldCopy && snapsh.isDragging && (
                         <Container

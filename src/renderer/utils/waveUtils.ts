@@ -72,3 +72,7 @@ export function waveLookup(waveNr: number | string, pathToDevice: string) {
         join(pathToDevice, `Roland/SPD-SX/WAVE/DATA/${wvNrToPath(waveNr)}.wav`)
     );
 }
+
+export function removeNonAscii(str: string) {
+    return str.replace(/[^\x20-\x7E]/g, '');
+}

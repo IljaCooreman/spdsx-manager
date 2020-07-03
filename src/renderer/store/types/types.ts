@@ -63,7 +63,8 @@ export enum KitConfiguratorEvents {
 
 export enum IOEvents {
     saveKitToDevice = 'IOEvents/saveKitToDevice',
-    removeKit = 'IOEvents/removeKit'
+    removeKit = 'IOEvents/removeKit',
+    saveWaveToDevice = 'IOEvents/saveWaveToDevice'
 }
 
 export enum NotificationEvents {
@@ -91,6 +92,7 @@ export interface Events {
     [KitConfiguratorEvents.removeWaveFromPad]: DropResult;
     [KitConfiguratorEvents.clickOnPad]: PadNames;
     [IOEvents.saveKitToDevice]: Kit;
+    [IOEvents.saveWaveToDevice]: DeviceWave;
     [IOEvents.removeKit]: number;
     [NotificationEvents.showError]: string;
     [NotificationEvents.showSuccess]: string;
