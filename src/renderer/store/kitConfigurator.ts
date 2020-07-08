@@ -43,6 +43,9 @@ export const kitConfigurator: StoreonModule<State, Events> = store => {
     store.on(KitConfiguratorEvents.dropOnPad, (state: State, dropResult: DropResult) => {
         const { droppableId } = dropResult.source;
 
+        const index = state.dndLocalWaves.findIndex(w => w.id === dropResult.draggableId);
+        const newDndLocalWaves = [...state.dndLocalWaves];
+
         switch (parseDroppableId(droppableId).type) {
             case DroppableTypes.list:
                 return handleListToPadDrop(state, dropResult);
@@ -51,7 +54,12 @@ export const kitConfigurator: StoreonModule<State, Events> = store => {
                 return handlePadToPadDrop(state, dropResult);
 
             case DroppableTypes.local:
-                return handleLocalToPadDrop(state, dropResult);
+                // TODO: do we need to remove the localWaves, or just the dnd reference?
+                if (index > -1) newDndLocalWaves.splice(index, 1);
+                return {
+                    dndLocalWaves: newDndLocalWaves,
+                    ...handleLocalToPadDrop(state, dropResult)
+                };
 
             default:
                 console.error('unknown source!');
