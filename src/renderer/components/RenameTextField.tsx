@@ -18,7 +18,8 @@ const RenameTextField: React.FunctionComponent<RenameTextField> = ({
 
     React.useEffect(() => {
         const timeout = setTimeout(() => {
-            inputRef.current.focus();
+            const uselessInputRefCast = inputRef as any;
+            uselessInputRefCast.current.focus();
         }, 0);
 
         return () => {
