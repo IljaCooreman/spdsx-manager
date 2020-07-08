@@ -2,17 +2,18 @@ import { join } from 'path';
 import io from '../../classes/IO';
 import Device from '../../classes/Device';
 import { pathToWvNr, wvNrToPath } from './waveUtils';
-import { hasWeirdFileName } from './hasWeirdFileName';
 
 export function assignPath(device: Device) {
     const numbers = listWavePaths(device)
         .map(path => {
-            if (hasWeirdFileName(path)) {
+            try {
+                return pathToWvNr(path);
+            } catch (e) {
+                console.log('failed to parse file', path, e.message);
                 return undefined;
             }
-            return pathToWvNr(path);
         })
-        .filter(number => number);
+        .filter(number => number !== undefined);
     const castedNumbers = numbers as number[];
     const missingNr = findMissingNumber(castedNumbers);
     if (missingNr !== undefined && missingNr >= 0) {

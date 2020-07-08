@@ -21,6 +21,9 @@ describe('wave utils', () => {
         expect(() => {
             pathToWvNr('00/._00.spd');
         }).toThrow();
+        expect(() => {
+            pathToWvNr('00/clap_.wav.spd');
+        }).toThrow();
 
         expect(wvNrToPath(pathToWvNr('00/01'))).toBe('00/01');
     });

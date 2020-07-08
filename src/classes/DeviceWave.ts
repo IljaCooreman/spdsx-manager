@@ -6,7 +6,7 @@ import Device from './Device';
 import { WvPrmType } from '../renderer/store/types/WvPrm';
 import { WaveNameType } from '../renderer/store/types/NameTypes';
 import LocalWave from './LocalWave';
-import { decimalToString } from './xmlUtils';
+import { decimalToString, stripExtension } from './xmlUtils';
 
 export interface DndObject<T> {
     id: string;
@@ -39,7 +39,7 @@ export default class DeviceWave {
                 );
             }
             this.tag = 0;
-            this.name = new Name(localWave.fileName, 'waveNm');
+            this.name = new Name(stripExtension(localWave.fileName), 'waveNm');
             this.wavePath = `${path?.split('/')[0]}/${basename(localWave.fullPath)}`;
             this.localWave = localWave;
         } else {

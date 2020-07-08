@@ -4,7 +4,6 @@ import { StoreonModule } from 'storeon';
 // eslint-disable-next-line import/no-cycle
 
 import { DropResult } from 'react-beautiful-dnd';
-import { v4 as uuidv4 } from 'uuid';
 import {
     State,
     Events,
@@ -19,7 +18,6 @@ import io from '../../classes/IO';
 import { parseDroppableId } from '../utils/parseDroppableId';
 import Device from '../../classes/Device';
 import { Kit } from '../../classes/Kit';
-import DeviceWave from '../../classes/DeviceWave';
 import { handleListToPadDrop, handlePadToPadDrop, handleLocalToPadDrop } from '../utils/dndUtils';
 import { Pad } from '../../classes/Pad';
 

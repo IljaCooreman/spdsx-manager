@@ -17,7 +17,7 @@ export const addWaveToDevice = (wave: LocalWave, device: Device): DeviceWave => 
     }
     // write wave
     const folder = path?.split('/')[0];
-    const wavePath = `${folder}/${wave.name}`;
+    const wavePath = `${folder}/${wave.name.name}`;
 
     io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/PRM/${path}`));
     io.createIfNotExists(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}`));

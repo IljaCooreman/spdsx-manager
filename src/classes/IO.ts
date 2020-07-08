@@ -56,9 +56,12 @@ const io = {
 
     createIfNotExists(path: string) {
         if (!existsSync(dirname(path))) {
-            console.log(`path creator:`, dirname(path));
-            mkdirSync(dirname(path));
-            console.log(existsSync(dirname(path)));
+            try {
+                console.log(`path creator:`, dirname(path));
+                mkdirSync(dirname(path));
+            } catch (e) {
+                throw new Error(`Failed while trying to create a folder at ${dirname(path)}`);
+            }
         }
     },
 
@@ -89,10 +92,16 @@ const io = {
         );
     },
 
+    /**
+     * Write an actual .wav to the device
+     * @param buffer the buffer containing the sound data
+     * @param fileName the number of the file OR the short wave path
+     * @param device
+     */
     writeWaveFile(buffer: any, fileName: string, device: Device) {
         const path =
             typeof fileName === 'number' || Number(fileName) ? wvNrToPath(fileName) : fileName;
-        writeFileSync(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}`), buffer);
+        writeFileSync(join(device.path, `Roland/SPD-SX/WAVE/DATA/${path}.wav`), buffer);
     },
 
     removeFile(fullPath: PathLike) {

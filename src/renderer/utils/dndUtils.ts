@@ -139,9 +139,7 @@ export const handleLocalToPadDrop = (
 
     const dndObject = dndLocalWaves.find(localWave => localWave.id === draggableId);
     if (!dndObject?.item) {
-        // throw new Error('invalid wave found');
-        console.error('invalid wave found');
-        return {};
+        throw new Error('The local wave you are trying to move does not exist');
     }
     // copy wave to device
     const deviceWave = addWaveToDevice(dndObject.item, device);
