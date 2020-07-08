@@ -16,9 +16,14 @@ import {
 import { Kit } from './Kit';
 import { inputSanitize } from './inputSanitize';
 
+export enum PadWaveLocations {
+    wave = 'wave',
+    SubWv = 'SubWv'
+}
+
 export class Pad {
     uuid: string;
-    wave: DeviceWave | undefined;
+    [PadWaveLocations.wave]: DeviceWave | undefined;
     WvLevel = 100;
     WvPan = 0; // L15 - center - R15
     MuteGrp: MuteGrpOptions = MuteGrpOptions.OFF;
@@ -34,7 +39,7 @@ export class Pad {
     Dynamics: DynamicsOptions = DynamicsOptions.ON;
     VoiceAsgn: VoiceAssignOptions = VoiceAssignOptions.MONO;
     Reverse = 0;
-    SubWv?: DeviceWave = undefined;
+    [PadWaveLocations.SubWv]?: DeviceWave = undefined;
     SubWvLevel = 0;
     SubWvPan = 0;
     padName: PadNames; // padName and kit are not used at the moment

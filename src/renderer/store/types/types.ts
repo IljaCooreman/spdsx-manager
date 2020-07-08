@@ -38,7 +38,9 @@ export enum WaveManagerEvents {
     importFromDevice = 'waveManager/importFromDevice',
     addWaveToDevice = 'waveManager/addWaveToDevice',
     addNewDeviceWave = 'waveManager/addNewDeviceWave',
-    addExistingDeviceWave = 'waveManager/addExistingDeviceWave'
+    addExistingDeviceWave = 'waveManager/addExistingDeviceWave',
+    setWaveName = 'waveManager/setWaveName',
+    deleteDeviceWave = 'waveManager/deleteDeviceWave'
 }
 
 export enum DeviceConnectorEvents {
@@ -80,6 +82,8 @@ export interface Events {
     [WaveManagerEvents.addWaveToDevice]: LocalWave;
     [WaveManagerEvents.addNewDeviceWave]: string;
     [WaveManagerEvents.addExistingDeviceWave]: DeviceWave;
+    [WaveManagerEvents.setWaveName]: { wave: DeviceWave | LocalWave; name: string };
+    [WaveManagerEvents.deleteDeviceWave]: string; // uuid
     [DeviceConnectorEvents.connect]: string[];
     [DeviceConnectorEvents.disconnect]: undefined;
     [KitNavigatorEvents.selectKit]: Kit | undefined;

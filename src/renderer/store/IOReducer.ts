@@ -23,7 +23,6 @@ export const IOReducer: StoreonModule<State, Events> = store => {
     });
 
     store.on(IOEvents.saveWaveToDevice, ({ device }: State, deviceWave: DeviceWave) => {
-        console.log(deviceWave.name);
         io.writeWvPrm(deviceWave.WvPrmObject, deviceWave.wvNr, device);
     });
 };

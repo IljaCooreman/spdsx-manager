@@ -8,7 +8,8 @@ import {
     Events,
     WaveManagerEvents,
     NotificationEvents,
-    KitNavigatorEvents
+    KitNavigatorEvents,
+    IOEvents
 } from './types/types';
 import LocalWave from '../../classes/LocalWave';
 import io from '../../classes/IO';
@@ -16,6 +17,8 @@ import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import { pathToWvNr } from '../utils/waveUtils';
 import { Kit } from '../../classes/Kit';
 import { createKitFromPath } from '../../classes/KitFactory';
+import { findAllPadsWithWave } from '../utils/findWavesInPads';
+import { createDndPadWaves } from '../utils/createDndPadWaves';
 
 export const waveManager: StoreonModule<State, Events> = store => {
     // first, import waves
@@ -131,6 +134,52 @@ export const waveManager: StoreonModule<State, Events> = store => {
             return {
                 deviceWaves: [deviceWave, ...deviceWaves],
                 dndDeviceWaves: [{ item: deviceWave, id: uuidv4() }, ...dndDeviceWaves]
+            };
+        }
+    );
+
+    store.on(WaveManagerEvents.setWaveName, ({ dndDeviceWaves, dndLocalWaves }, { wave, name }) => {
+        wave.name.setName(name);
+        if (wave instanceof DeviceWave) {
+            store.dispatch(IOEvents.saveWaveToDevice, wave);
+            return {
+                dndDeviceWaves: [...dndDeviceWaves]
+            };
+        }
+        return {
+            dndLocalWaves
+        };
+    });
+
+    store.on(
+        WaveManagerEvents.deleteDeviceWave,
+        ({ deviceWaves, dndDeviceWaves, kitList, selectedKit }: State, uuid: string) => {
+            const index = deviceWaves.findIndex(dw => dw.uuid === uuid);
+            const deviceWave = deviceWaves[index];
+            if (!deviceWave) {
+                throw new Error('Could not find deviceWave. No wave deleted');
+            }
+            io.removeFile(deviceWave.fullPath);
+            io.removeFile(deviceWave.paramPath);
+
+            const filteredDndDw = dndDeviceWaves.filter(dnddw => dnddw.item.uuid !== uuid);
+            const filteredKits = kitList.filter(kit => kit.type === 'Kit') as Kit[];
+            const wavesInPads = findAllPadsWithWave(filteredKits, uuid);
+            // set it all to undefined
+            wavesInPads.forEach(waveInPad => {
+                // eslint-disable-next-line no-param-reassign
+                waveInPad.pad[waveInPad.location] = undefined;
+                // TODO: this is a simple approach, but it overwrites the same kit if a wave is imported more than once in that kit
+                store.dispatch(IOEvents.saveKitToDevice, waveInPad.pad.kit);
+            });
+
+            const newDeviceWaves = [...deviceWaves];
+            newDeviceWaves.splice(index, 1);
+
+            return {
+                deviceWaves: newDeviceWaves,
+                dndDeviceWaves: filteredDndDw,
+                dndPadWaves: selectedKit && createDndPadWaves(selectedKit)
             };
         }
     );

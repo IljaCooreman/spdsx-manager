@@ -6,6 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import LocalWave from '../../classes/LocalWave';
+import { store } from '../store';
+import { WaveManagerEvents } from '../store/types/types';
 
 interface AudioPopupMenuProps {
     isHovering: boolean;
@@ -43,6 +45,13 @@ const AudioPopupMenu: React.FunctionComponent<AudioPopupMenuProps> = ({
         handleClose();
     };
 
+    const handleDelete = () => {
+        if (dndObject.item instanceof DeviceWave) {
+            store.dispatch(WaveManagerEvents.deleteDeviceWave, dndObject.item.uuid);
+        }
+        handleClose();
+    };
+
     return (
         <PlaceHolder>
             {isHovering && (
@@ -62,11 +71,11 @@ const AudioPopupMenu: React.FunctionComponent<AudioPopupMenuProps> = ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose}>Info</MenuItem>
+                {/* <MenuItem onClick={handleClose}>Info</MenuItem> */}
                 <MenuItem onClick={handleRenameClick}>Rename</MenuItem>
-                <MenuItem onClick={handleClose}>Remove from pad</MenuItem>
-                <MenuItem onClick={handleClose}>Copy</MenuItem>
-                <MenuItem onClick={handleClose}>Delete</MenuItem>
+                {/* <MenuItem onClick={handleClose}>Remove from pad</MenuItem>
+                <MenuItem onClick={handleClose}>Copy</MenuItem> */}
+                <MenuItem onClick={handleDelete}>Delete</MenuItem>
             </Menu>
         </PlaceHolder>
     );

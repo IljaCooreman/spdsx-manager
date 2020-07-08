@@ -39,7 +39,6 @@ const io = {
 
     writeFile(fullPath: string, content: string) {
         try {
-            console.log(fullPath, content);
             writeFileSync(fullPath, content);
         } catch (e) {
             if (existsSync(store.get().device?.path)) {

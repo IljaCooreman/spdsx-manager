@@ -1,18 +1,18 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
-import { PlayArrow, Stop, MoreVert } from '@material-ui/icons';
+import { PlayArrow, Stop } from '@material-ui/icons';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
-import { IconButton, MenuItem, Menu, TextField } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { Howl } from 'howler';
 import DeviceWave, { DndObject } from '../../classes/DeviceWave';
 import LocalWave from '../../classes/LocalWave';
-import { stripExtension } from '../../classes/xmlUtils';
 import { colors } from '../styling';
 import AudioPopupMenu from './AudioPopupMenu';
 import RenameTextField from './RenameTextField';
 import { store } from '../store';
-import { IOEvents } from '../store/types/types';
+import { WaveManagerEvents } from '../store/types/types';
+import { PadWaveLocations, Pad } from '../../classes/Pad';
 
 interface DraggableAudioProps {
     handleClick?: (id: string) => void;
@@ -21,6 +21,11 @@ interface DraggableAudioProps {
     theme?: 'light' | 'dark';
     index: number;
     shouldCopy?: boolean;
+    // context: {
+    //     type: 'pad' | 'waveList' | 'localWaveList';
+    //     pad?: Pad;
+    //     location?: PadWaveLocations;
+    // };
 }
 
 const Container = styled.div<{ isDark: boolean; isDragging: boolean; isHovering?: boolean }>`
@@ -76,11 +81,7 @@ const DraggableAudio: React.FunctionComponent<DraggableAudioProps> = ({
 
     const handleRenameBlur = (newName: string) => {
         if (newName !== dndObject.item.name.name) {
-            console.log('handleRename', newName);
-            dndObject.item.name.setName(newName);
-            if (dndObject.item instanceof DeviceWave) {
-                store.dispatch(IOEvents.saveWaveToDevice, dndObject.item);
-            }
+            store.dispatch(WaveManagerEvents.setWaveName, { wave: dndObject.item, name: newName });
         }
         setIsRenaming(false);
     };
