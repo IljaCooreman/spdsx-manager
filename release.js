@@ -86,7 +86,7 @@ const removeAllFiles = dir => {
 const init = async () => {
     // 0. build
     console.log('start building images');
-    // await build();
+    await build();
     // 1. copy files to correct location
     const info = getInfo(sourceBasePath);
     const destFolder = path.join(destBasePath, 'releases', info.pc.version);
