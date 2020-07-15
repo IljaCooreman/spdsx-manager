@@ -75,6 +75,10 @@ export enum NotificationEvents {
     showInfo = 'notificationEvents/showInfo'
 }
 
+export enum VersionEvents {
+    checkVersion = 'VersionEvents/checkVersion'
+}
+
 export interface Events {
     [WaveManagerEvents.import]: string[];
     [WaveManagerEvents.createWave]: string;
@@ -101,6 +105,7 @@ export interface Events {
     [NotificationEvents.showError]: string;
     [NotificationEvents.showSuccess]: string;
     [NotificationEvents.showInfo]: string;
+    [VersionEvents.checkVersion]: void;
 }
 
 export enum PadWaveTypes {
