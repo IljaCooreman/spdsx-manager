@@ -1,7 +1,29 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('start deployment');
+const build = async () => {
+    try {
+        const { exec } = require('child_process');
+
+        const promise = new Promise((resolve, reject) => {
+            exec('npm run build-all', (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`error: ${error.message}`);
+                    reject(error);
+                }
+                if (stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    reject(stderr);
+                }
+                console.log(`stdout: ${stdout}`);
+                resolve();
+            });
+        });
+        await promise;
+    } catch (e) {
+        return e;
+    }
+};
 
 const sourceBasePath = './release';
 const destBasePath = '/Users/coorem43/Dropbox/spdsx-wave-manager';
@@ -49,31 +71,41 @@ const copyFile = (info, destFolder) => {
     );
 };
 
-// 1. copy files to correct location
-const info = getInfo(sourceBasePath);
-// const destFolder = path.join(destBasePath, 'releases', info.pc.version);
-// if (!fs.existsSync(destFolder)) {
-//     fs.mkdirSync(destFolder);
-// }
-// copyFile(info.pc, destFolder);
-// copyFile(info.mac, destFolder);
+const init = async () => {
+    // 0. build
+    await build();
+    // 1. copy files to correct location
+    const info = getInfo(sourceBasePath);
+    const destFolder = path.join(destBasePath, 'releases', info.pc.version);
+    if (!fs.existsSync(destFolder)) {
+        fs.mkdirSync(destFolder);
+    }
+    copyFile(info.pc, destFolder);
+    copyFile(info.mac, destFolder);
 
-// 2. update manifest
-const manifest = require(manifestPath);
+    // 2. update manifest
+    const manifest = require(manifestPath);
 
-const versionObj = {
-    version: info.mac.version,
-    releaseDate: new Date().toISOString()
+    const versionObj = {
+        version: info.mac.version,
+        releaseDate: new Date().toISOString()
+    };
+    manifest.latest = {
+        ...versionObj,
+        downloadUrlMac: path.join(downloadUrlBase, info.mac.fileName) + downloadUrlSuffix,
+        downloadUrlPc: path.join(downloadUrlBase, info.pc.fileName) + downloadUrlSuffix
+    };
+    const newHistory = manifest.history.filter(release => {
+        return release.version !== info.mac.version;
+    });
+    newHistory.push(versionObj);
+    manifest.history = newHistory;
+
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+
+    console.log(manifest);
+
+    console.log('done');
 };
-manifest.latest = {
-    ...versionObj,
-    downloadUrlMac: path.join(downloadUrlBase, info.mac.fileName) + downloadUrlSuffix,
-    downloadUrlPc: path.join(downloadUrlBase, info.pc.fileName) + downloadUrlSuffix
-};
-manifest.history.push(versionObj);
 
-fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-
-console.log(manifest);
-
-console.log('done');
+init();

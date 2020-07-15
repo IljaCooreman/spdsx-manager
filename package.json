@@ -20,10 +20,11 @@
         "pack": "npm run build && electron-builder --dir",
         "dist": "npm run build && electron-builder",
         "postinstall": "electron-builder install-app-deps",
-        "release-patch": "npm version patch && npm run dist -- -mwl && deploy-build",
-        "release-minor": "npm version minor && npm run dist -- -mwl && deploy-build",
-        "release-major": "npm version major && npm run dist -- -mwl && deploy-build",
-        "deploy-build": "node ./release.js"
+        "release-patch": "npm version patch && npm run build-and-release",
+        "release-minor": "npm version minor",
+        "release-major": "npm version major",
+        "build-all": "npm run dist -- -mwl",
+        "build-and-release": "node ./release.js"
     },
     "husky": {
         "hooks": {
@@ -132,6 +133,7 @@
         "jest": "^24.8.0",
         "lint-staged": "^10.0.7",
         "node-sass": "^4.12.0",
+        "npm-run-all": "^4.1.5",
         "prettier": "^1.18.2",
         "react-hot-loader": "^4.8.8",
         "react-test-renderer": "^16.8.6",
