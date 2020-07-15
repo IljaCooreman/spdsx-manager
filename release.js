@@ -71,19 +71,40 @@ const copyFile = (info, destFolder) => {
     );
 };
 
+const removeAllFiles = dir => {
+    fs.readdir(dir, (err, files) => {
+        if (err) throw err;
+
+        for (const file of files) {
+            fs.unlink(path.join(dir, file), err => {
+                if (err) throw err;
+            });
+        }
+    });
+};
+
 const init = async () => {
     // 0. build
-    await build();
+    console.log('start building images');
+    // await build();
     // 1. copy files to correct location
     const info = getInfo(sourceBasePath);
     const destFolder = path.join(destBasePath, 'releases', info.pc.version);
+    const latestFolder = path.join(destBasePath, 'releases/latest');
+    console.log('start copying files');
     if (!fs.existsSync(destFolder)) {
         fs.mkdirSync(destFolder);
     }
     copyFile(info.pc, destFolder);
     copyFile(info.mac, destFolder);
 
+    removeAllFiles(latestFolder);
+    copyFile(info.pc, latestFolder);
+    copyFile(info.mac, latestFolder);
+    console.log('files copied.');
+
     // 2. update manifest
+    console.log('start updating manifest');
     const manifest = require(manifestPath);
 
     const versionObj = {
@@ -103,9 +124,8 @@ const init = async () => {
 
     fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
-    console.log(manifest);
-
-    console.log('done');
+    console.log('Manifest updated', versionObj);
+    console.log('Success!');
 };
 
 init();
