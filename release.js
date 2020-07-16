@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
+const sourceBasePath = './release';
+const destBasePath = '/Users/coorem43/Dropbox/spdsx-wave-manager';
+const manifestPath = path.join(__dirname, 'public-release/versionManifest.json');
+const downloadUrlBase =
+    'https://github.com/IljaCooreman/spdsx-manager/tree/master/public-release/latest';
+
 const build = async () => {
     try {
         const { exec } = require('child_process');
@@ -24,12 +30,6 @@ const build = async () => {
         return e;
     }
 };
-
-const sourceBasePath = './release';
-const destBasePath = '/Users/coorem43/Dropbox/spdsx-wave-manager';
-const manifestPath = path.join(destBasePath, 'versionManifest.json');
-const downloadUrlBase = 'https://www.dropbox.com/s/md5leb80l9jtp1v';
-const downloadUrlSuffix = '?dl-1';
 
 findPath = string => {
     const result = /(path: )([^\s].*)/.exec(string);
@@ -58,25 +58,39 @@ getInfo = basePath => {
     };
 };
 
-const copyFile = (info, destFolder) => {
-    fs.copyFile(
-        path.join(__dirname, sourceBasePath, info.fileName),
-        path.join(destFolder, info.fileName),
-        err => {
-            if (err) {
-                console.log(err.message);
-                return err;
+const copyFile = async (info, destFolder) => {
+    return new Promise((resolve, reject) => {
+        fs.copyFile(
+            path.join(__dirname, sourceBasePath, info.fileName),
+            path.join(destFolder, info.fileName),
+            err => {
+                if (err) {
+                    console.log(err.message);
+                    reject(err);
+                }
+                resolve();
             }
-        }
-    );
+        );
+    });
 };
 
-const removeAllFiles = dir => {
-    fs.readdir(dir, (err, files) => {
+const removeAllFiles = async dir => {
+    try {
+        const files = await fs.readdirSync(dir);
+        let promises = [];
+        files.forEach(file => {
+            promises.push(fs.unlinkSync(path.join(dir, file)));
+        });
+        await Promise.all(promises);
+    } catch (e) {
+        throw new Error('failed to remove files', e.message);
+    }
+
+    fs.readdirSync(dir, (err, files) => {
         if (err) throw err;
 
         for (const file of files) {
-            fs.unlink(path.join(dir, file), err => {
+            fs.unlinkSync(path.join(dir, file), err => {
                 if (err) throw err;
             });
         }
@@ -86,21 +100,27 @@ const removeAllFiles = dir => {
 const init = async () => {
     // 0. build
     console.log('start building images');
-    await build();
+    // await build();
     // 1. copy files to correct location
     const info = getInfo(sourceBasePath);
     const destFolder = path.join(destBasePath, 'releases', info.pc.version);
-    const latestFolder = path.join(destBasePath, 'releases/latest');
+    const latestFolder = path.join(__dirname, 'public-release/latest');
     console.log('start copying files');
+    // save to dropbox
     if (!fs.existsSync(destFolder)) {
         fs.mkdirSync(destFolder);
     }
-    copyFile(info.pc, destFolder);
-    copyFile(info.mac, destFolder);
+    await copyFile(info.pc, destFolder);
+    await copyFile(info.mac, destFolder);
 
-    removeAllFiles(latestFolder);
-    copyFile(info.pc, latestFolder);
-    copyFile(info.mac, latestFolder);
+    // save to latest folder in project
+    if (!fs.existsSync(latestFolder)) {
+        fs.mkdirSync(latestFolder);
+    } else {
+        await removeAllFiles(latestFolder);
+    }
+    await copyFile(info.pc, latestFolder);
+    await copyFile(info.mac, latestFolder);
     console.log('files copied.');
 
     // 2. update manifest
@@ -113,8 +133,8 @@ const init = async () => {
     };
     manifest.latest = {
         ...versionObj,
-        downloadUrlMac: path.join(downloadUrlBase, info.mac.fileName) + downloadUrlSuffix,
-        downloadUrlPc: path.join(downloadUrlBase, info.pc.fileName) + downloadUrlSuffix
+        downloadUrlMac: path.join(downloadUrlBase, info.mac.fileName),
+        downloadUrlPc: path.join(downloadUrlBase, info.pc.fileName)
     };
     const newHistory = manifest.history.filter(release => {
         return release.version !== info.mac.version;
