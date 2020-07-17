@@ -1,0 +1,16 @@
+{
+    "name": "build-and-release",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "run": "node index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "aws-sdk": "^2.714.0",
+        "axios": "^0.19.2",
+        "dotenv": "^8.2.0"
+    }
+}

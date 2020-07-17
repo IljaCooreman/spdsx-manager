@@ -24,7 +24,7 @@
         "release-minor": "npm version minor && npm run build-and-release",
         "release-major": "npm version major && npm run build-and-release",
         "build-all": "npm run dist -- -mwl",
-        "build-and-release": "node ./release.js"
+        "build-and-release": "cd build-and-release && npm run run"
     },
     "husky": {
         "hooks": {
